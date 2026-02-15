@@ -78,67 +78,15 @@ const lang = "ru";
 </MainLayout>
 
 <style>
-  .container { 
-    max-width: 1200px; 
-    margin: 60px auto; 
-    padding: 0 20px; 
-  }
-  
-  .page-header { 
-    margin-bottom: 50px; 
-    border-bottom: 1px solid #222; 
-    padding-bottom: 30px; 
-  }
-  
-  .page-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-  }
-
-  .page-header p {
-    color: #fffdfd;
-    font-size: 1.1rem;
-  }
-
+  .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+  .page-header { margin-bottom: 50px; border-bottom: 1px solid #222; padding-bottom: 30px; }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 40px 25px;
   }
-
-  .pagination { 
-    margin-top: 60px; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    gap: 20px; 
-  }
-
-  .p-btn { 
-    padding: 10px 20px; 
-    background: #111; 
-    border: 1px solid #333; 
-    border-radius: 8px; 
-    text-decoration: none; 
-    color: #fff; 
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-  }
-
-  .p-btn:hover:not(.disabled) { 
-    background: #1a1a1a; 
-    border-color: var(--accent); 
-  }
-
-  .p-btn.disabled { 
-    opacity: 0.2; 
-    cursor: not-allowed; 
-  }
-
-  .pages { 
-    color: #666; 
-    font-size: 0.95rem; 
-    font-weight: 600; 
-    font-family: monospace;
-  }
+  .pagination { margin-top: 60px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+  .p-btn { padding: 8px 16px; background: #111; border: 1px solid #333; border-radius: 6px; text-decoration: none; color: #fff; }
+  .p-btn.disabled { opacity: 0.3; }
+  .pages { color: #666; font-size: 0.9rem; }
 </style>
