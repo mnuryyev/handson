@@ -45,9 +45,13 @@ const t = nav[lang];
         </div>
 
         <ul class="nav-links">
-          <li><a href={`/${lang}/articles/1`}>{t.articles}</a></li>
-          <li><a href={`/${lang}/labs`}>{t.labs}</a></li>
-          <li><a href={`/${lang}/writeups`}>{t.writeups}</a></li> <li><a href={`/${lang}/tools`}>{t.tools}</a></li>       <li><a href={`/${lang}/projects`}>{t.projects}</a></li>
+          {/* Добавляем {base} перед каждой ссылкой и убираем лишний начальный слеш */}
+          <li><a href={`${base}${lang}/articles/1`}>{t.articles}</a></li>
+          <li><a href={`${base}${lang}/labs`}>{t.labs}</a></li>
+          <li><a href={`${base}${lang}/writeups`}>{t.writeups}</a></li>
+          <li><a href={`${base}${lang}/tools`}>{t.tools}</a></li>
+          <li><a href={`${base}${lang}/projects`}>{t.projects}</a></li>
+          
           <li class="nav-actions">
             <LangSwitcher />
           </li>
