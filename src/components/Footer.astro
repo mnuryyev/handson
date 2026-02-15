@@ -1,15 +1,16 @@
 ---
-// Принимаем язык из пропсов (по умолчанию ru)
-const base = import.meta.env.BASE_URL;
-const { lang = "ru" } = Astro.props;
+// Определяем язык прямо из URL, чтобы не зависеть от пропсов
+const { pathname } = Astro.url;
+const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
+const base = import.meta.env.BASE_URL;
 const currentYear = new Date().getFullYear();
 
 // Объекты перевода
 const translations = {
   ru: {
     articles: "Статьи",
-    labs: "Лабораторные",
+    labs: "Безопасность",
     writeups: "Writeups",
     tools: "Tools",
     projects: "Проекты",
@@ -25,7 +26,7 @@ const translations = {
   }
 };
 
-const t = translations[lang] || translations.ru;
+const t = translations[lang];
 ---
 
 <footer class="footer">
