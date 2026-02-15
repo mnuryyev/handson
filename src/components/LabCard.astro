@@ -2,22 +2,29 @@
 // 1. Получаем данные из пропсов
 const { title, desc, url, image, date } = Astro.props;
 
-// 2. Определяем текущий язык из URL
+// 2. Получаем базовый путь проекта
+const base = import.meta.env.BASE_URL; // Это "/handson/"
+
+// 3. Определяем текущий язык
 const { pathname } = Astro.url;
-const isEn = pathname.startsWith('/en');
+const isEn = pathname.includes('/en/');
 const lang = isEn ? 'en' : 'ru';
 
-// 3. Формируем правильную ссылку. 
-// Если url не содержит префикс языка, добавляем его.
-const finalUrl = (url.startsWith('/ru/') || url.startsWith('/en/')) 
-  ? url 
-  : `/${lang}${url.startsWith('/') ? url : '/' + url}`;
+// 4. Формируем правильную ссылку для карточки
+// Убираем начальный слеш у url, если он есть, и клеим к base + lang
+const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+const finalUrl = `${base}${cleanUrl}`;
+
+// 5. Формируем путь к картинке
+// Если картинка лежит в public/images/lab.jpg, то image должен быть "images/lab.jpg"
+const cleanImage = image && image.startsWith('/') ? image.slice(1) : image;
+const finalImage = image ? `${base}${cleanImage}` : null;
 ---
 
 <a href={finalUrl} class="yt-video-card">
   <div class="thumbnail">
-    {image ? (
-      <img src={image} alt={title} class="card-img" />
+    {finalImage ? (
+      <img src={finalImage} alt={title} class="card-img" />
     ) : (
       <div class="no-img">LAB PREVIEW</div>
     )}
