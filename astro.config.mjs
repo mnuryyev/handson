@@ -1,5 +1,9 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  // Укажи адрес своего сайта на GitHub Pages
+  site: 'https://mnuryyev.github.io',
+  // Укажи название репозитория в начале и конце со слешами
+  base: '/handson/', 
+  // ... твои остальные настройки (интеграции и т.д.)
+});
