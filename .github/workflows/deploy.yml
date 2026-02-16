@@ -3,24 +3,29 @@ name: Deploy Astro Site
 on:
   push:
     branches:
-      - web   # собираем только при пуше в web
+      - web  # workflow срабатывает только при пуше в web
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Клонируем репозиторий
       - uses: actions/checkout@v3
 
+      # 2. Устанавливаем Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3. Устанавливаем зависимости Astro
       - run: npm install
 
+      # 4. Собираем Astro сайт
       - run: npm run build
 
-      - uses: peaceiris/actions-gh-pages@v5
+      # 5. Публикуем готовый сайт в gh-pages
+      - uses: peaceiris/actions-gh-pages@v5.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
