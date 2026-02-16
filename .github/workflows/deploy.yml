@@ -3,30 +3,32 @@ name: Deploy Astro Site
 on:
   push:
     branches:
-      - web  # workflow запускается только при пуше в ветку web
+      - web   # запускаем только при пуше в web
+  workflow_dispatch:   # позволяет запускать вручную
+
+permissions:
+  pages: write
+  contents: read
+  id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Проверить репозиторий
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
-      # 2) Установить Node.js
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+      - name: Build Astro
+        uses: withastro/action@v5
 
-      # 3) Установить зависимости
-      - run: npm install
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
 
-      # 4) Собрать Astro
-      - run: npm run build
-
-      # 5) Публиковать в ветку gh-pages
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+        id: deployment
+        uses: actions/deploy-pages@v4
