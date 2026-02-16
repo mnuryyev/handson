@@ -1,0 +1,123 @@
+---
+import MainLayout from '../../../../layouts/MainLayout.astro'; // 4 уровня вверх!
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const lang = "ru";
+  const projectsDir = `./src/content/projects/${lang}`;
+  
+  if (!fs.existsSync(projectsDir)) return [];
+
+  const folders = fs.readdirSync(projectsDir).filter(f => 
+    fs.statSync(path.join(projectsDir, f)).isDirectory()
+  );
+
+  let paths = [];
+  for (const folder of folders) {
+    const folderPath = path.join(projectsDir, folder);
+    const files = fs.readdirSync(folderPath).filter(f => f.endsWith('.md'));
+    files.forEach(file => {
+      paths.push({
+        params: { project: folder, card: file.replace('.md', '') },
+        props: { lang }
+      });
+    });
+  }
+  return paths;
+}
+
+const { project, card } = Astro.params;
+const { lang } = Astro.props;
+const filePath = path.join('./src/content/projects', lang, project, `${card}.md`);
+const fileContent = fs.readFileSync(filePath, 'utf-8');
+const { data, content } = matter(fileContent);
+
+const htmlContent = marked.parse(content);
+---
+
+<MainLayout title={data.title}>
+  <div class="article-container">
+    <nav class="breadcrumb">
+      <a href={`/${lang}/projects`}>Проекты</a> 
+      <span class="sep">/</span> 
+      <a href={`/${lang}/projects/${project}`}>{project.replace(/-/g, ' ')}</a>
+      <span class="sep">/</span>
+      <span class="current">{data.title}</span>
+    </nav>
+
+    <article class="prose">
+      <header class="article-header">
+        <h1>{data.title}</h1>
+        <div class="meta">Проект: <strong>{project.replace(/-/g, ' ')}</strong></div>
+      </header>
+
+      <hr class="divider" />
+
+      <div class="article-body" set:html={htmlContent} />
+    </article>
+  </div>
+</MainLayout>
+
+<style>
+  .article-container {
+    max-width: 1100px; 
+    margin: 40px auto;
+    padding: 0 40px;
+  }
+
+  .breadcrumb { margin-bottom: 30px; font-size: 0.9rem; color: #666; text-transform: capitalize; }
+  .breadcrumb a { color: var(--accent); text-decoration: none; }
+  .breadcrumb .sep { margin: 0 10px; opacity: 0.3; }
+  .breadcrumb .current { color: #aaa; }
+
+  .article-header h1 { font-size: 2.8rem; margin-bottom: 10px; color: #fff; }
+  .meta { color: #666; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+  .meta strong { color: var(--accent); }
+
+  .divider { border: 0; border-top: 1px solid #222; margin: 30px 0; }
+
+  .article-body {
+    line-height: 1.8;
+    font-size: 1.10rem;
+    color: #e0e0e0;
+    word-wrap: break-word;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .article-body :global(h2), .article-body :global(h3) { 
+    text-align: left; 
+    color: #fff; 
+    margin: 1.5em 0 0.5em; 
+  }
+  
+  .article-body :global(p) { margin-bottom: 1.5em; }
+
+  .article-body :global(pre) {
+    background: #0b0b0b;
+    padding: 24px;
+    border-radius: 12px;
+    overflow-x: auto;
+    border: 1px solid #222;
+    margin: 2em 0;
+    text-align: left;
+  }
+
+  .article-body :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 2.5em 0;
+    border: 1px solid #333;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .article-container { padding: 0 20px; margin: 20px auto; }
+    .article-header h1 { font-size: 2rem; }
+    .article-body { text-align: left; }
+  }
+</style>

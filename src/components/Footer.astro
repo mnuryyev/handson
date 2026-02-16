@@ -1,0 +1,156 @@
+---
+// Принимаем язык из пропсов (по умолчанию ru)
+const { lang = "ru" } = Astro.props;
+
+const currentYear = new Date().getFullYear();
+
+// Объекты перевода
+const translations = {
+  ru: {
+    articles: "Статьи",
+    labs: "Лабораторные",
+    writeups: "Writeups",
+    tools: "Tools",
+    projects: "Проекты",
+    rights: "Все права защищены.",
+  },
+  en: {
+    articles: "Articles",
+    labs: "Labs",
+    writeups: "Writeups",
+    tools: "Tools",
+    projects: "Projects",
+    rights: "All rights reserved.",
+  }
+};
+
+const t = translations[lang] || translations.ru;
+---
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-left">
+      <div class="footer-logo">
+        <a href={`/${lang}`}>HANDS<span>.ON</span></a>
+      </div>      
+    </div>
+
+    <div class="footer-right">
+      <div class="footer-nav">
+        <a href={`/${lang}/articles/1`}>{t.articles}</a>
+        <a href={`/${lang}/labs`}>{t.labs}</a>
+        <a href={`/${lang}/writeups/1`}>{t.writeups}</a>
+        <a href={`/${lang}/tools`}>{t.tools}</a>
+        <a href={`/${lang}/projects`}>{t.projects}</a>
+      </div>
+      
+      <div class="footer-social">
+        <a href="https://github.com/mnuryyev" target="_blank" class="social-btn">
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container bottom-wrapper">
+      <p>&copy; {currentYear} HANDS.ON. {t.rights}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Стили остаются без изменений */
+  .footer {
+    width: 100%;
+    background: #0a0a0a;
+    border-top: 1px solid #1a1a1a;
+    padding: 40px 0 10px 0;
+    margin-top: 60px;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-logo a {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-nav a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.2s;
+  }
+
+  .footer-nav a:hover { color: #fff; }
+
+  .social-btn {
+    background: #111;
+    border: 1px solid #222;
+    padding: 6px 14px;
+    border-radius: 6px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.2s;
+  }
+
+  .social-btn:hover {
+    border-color: var(--accent);
+    background: #161616;
+  }
+
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 20px auto 0 auto;
+    padding: 20px 20px 0 20px;
+    border-top: 1px solid #111;
+    display: flex;
+    justify-content: space-between;
+    color: #7a7a7a;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      gap: 20px;
+      text-align: center;
+    }
+    .footer-right {
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+</style>

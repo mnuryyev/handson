@@ -1,0 +1,57 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const articlesDir = './src/content/articles/en';
+  if (!fs.existsSync(articlesDir)) return [];
+  
+  const files = fs.readdirSync(articlesDir).filter(f => f.endsWith('.md'));
+  return files.map(file => ({ params: { slug: file.replace('.md', '') } }));
+}
+
+const { slug } = Astro.params;
+const lang = "en";
+const filePath = path.join('./src/content/articles/en', `${slug}.md`);
+const fileContent = fs.readFileSync(filePath, 'utf-8');
+const { data, content } = matter(fileContent);
+const htmlContent = marked.parse(content);
+---
+
+<MainLayout title={data.title}>
+  <div class="article-container">
+    <nav class="breadcrumb">
+      <a href={`/${lang}/articles`}>Articles</a> 
+      <span class="sep">/</span> 
+      <span class="current">{data.title}</span>
+    </nav>
+
+    <article class="prose">
+      <header class="article-header">
+        <h1>{data.title}</h1>
+      </header>
+      
+      <div class="article-body" set:html={htmlContent} />
+    </article>
+  </div>
+</MainLayout>
+
+<style>
+  /* Стили идентичны русской версии */
+  .article-container { max-width: 900px; margin: 60px auto; padding: 0 40px; }
+  .breadcrumb { margin-bottom: 25px; font-size: 0.9rem; color: #666; }
+  .breadcrumb a { color: var(--accent); text-decoration: none; }
+  .breadcrumb .sep { margin: 0 10px; opacity: 0.3; }
+  .article-header h1 { font-size: 2.8rem; margin-bottom: 12px; color: #fff; }
+  .lead { font-size: 1.2rem; color: #aaa; line-height: 1.6; margin-bottom: 20px; }
+  .meta-row { display: flex; gap: 30px; margin-top: 20px; }
+  .meta-item span { font-size: 0.7rem; color: #555; text-transform: uppercase; font-weight: bold; }
+  .meta-item strong { font-size: 0.9rem; color: #eee; }
+  .divider { border: 0; border-top: 1px solid #222; margin: 30px 0; }
+  .article-body { line-height: 1.8; font-size: 1.1rem; color: #e0e0e0; }
+  .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; }
+  .article-body :global(img) { width: 100%; border-radius: 12px; margin: 2rem 0; border: 1px solid #333; }
+</style>

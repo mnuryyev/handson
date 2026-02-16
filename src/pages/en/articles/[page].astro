@@ -1,0 +1,80 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import LabCard from '../../../components/LabCard.astro'; 
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+
+export async function getStaticPaths({ paginate }) {
+  // Читаем из подпапки en
+  const articlesDir = './src/content/articles/en';
+  
+  const files = fs.existsSync(articlesDir) 
+    ? fs.readdirSync(articlesDir).filter(f => f.endsWith('.md'))
+    : [];
+
+  const allArticles = files.map(file => {
+    const fileContent = fs.readFileSync(path.join(articlesDir, file), 'utf-8');
+    const { data } = matter(fileContent);
+    return {
+      slug: file.replace('.md', ''),
+      ...data
+    };
+  }).sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
+
+  return paginate(allArticles, { pageSize: 12 });
+}
+
+const { page } = Astro.props;
+const lang = "en"; 
+---
+
+<MainLayout title={`Articles - Page ${page.currentPage}`}>
+  <div class="container">
+    <header class="page-header">
+      <h1>🌐 Networks & Administration</h1>
+      <p>Insights and practical notes on networking and system administration</p>
+    </header>
+
+    <div class="grid">
+      {page.data.map(article => (
+        <LabCard 
+          title={article.title} 
+          desc={article.description} 
+          date={article.date} 
+          url={`/${lang}/articles/${article.slug}`} 
+          image={article.image}
+        />
+      ))}
+    </div>
+
+    <nav class="pagination">
+      {page.url.prev ? (
+        <a href={page.url.prev} class="p-btn">← Previous</a>
+      ) : (
+        <span class="p-btn disabled">← Previous</span>
+      )}
+      <div class="pages">{page.currentPage} / {page.lastPage}</div>
+      {page.url.next ? (
+        <a href={page.url.next} class="p-btn">Next →</a>
+      ) : (
+        <span class="p-btn disabled">Next →</span>
+      )}
+    </nav>
+  </div>
+</MainLayout>
+
+<style>
+  /* Стили такие же, как в русской версии */
+  .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+  .page-header { margin-bottom: 50px; border-bottom: 1px solid #222; padding-bottom: 30px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 40px 25px;
+  }
+  .pagination { margin-top: 60px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+  .p-btn { padding: 8px 16px; background: #111; border: 1px solid #333; border-radius: 6px; text-decoration: none; color: #fff; }
+  .p-btn.disabled { opacity: 0.3; }
+  .pages { color: #666; font-size: 0.9rem; }
+</style>

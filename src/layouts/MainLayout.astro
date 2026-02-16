@@ -1,0 +1,159 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import LangSwitcher from '../components/LangSwitcher.astro';
+
+const { title } = Astro.props;
+const { pathname } = Astro.url;
+
+// Определяем текущий язык для меню (ru по умолчанию)
+const lang = pathname.startsWith('/en') ? 'en' : 'ru';
+
+// Переводы для навигации
+const nav = {
+  ru: {
+    articles: 'Сети и администрирование',
+    labs: 'Безопасность',
+    projects: 'Проекты',
+    writeups: 'Writeups', // Добавили
+    tools: 'Tools',       // Добавили
+  },
+  en: {
+    articles: 'Networks & Administration',
+    labs: 'Security',
+    projects: 'Projects',
+    writeups: 'Writeups',
+    tools: 'Tools',
+  }
+};
+
+const t = nav[lang];
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+  </head>
+  <body>
+   <nav class="navbar">
+      <div class="container nav-wrapper">
+        <div class="nav-logo">
+          <a href={`/${lang}/`}>HANDS<span>.ON</span></a>
+        </div>
+
+        <ul class="nav-links">
+          <li><a href={`/${lang}/articles/1`}>{t.articles}</a></li>
+          <li><a href={`/${lang}/labs`}>{t.labs}</a></li>
+          <li><a href={`/${lang}/writeups`}>{t.writeups}</a></li> <li><a href={`/${lang}/tools`}>{t.tools}</a></li>       <li><a href={`/${lang}/projects`}>{t.projects}</a></li>
+          <li class="nav-actions">
+            <LangSwitcher />
+          </li>
+          <li>
+            <a href="https://github.com/mnuryyev" class="btn-projects" target="_blank" rel="noopener noreferrer">Github</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="container main-content">
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+  </body>
+</html>
+
+<style is:global>
+  /* Стили остаются без изменений */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  
+  .main-content {
+    flex: 1;
+    width: 100%;
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+
+  .navbar {
+    border-bottom: 1px solid #1a1a1a;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 25px; /* Немного уменьшил отступ, чтобы всё влезло */
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: #888;
+    font-weight: 500;
+    transition: 0.3s;
+    font-size: 0.95rem; /* Чуть-чуть меньше шрифт для компактности */
+  }
+
+  .nav-links a:hover {
+    color: #fff;
+  }
+
+  .nav-logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+  }
+
+  .nav-actions {
+    padding: 0 10px;
+    border-left: 1px solid #222;
+    border-right: 1px solid #222;
+  }
+
+  .btn-projects {
+    background: #fff;
+    color: #000 !important;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+
+  .btn-projects:hover {
+    background: var(--accent) !important;
+    color: #fff !important;
+  }
+</style>

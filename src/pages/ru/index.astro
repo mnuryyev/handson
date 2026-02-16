@@ -1,0 +1,215 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import LabCard from '../../components/LabCard.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+
+const lang = "ru";
+
+// Функция для получения свежих лаб и статей с сортировкой по ORDER
+function getLatestFiles(dirPath) {
+  const fullPath = path.resolve(dirPath);
+  if (!fs.existsSync(fullPath)) return [];
+    
+  const files = fs.readdirSync(fullPath).filter(f => f.endsWith('.md'));
+    
+  return files.map(file => {
+    const fileContent = fs.readFileSync(path.join(fullPath, file), 'utf-8');
+    const { data } = matter(fileContent);
+    return {
+      slug: file.replace('.md', ''),
+      data: data
+    };
+  })
+  .sort((a, b) => {
+    // 1. Принудительно превращаем order в числа для сравнения
+    const orderA = a.data.order !== undefined ? parseInt(a.data.order) : 999;
+    const orderB = b.data.order !== undefined ? parseInt(b.data.order) : 999;
+
+    // 2. Если порядковые номера разные, сортируем по ним (1, 2, 3...)
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    // 3. Если order одинаковый или отсутствует, сортируем по дате (новые выше)
+    const dateA = new Date(a.data.date || 0).getTime();
+    const dateB = new Date(b.data.date || 0).getTime();
+    return dateB - dateA;
+  })
+  .slice(0, 3);
+}
+
+const latestLabs = getLatestFiles(`./src/content/labs/${lang}`);
+const latestArticles = getLatestFiles(`./src/content/articles/${lang}`);
+const latestWriteups = getLatestFiles(`./src/content/writeups/${lang}`);
+const latestTools = getLatestFiles(`./src/content/tools/${lang}`);
+
+// --- ЛОГИКА ПРОЕКТОВ С СОРТИРОВКОЙ ПАПОК (опционально) ---
+const projectsDir = path.resolve(`./src/content/projects/${lang}`);
+let latestProjects = [];
+
+if (fs.existsSync(projectsDir)) {
+  const projectFolders = fs.readdirSync(projectsDir).filter(f => 
+    fs.statSync(path.join(projectsDir, f)).isDirectory()
+  );
+
+  latestProjects = projectFolders.map(folder => {
+    const folderPath = path.join(projectsDir, folder);
+    const files = fs.readdirSync(folderPath).filter(f => f.endsWith('.md')).sort();
+    
+    if (files.length === 0) return null;
+
+    // Читаем первый файл проекта, чтобы достать его описание и его собственный order
+    const firstFileContent = fs.readFileSync(path.join(folderPath, files[0]), 'utf-8');
+    const { data } = matter(firstFileContent);
+
+    return { 
+       folder, 
+       title: folder.replace(/-/g, ' '),
+       description: data.description || "Разбор проекта",
+       count: files.length,
+       firstCard: files[0].replace('.md', ''),
+       order: data.order !== undefined ? parseInt(data.order) : 999 // Берем order из первой карточки проекта
+    };
+  })
+  .filter(project => project !== null)
+  .sort((a, b) => a.order - b.order) // Сортируем и папки проектов тоже
+  .slice(0, 3);
+}
+
+function pluralize(count, one, two, five) {
+  let n = Math.abs(count);
+  n %= 100;
+  if (n >= 5 && n <= 20) return five;
+  n %= 10;
+  if (n === 1) return one;
+  if (n >= 2 && n <= 4) return two;
+  return five;
+}
+---
+
+<MainLayout title="Главная | HANDS.ON">
+  <section class="hero">
+    <h1><span>Проекты,</span> <span>Writeups</span> и разборы по <span>сетям</span> и <span>безопасности</span></h1>
+    <p>Документация, лабораторные и разборы технологий.</p>
+  </section>
+
+    <section class="home-section">
+    <div class="section-header">
+      <h2>🌐 Разборы по сетям и администрированию</h2>
+      <a href={`/${lang}/articles/1`}>Все →</a>
+    </div>
+    <div class="grid">
+      {latestArticles.map(article => (
+        <LabCard 
+          title={article.data.title} 
+          desc={article.data.description} 
+          image={article.data.image} 
+          date={article.data.date} 
+          url={`/${lang}/articles/${article.slug}`} 
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="section-header">
+      <h2>🔐 Разборы по безопасности и защите систем</h2>
+      <a href={`/${lang}/labs`}>Все →</a>
+    </div>
+    <div class="grid">
+      {latestLabs.map(lab => (
+        <LabCard 
+          title={lab.data.title} 
+          desc={lab.data.description} 
+          image={lab.data.image} 
+          date={lab.data.date} 
+          url={`/${lang}/labs/${lab.slug}`} 
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="section-header">
+      <h2>🎯 Разборы CTF, HTB и THM</h2>
+      <a href={`/${lang}/writeups/1`}>Все →</a>
+    </div>
+    <div class="grid">
+      {latestWriteups.map(post => (
+        <LabCard 
+          title={post.data.title} 
+          desc={post.data.description} 
+          image={post.data.image} 
+          date={post.data.date} 
+          url={`/${lang}/writeups/${post.slug}`} 
+        />
+      ))}
+    </div>
+  </section>
+
+  <section class="home-section">
+    <div class="section-header">
+      <h2>🛠️ Инструменты, скрипты и утилиты</h2>
+      <a href={`/${lang}/tools/1`}>Все →</a>
+    </div>
+    <div class="grid">
+      {latestTools.map(tool => (
+        <LabCard 
+          title={tool.data.title} 
+          desc={tool.data.description} 
+          image={tool.data.image} 
+          date={tool.data.date} 
+          url={`/${lang}/tools/${tool.slug}`} 
+        />
+      ))}
+    </div>
+  </section>
+
+
+
+  <section class="home-section">
+    <div class="section-header">
+      <h2>📁 Проекты</h2>
+      <a href={`/${lang}/projects`}>Все проекты →</a>
+    </div>
+    <div class="grid">
+      {latestProjects.map(proj => (
+        <a href={`/${lang}/projects/${proj.folder}/${proj.firstCard}`} class="folder-card">
+          <div class="folder-header">
+             <div class="folder-icon">📁</div>
+             <span class="step-badge">
+               {proj.count} {pluralize(proj.count, 'часть', 'части', 'частей')}
+             </span>
+          </div>
+          <div class="folder-body">
+            <h3>{proj.title}</h3>
+            <p>{proj.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  /* Стили остаются прежними */
+  .hero { padding: 80px 0; text-align: center; }
+  .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; letter-spacing: -2px; color: #fff; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: #888; font-size: 1.25rem; max-width: 600px; margin: 0 auto; }
+  .home-section { padding: 40px 0; }
+  .section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+  .section-header h2 { font-size: 1.5rem; margin: 0; color: #fff; }
+  .section-header a { color: var(--accent); font-weight: 500; font-size: 0.9rem; text-decoration: none; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+  
+  .folder-card { background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 24px; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 15px; }
+  .folder-card:hover { border-color: var(--accent); transform: translateY(-5px); background: #222; }
+  .folder-header { display: flex; justify-content: space-between; align-items: center; }
+  .folder-icon { font-size: 2.5rem; }
+  .step-badge { background: rgba(var(--accent-rgb), 0.1); color: var(--accent); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; border: 1px solid var(--accent); }
+  .folder-body h3 { margin: 0; color: #fff; text-transform: capitalize; font-size: 1.25rem; }
+  .folder-body p { margin: 8px 0 0; color: #888; font-size: 0.95rem; line-height: 1.5; }
+</style>

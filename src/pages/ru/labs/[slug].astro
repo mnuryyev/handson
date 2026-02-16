@@ -1,0 +1,103 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro'; // Исправили путь (3 уровня вверх)
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  // Теперь ищем файлы в папке контента для русского языка
+  const labsDir = './src/content/labs/ru';
+  
+  if (!fs.existsSync(labsDir)) return [];
+
+  const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
+
+  return files.map(file => ({
+    params: { slug: file.replace('.md', '') }
+  }));
+}
+
+const { slug } = Astro.params;
+const lang = "ru"; // Указываем язык текущей страницы
+
+// Путь к конкретному файлу тоже теперь включает /ru/
+const filePath = path.join('./src/content/labs/ru', `${slug}.md`);
+const fileContent = fs.readFileSync(filePath, 'utf-8');
+const { data, content } = matter(fileContent);
+
+// Превращаем Markdown в HTML
+const htmlContent = marked.parse(content);
+---
+
+<MainLayout title={data.title}>
+  <div class="article-container">
+    <nav class="breadcrumb">
+      <a href={`/${lang}/labs`}>Безопасность</a> 
+      <span class="sep">/</span> 
+      <span class="current">{data.title}</span>
+    </nav>
+
+    <article class="prose">
+      <header class="article-header">
+        <h1>{data.title}</h1>
+      </header>
+      
+      <div class="article-body" set:html={htmlContent} />
+    </article>
+  </div>
+</MainLayout>
+
+<style>
+  .article-container {
+    max-width: 1100px; 
+    margin: 60px auto;
+    padding: 0 40px;
+  }
+
+  .breadcrumb { margin-bottom: 25px; font-size: 0.9rem; color: #666; }
+  .breadcrumb a { color: var(--accent); text-decoration: none; }
+  .breadcrumb .sep { margin: 0 10px; opacity: 0.3; }
+
+  .article-header h1 { font-size: 2.8rem; margin-bottom: 12px; letter-spacing: -1.2px; color: #fff; }
+  
+  /* ТЕКСТ */
+  .article-body {
+    line-height: 1.7;
+    font-size: 1.10rem;
+    color: #e0e0e0;
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; text-align: left; }
+  .article-body :global(p) { margin-bottom: 1.2em; }
+
+  /* КОД */
+  .article-body :global(pre) {
+    background: #0b0b0b;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #222;
+    margin: 1.5em 0;
+    text-align: left;
+    overflow-x: auto;
+  }
+
+  /* КАРТИНКИ */
+  .article-body :global(img) {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 1.5rem auto;
+    border: 1px solid #333;
+  }
+
+  @media (max-width: 768px) {
+    .article-container { margin: 40px auto; padding: 0 20px; }
+    .article-body { text-align: left; }
+    .article-header h1 { font-size: 2rem; }
+  }
+</style>

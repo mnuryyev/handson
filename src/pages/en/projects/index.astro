@@ -1,0 +1,160 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+
+// 1. DATA PREPARATION (Server-side)
+const lang = "en"; // Current language
+const projectsDir = path.resolve(`./src/content/projects/${lang}`);
+
+// Check if folder exists
+if (!fs.existsSync(projectsDir)) {
+  // We don't create it automatically to avoid empty dirs, but ensure the app doesn't crash
+}
+
+// Read project folders inside /en/
+const projectFolders = fs.existsSync(projectsDir) 
+  ? fs.readdirSync(projectsDir).filter(f => 
+      fs.statSync(path.join(projectsDir, f)).isDirectory()
+    )
+  : [];
+
+// Collect data about projects and their cards
+const allProjects = projectFolders.map(folder => {
+  const folderPath = path.join(projectsDir, folder);
+  const files = fs.readdirSync(folderPath).filter(f => f.endsWith('.md'));
+  
+  const cards = files.map(file => {
+    const fileContent = fs.readFileSync(path.join(folderPath, file), 'utf-8');
+    const { data } = matter(fileContent);
+    
+    return { 
+      ...data, 
+      fileName: file.replace('.md', '') 
+    }; 
+  });
+
+  return { folder, cards };
+});
+---
+
+<MainLayout title="My Projects">
+  <section>
+    <header class="page-header">
+      <h1>📁 Projects</h1>
+      <p>Projects & Guides.</p>
+    </header>
+    
+    {allProjects.length === 0 && (
+      <div class="empty-state">
+        <p>No projects yet. Create a folder in <code>src/content/projects/{lang}/name</code></p>
+      </div>
+    )}
+
+    {allProjects.map(project => (
+      <div class="project-group">
+        <div class="project-title">
+          <h2>📁 {project.folder}</h2>
+        </div>
+        
+        <div class="cards-preview-grid">
+          {project.cards.map(card => (
+            /* FIXED URL: Added /en/ prefix */
+            <a href={`/${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
+              <div class="mini-card">
+                <div class="card-icon">📝</div>
+                <div class="card-body">
+                  <h4>{card.title || "Untitled"}</h4>
+                  <p>{card.description || "No description provided"}</p>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+</MainLayout>
+
+<style>
+  /* Styles remain the same for visual consistency */
+  .page-header {
+    margin-bottom: 40px;
+    border-left: 4px solid var(--accent);
+    padding-left: 20px;
+  }
+
+  .project-group {
+    background: #111111;
+    border: 1px solid #222;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .project-title h2 {
+    margin: 0 0 25px 0;
+    font-size: 1.4rem;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .cards-preview-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 20px !important;
+    width: 100%;
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    height: 100%;
+  }
+
+  .mini-card {
+    background: #1a1a1a;
+    border: 1px solid #282828;
+    padding: 24px;
+    border-radius: 12px;
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .card-link:hover .mini-card {
+    background: #222;
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .card-icon { font-size: 1.4rem; line-height: 1; }
+
+  .mini-card h4 {
+    margin: 0 0 8px 0;
+    color: var(--accent);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .mini-card p {
+    margin: 0;
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .cards-preview-grid {
+      grid-template-columns: 1fr !important;
+      gap: 15px !important;
+    }
+    .project-group { padding: 20px; }
+  }
+</style>

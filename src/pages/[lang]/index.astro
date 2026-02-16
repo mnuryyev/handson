@@ -1,0 +1,75 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import LabCard from '../../components/LabCard.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { ui } from '../../utils/i18n.js'; // Мы создадим этот файл следующим шагом
+
+// 1. Генерируем пути для Astro
+export async function getStaticPaths() {
+  return [
+    { params: { lang: 'ru' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+const t = ui[lang]; // Берем переводы
+
+function getLatestFiles(dirPath) {
+  const fullPath = path.resolve(dirPath);
+  if (!fs.existsSync(fullPath)) return [];
+    
+  const files = fs.readdirSync(fullPath).filter(f => f.endsWith('.md'));
+    
+  const dataMap = files.map(file => {
+    const fileContent = fs.readFileSync(path.join(fullPath, file), 'utf-8');
+    const { data } = matter(fileContent);
+    
+    // ЭТА СТРОЧКА ПОКАЖЕТ ВСЁ В ТЕРМИНАЛЕ
+    console.log(`Файл: ${file} | Язык: ${lang} | Order: ${data.order}`);
+
+    return {
+      slug: file.replace('.md', ''),
+      data: data
+    };
+  });
+
+  return dataMap
+    .sort((a, b) => {
+      const aOrder = a.data.order !== undefined ? Number(a.data.order) : 999;
+      const bOrder = b.data.order !== undefined ? Number(b.data.order) : 999;
+      return aOrder - bOrder;
+    })
+    .slice(0, 3);
+}
+
+const latestLabs = getLatestFiles('./src/content/labs', lang);
+const latestArticles = getLatestFiles('./src/content/articles', lang);
+---
+
+<MainLayout title={t['hero.title']}>
+  <section class="hero">
+    <h1>{t['hero.title']}</h1>
+    <p>{t['hero.desc']}</p>
+  </section>
+
+  <section class="home-section">
+    <div class="section-header">
+      <h2>🧪 {t['nav.labs']}</h2>
+      <a href={`/${lang}/labs`}>{lang === 'ru' ? 'Все лабы →' : 'All labs →'}</a>
+    </div>
+    <div class="grid">
+      {latestLabs.map(lab => (
+        <LabCard 
+          title={lab.data.title} 
+          desc={lab.data.description} 
+          image={lab.data.image} 
+          date={lab.data.date}  
+          url={`/${lang}/labs/${lab.slug}`} 
+        />
+      ))}
+    </div>
+  </section>
+</MainLayout>

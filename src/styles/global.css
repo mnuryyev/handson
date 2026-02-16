@@ -1,0 +1,115 @@
+:root {
+  --bg-color: #0f0f0f;
+  --card-bg: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+  --accent: #3ea6ff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2 { border-bottom: 1px solid #333; padding-bottom: 10px; }
+a { color: inherit; text-decoration: none; }
+
+/* Navbar Container */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(15, 15, 15, 0.8); /* Полупрозрачный черный */
+  backdrop-filter: blur(12px); /* Эффект матового стекла */
+  border-bottom: 1px solid #222;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-wrapper {
+  display: flex;
+  justify-content: space-between; /* Это разносит лого влево, а ссылки вправо */
+  align-items: center;
+  width: 100%;
+}
+
+/* Логотип */
+.nav-logo a {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-logo span {
+  color: var(--accent); /* Твой основной синий цвет */
+}
+
+/* Ссылки справа */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #fff;
+}
+
+/* Акцентная кнопка для Проектов */
+.btn-projects {
+  background: #222;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #333;
+  color: #fff !important;
+}
+
+.btn-projects:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 600px) {
+  .nav-links { gap: 16px; }
+  .nav-links a { font-size: 0.85rem; }
+}
+
+.grid {
+  display: grid;
+  /* Автоматическое создание колонок: минимум 300px, максимум 1 часть пространства */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+  gap: 24px;
+  width: 100%;
+}
+
+/* Контейнер, который держит всё по центру */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box; /* Чтобы padding не раздувал ширину */
+}

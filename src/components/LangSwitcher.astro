@@ -1,0 +1,48 @@
+---
+// src/components/LangSwitcher.astro
+const { pathname } = Astro.url;
+
+// Определяем текущий язык
+const isEn = pathname.startsWith('/en');
+const currentLang = isEn ? 'en' : 'ru';
+
+// Формируем путь для переключения
+// Если мы в /ru/labs/lab1, то станет /en/labs/lab1
+let targetPath;
+if (isEn) {
+    targetPath = pathname.replace('/en', '/ru');
+} else if (pathname.startsWith('/ru')) {
+    targetPath = pathname.replace('/ru', '/en');
+} else {
+    // На случай если мы в корне /
+    targetPath = '/en/';
+}
+---
+
+<div class="lang-switch">
+  <a href={targetPath} class={currentLang === 'ru' ? 'active' : ''}>RU</a>
+  <span class="sep">/</span>
+  <a href={targetPath} class={currentLang === 'en' ? 'active' : ''}>EN</a>
+</div>
+
+<style>
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .lang-switch a {
+    text-decoration: none;
+    color: #666;
+    transition: 0.3s;
+  }
+  .lang-switch a.active {
+    color: var(--accent); /* Твой оранжевый/акцентный цвет */
+  }
+  .lang-switch a:hover:not(.active) {
+    color: #eee;
+  }
+  .sep { color: #333; }
+</style>
