@@ -33,18 +33,16 @@ const t = translations[lang];
   <div class="container footer-content">
     <div class="footer-left">
       <div class="footer-logo">
-        {/* Добавляем base и убираем начальный слеш перед lang */}
-        <a href={`${base}${lang}`}>HANDS<span>.ON</span></a>
+        <a href={`${base}${lang}/`}>HANDS<span>.ON</span></a>
       </div>      
     </div>
 
     <div class="footer-right">
       <div class="footer-nav">
-        {/* Везде добавляем ${base} */}
         <a href={`${base}${lang}/articles/1`}>{t.articles}</a>
-        <a href={`${base}${lang}/labs`}>{t.labs}</a>
+        <a href={`${base}${lang}/labs/1`}>{t.labs}</a>
         <a href={`${base}${lang}/writeups/1`}>{t.writeups}</a>
-        <a href={`${base}${lang}/tools`}>{t.tools}</a>
+        <a href={`${base}${lang}/tools/1`}>{t.tools}</a>
         <a href={`${base}${lang}/projects`}>{t.projects}</a>
       </div>
       
@@ -64,19 +62,15 @@ const t = translations[lang];
 </footer>
 
 <style>
-  /* Стили остаются без изменений */
   .footer {
     width: 100%;
     background: #0a0a0a;
     border-top: 1px solid #1a1a1a;
-    padding: 40px 0 10px 0;
-    margin-top: 60px;
+    padding: 60px 0 20px 0;
+    margin-top: 80px;
   }
 
   .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -91,10 +85,11 @@ const t = translations[lang];
   }
 
   .footer-logo a {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 800;
     text-decoration: none;
     color: #fff;
+    letter-spacing: -1px;
   }
 
   .footer-logo span { color: var(--accent); }
@@ -113,7 +108,7 @@ const t = translations[lang];
   .footer-nav a {
     color: #888;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     transition: 0.2s;
   }
 
@@ -122,39 +117,56 @@ const t = translations[lang];
   .social-btn {
     background: #111;
     border: 1px solid #222;
-    padding: 6px 14px;
-    border-radius: 6px;
+    padding: 8px 18px;
+    border-radius: 8px;
     color: #fff;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     transition: 0.2s;
+    display: inline-block;
   }
 
   .social-btn:hover {
     border-color: var(--accent);
     background: #161616;
+    color: var(--accent);
   }
 
   .footer-bottom {
-    max-width: 1200px;
-    margin: 20px auto 0 auto;
-    padding: 20px 20px 0 20px;
+    margin-top: 40px;
+    padding-top: 20px;
     border-top: 1px solid #111;
-    display: flex;
-    justify-content: space-between;
-    color: #7a7a7a;
-    font-size: 0.75rem;
+    color: #555;
+    font-size: 0.85rem;
+    text-align: center;
   }
 
+  .bottom-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
   @media (max-width: 768px) {
+    .footer {
+      padding: 40px 0 20px 0;
+    }
     .footer-content {
       flex-direction: column;
-      gap: 20px;
+      gap: 30px;
       text-align: center;
     }
     .footer-right {
       flex-direction: column;
-      gap: 20px;
+      gap: 25px;
+    }
+    .footer-nav {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px 20px;
+    }
+    .footer-nav a {
+      font-size: 0.9rem;
     }
   }
 </style>
