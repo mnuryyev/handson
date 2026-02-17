@@ -16,23 +16,23 @@ Before starting the attack, it's necessary to conduct network reconnaissance and
 
 For the experiment, we deployed a virtual laboratory environment in which Windows 10 operating system is used as the victim, and Kali Linux as the attacking side. Both virtual machines are connected in Bridge mode, which allows them to be in one broadcast domain and directly interact with each other and with the router. The approximate topology looks like this:
 
-![01_topology](/images/arp_spoofing_sec/01_topology.png)
+![01_topology](/handson/images/arp_spoofing_sec/01_topology.png)
 
 First, on the victim's side, network settings were checked to determine the system's IP address and the main gateway address. This data is necessary for conducting the MITM attack, since all external traffic from the Windows machine goes exactly through the gateway. During the check, it was established that the victim's IP address is *192.168.70.11*, and the default gateway is *192.168.70.1*.
 
-![02_ipconfig](/images/arp_spoofing_sec/02_ipconfig.png)
+![02_ipconfig](/handson/images/arp_spoofing_sec/02_ipconfig.png)
 
 ### Step 2. Analyzing the Initial ARP Table
 
 After this, the initial ARP table on the Windows side was captured. This stage is necessary to preserve the correct system state before starting the attack and have the ability to compare it with results after ARP cache poisoning. Using the **arp -a** command, the current correspondence between the gateway's IP address and its MAC address was obtained:
 
-![03_arp_a_win](/images/arp_spoofing_sec/03_arp_a_win.png)
+![03_arp_a_win](/handson/images/arp_spoofing_sec/03_arp_a_win.png)
 
 From the output we see that the default gateway is linked with the correct router MAC address, and the entry type is designated as dynamic. This means the entry was obtained automatically and can be changed when receiving new ARP responses, which creates conditions for conducting ARP Spoofing. The captured ARP table is used later as a checkpoint.
 
 ### Step 3. Checking Network Interface on the Attacker's Side
 
-![04_kali_ip_a](/images/arp_spoofing_sec/04_kali_ip_a.png)
+![04_kali_ip_a](/handson/images/arp_spoofing_sec/04_kali_ip_a.png)
 
 On Kali we open the terminal and enter the command ip a. In the output we see that the active network interface is eth0, and the system's IP address is *192.168.70.12*. This means Kali is in the same network as the victim.
 
@@ -40,7 +40,7 @@ On Kali we open the terminal and enter the command ip a. In the output we see th
 
 On Kali Linux we check the target machine's availability. In the terminal we execute the ping command, specifying the Windows system's IP address *192.168.70.11*.
 
-![05_ping_from_kali](/images/arp_spoofing_sec/05_ping_from_kali.png)
+![05_ping_from_kali](/handson/images/arp_spoofing_sec/05_ping_from_kali.png)
 
 From the results we see that responses from the target node arrive without losses, and the delay is minimal. This confirms a stable network connection between the attacking machine and the victim and allows moving on to the next research stages.
 
@@ -50,9 +50,9 @@ To get an overall picture of the network, we use the netdiscover utility. In Kal
 
 Next, we start scanning the local network. We specify the used network interface (eth0) and the network range *192.168.70.0/24*. Scanning allows determining active devices in the segment and obtaining their IP and MAC addresses.
 
-![06_netdiscover_start](/images/arp_spoofing_sec/06_netdiscover_start.png)
+![06_netdiscover_start](/handson/images/arp_spoofing_sec/06_netdiscover_start.png)
 
-![07_scan_finish](/images/arp_spoofing_sec/07_scan_finish.png)
+![07_scan_finish](/handson/images/arp_spoofing_sec/07_scan_finish.png)
 
 
 After a few seconds, a list of discovered nodes appears in the output. In it we find:
@@ -76,7 +76,7 @@ To remain undetected, we must force Kali Linux to work in router mode, that is, 
 
 We perform verification and activation through the system variable net.ipv4.ip_forward:
 
-![08_forwarding](/images/arp_spoofing_sec/08_forwarding.png)
+![08_forwarding](/handson/images/arp_spoofing_sec/08_forwarding.png)
 
 ### Step 7. Installing dsniff
 
@@ -84,7 +84,7 @@ For implementing the attack, we need specific utilities capable of forming and s
 
 The main component we're interested in this set is the **arpspoof** utility. Its task is to automate the process of sending fake ARP responses. Instead of manually forming each frame, we delegate this to the program, and it will periodically broadcast our MAC address to the target, maintaining substituted entries in the ARP table. Installation check:
 
-![09_dsniff](/images/arp_spoofing_sec/09_dsniff.png)
+![09_dsniff](/handson/images/arp_spoofing_sec/09_dsniff.png)
 
 ARP cache is not static and updates over time, meaning the router periodically reminds of its real MAC address. arpspoof solves this problem by constantly broadcasting fake ARP responses and not allowing these entries to restore, keeping traffic under our control.
 
@@ -98,7 +98,7 @@ After completing preparations, we move on to the active phase, establishing cont
 
 We open two terminal windows in Kali Linux and place them side by side. This allows simultaneously controlling the ARP substitution process both from the victim's side and from the router's side.
 
-![10_attackingpng](/images/arp_spoofing_sec/10_attackingpng.png)
+![10_attackingpng](/handson/images/arp_spoofing_sec/10_attackingpng.png)
 
 **Terminal 1**. We launch the attack on the Windows machine. We specify the network interface (eth0), the victim's IP address (192.168.70.11), and the gateway address (192.168.70.1), on whose behalf we'll act.
 
@@ -120,7 +120,7 @@ After launching the active phase, we need to make sure that address substitution
 
 To verify the result, we switch to the Windows machine. In the command line we re-enter the **arp -a** command to view the current state of the ARP cache after the attack started.
 
-![11_arp_a_win](/images/arp_spoofing_sec/11_arp_a_win.png)
+![11_arp_a_win](/handson/images/arp_spoofing_sec/11_arp_a_win.png)
 
 When analyzing the output, we capture a critical moment: the router's IP address (192.168.70.1) and our attacking Kali machine's IP address (192.168.70.12) now have absolutely the **same physical address**.
 
@@ -137,19 +137,19 @@ We check that traffic is going through our system, and immediately configure Wir
 
 In the upper part of the Wireshark window, in the Filter field, we set display parameters. We need to see only HTTP requests coming from our victim or directed to it. We enter the following construction: **ip.addr == 192.168.70.11 && http**
 
-![12_wireshark_kali](/images/arp_spoofing_sec/12_wireshark_kali.png)
+![12_wireshark_kali](/handson/images/arp_spoofing_sec/12_wireshark_kali.png)
 
 To check the interception, we go to the Windows machine's side and open any browser. Most modern sites use HTTPS, because of which packet contents are encrypted and unavailable for viewing. To see HTTP traffic in plain form, we use the site http://neverssl.com, which works without encryption.
 
-![13_neverssl](/images/arp_spoofing_sec/13_neverssl.png)
+![13_neverssl](/handson/images/arp_spoofing_sec/13_neverssl.png)
 
 ### Step 11. Analyzing Intercepted Data
 
 After the victim visited the site, a list of intercepted HTTP packets appeared in the Wireshark window on Kali Linux. Now we can study the contents of any of them in detail to understand what information an attacker can obtain.
 
-![14_wireshark_http](/images/arp_spoofing_sec/14_wireshark_http.png)
+![14_wireshark_http](/handson/images/arp_spoofing_sec/14_wireshark_http.png)
 
-![15_analyzing](/images/arp_spoofing_sec/15_analyzing.png)
+![15_analyzing](/handson/images/arp_spoofing_sec/15_analyzing.png)
 
 For analysis, we select any packet with the **GET / HTTP/1.1** method. In the lower part of the Wireshark window we expand the Hypertext Transfer Protocol section and look at the application layer contents. Exactly this data in a normal situation should be visible only to the client and web server.
 
@@ -165,7 +165,7 @@ Since traffic is transmitted without encryption, all this data is displayed in p
 
 To assess the real risks of the attack, we'll conduct an experiment on intercepting user-entered data. In modern conditions, most sites use encryption, so for the purity of the experiment we'll create a local test form imitating an authorization page.
 
-![16_test_html](/images/arp_spoofing_sec/16_test_html.png)
+![16_test_html](/handson/images/arp_spoofing_sec/16_test_html.png)
 
 On the Windows side, we create a simple HTML file with an input form. The main feature of this form is the use of the **POST** method and sending data via the unprotected HTTP protocol to the test service httpbin.org.
 
@@ -173,19 +173,19 @@ On the Windows side, we create a simple HTML file with an input form. The main f
 
 On Kali, we'll change the filter in Wireshark to **http.request.method == "POST"** to quickly find the packet with form data.
 
-![17_start_wireshark](/images/arp_spoofing_sec/17_start_wireshark.png)
+![17_start_wireshark](/handson/images/arp_spoofing_sec/17_start_wireshark.png)
 
 ### Step 14. Sending Test Credentials
 
 On the Windows side, we fill in the created form. In the login field we entered *testuser*, and in the password field *test123*. After clicking the *Login* button, the data was sent to the network.
 
-![18_test_win](/images/arp_spoofing_sec/18_test_win.png)
+![18_test_win](/handson/images/arp_spoofing_sec/18_test_win.png)
 
 ### Step 15. Analyzing POST Request in Wireshark
 
 We returned to Kali Linux and among the intercepted traffic found a packet sent by the **POST** method. Unlike a regular GET request, this packet contains a message body, in which user-entered data is transmitted.
 
-![19_wireshark_result](/images/arp_spoofing_sec/19_wireshark_result.png)
+![19_wireshark_result](/handson/images/arp_spoofing_sec/19_wireshark_result.png)
 
 Clicking on the packet and expanding the **HTML Form URL Encoded** section, we got full access to the form contents.
 
@@ -203,7 +203,7 @@ This is important because with correct stopping, the utility automatically sends
 
 After the network tables are restored, we need to return our system to standard state. We disable the packet forwarding function so Kali again stops working as a router.
 
-![20_restore](/images/arp_spoofing_sec/20_restore.png)
+![20_restore](/handson/images/arp_spoofing_sec/20_restore.png)
 
 Leaving IP Forwarding enabled on a working machine is unsafe and impractical. Now our system again ignores packets not addressed to it.
 
