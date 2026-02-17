@@ -15,7 +15,7 @@ It broadcasts a request on the network, gets a response from the needed device, 
 
 ### 1. Build the Topology
 
-![01_topology](/images/arp_net/01_topology.png)
+![01_topology](/handson/images/arp_net/01_topology.png)
 
 For the lab setup in GNS3, we'll create a simple network with a Cisco router, a switch, and two virtual machines. The router will have a FastEthernet0/0 interface configured with address *192.168.1.1/24*, which will act as the gateway for all network devices. The switch connects all nodes in one subnet, providing data transmission at the data link layer.
 
@@ -23,19 +23,19 @@ For the lab setup in GNS3, we'll create a simple network with a Cisco router, a 
 
 ### 2. Configuring IP Addresses on the Router and Client PCs
 
-![02_set_router](/images/arp_net/02_set_router.png)
+![02_set_router](/handson/images/arp_net/02_set_router.png)
 
 Let's move on to configuring the Cisco router. First, we select the needed interface, in my case FastEthernet0/0, and assign it an IP address and subnet mask. For the interface in our network, we assign *192.168.1.1/24*. After that, the interface needs to be activated with the **no shutdown** command so it starts working and passing traffic. Now the router is ready to exchange data with devices in the local network.
 
 * * *
 
-![03_set_windows](/images/arp_net/03_set_windows.png)
+![03_set_windows](/handson/images/arp_net/03_set_windows.png)
 
 Now let's configure the IP address on the Windows 10 client machine. To do this, we open the network adapter settings, select the needed connection, and manually specify the IP address, subnet mask, and gateway. In our example, for Windows we set IP *192.168.1.10*, subnet mask *255.255.255.0*, and for the gateway we specify the router address - *192.168.1.1*. After saving the settings, the computer will be able to exchange data with other network devices and access the local subnet.
 
 * * *
 
-![04_set_route](/images/arp_net/04_set_route.png)
+![04_set_route](/handson/images/arp_net/04_set_route.png)
 
 On Linux, we'll configure the IP address manually through the terminal. In our case, the network interface is called **enp2s0**. To assign a static IP, we use the command **sudo ip addr add 192.168.1.11/24 dev enp2s0**. Next, we need to specify the default gateway through which the device will access the network **sudo ip route add default via 192.168.1.1**. After these actions, the enp2s0 interface gets IP address *192.168.1.11* with subnet mask *255.255.255.0*, and the router *192.168.1.1* acts as the gateway. Now the Ubuntu machine can correctly exchange data with other network devices and interact with the router.
 
@@ -43,13 +43,13 @@ On Linux, we'll configure the IP address manually through the terminal. In our c
 
 ### 3. Breakdown of Standard ARP Message Exchange
 
-![05_empty_arp](/images/arp_net/05_empty_arp.png)
+![05_empty_arp](/handson/images/arp_net/05_empty_arp.png)
 
 Let's move on to capturing network traffic using Wireshark. For convenience, we filter packets by ARP protocol to see only ARP messages. At the start of the capture, the ARP tables on both hosts are empty, so all requests and responses will be recorded from scratch.
 
 * * *
 
-![06_arp_d_win](/images/arp_net/06_arp_d_win.png)
+![06_arp_d_win](/handson/images/arp_net/06_arp_d_win.png)
 
 Before starting the experiment, we'll clear the ARP cache on both hosts so that all entries are created anew and we can observe the process in real time.
 
@@ -59,7 +59,7 @@ Initially the table is empty, but after running the ping command to another host
 
 * * *
 
-![07_arp_d_linux](/images/arp_net/07_arp_d_linux.png)
+![07_arp_d_linux](/handson/images/arp_net/07_arp_d_linux.png)
 
 On Linux, clearing the ARP cache is done with the command **sudo ip neigh flush all**. This command removes all current ARP entries for all interfaces, including enp2s0 in our case. After running it, the system forgets which MAC addresses correspond to which IPs, and all subsequent connections to other network devices will initiate new ARP requests.
 
@@ -67,13 +67,13 @@ To make sure the table is really empty, you can use **ip neigh show**. Initially
 
 * * *
 
-![08_ping](/images/arp_net/08_ping.png)
+![08_ping](/handson/images/arp_net/08_ping.png)
 
 We send ICMP requests to the Linux machine with IP address *192.168.1.11*, then proceed to analyze the network traffic in Wireshark.
 
 * * *
 
-![09_wireshark](/images/arp_net/09_wireshark.png)
+![09_wireshark](/handson/images/arp_net/09_wireshark.png)
 
 ARP request and ARP response entries appeared in Wireshark.
 
@@ -81,7 +81,7 @@ ARP request and ARP response entries appeared in Wireshark.
 
 #### ARP Request
 
-![10_arp_request](/images/arp_net/10_arp_request.png)
+![10_arp_request](/handson/images/arp_net/10_arp_request.png)
 
 When a device in a local network wants to send data to another device, it needs to know the recipient's MAC address. If there's no entry for this IP in the ARP cache, the system performs the following steps:
 
@@ -118,7 +118,7 @@ The packet is sent to address ff:ff:ff:ff:ff:ff, meaning to all computers in the
 
 #### ARP Reply
 
-![11_arp_reply](/images/arp_net/11_arp_reply.png)
+![11_arp_reply](/handson/images/arp_net/11_arp_reply.png)
 
 When a device receives an ARP request and finds that the IP in the request matches its own, it forms an ARP reply. This message tells the request sender which MAC address corresponds to the requested IP.
 
@@ -154,7 +154,7 @@ When a device receives an ARP request and finds that the IP in the request match
 
 ### Breakdown of Standard Gratuitous ARP (G-ARP) Exchange on the Network
 
-![12_arping_linux_grad](/images/arp_net/12_arping_linux_grad.png)
+![12_arping_linux_grad](/handson/images/arp_net/12_arping_linux_grad.png)
 
 Gratuitous ARP is a special type of ARP message that a device sends about itself, without anyone making a request. In other words, a computer or server itself tells the network: "Here's my IP and MAC address". Such packets don't require a response from other devices — they're broadcast so that all computers and network equipment in the local network update their ARP caches.
 
@@ -170,7 +170,7 @@ In Linux, sending G-ARP is easily done using the **arping** utility. The device 
 
 For example, if Ubuntu sends a G-ARP for IP 192.168.1.11, it broadcasts a message on the network, announcing its MAC address. All devices in the local network that receive this packet update their ARP caches, even if they didn't request this address. Thanks to this, subsequent data transmissions can be done directly, without extra requests.
 
-![13_g_arp](/images/arp_net/13_g_arp.png)
+![13_g_arp](/handson/images/arp_net/13_g_arp.png)
 
 **ARP Reply Fields**
 
@@ -189,7 +189,7 @@ For example, if Ubuntu sends a G-ARP for IP 192.168.1.11, it broadcasts a messag
 
 * * *
 
-![14_arp_windows](/images/arp_net/14_arp_windows.png)
+![14_arp_windows](/handson/images/arp_net/14_arp_windows.png)
 
 After Ubuntu sent Gratuitous ARP (G-ARP) indicating its IP and MAC address, Windows received this packet and automatically updated its ARP cache.
 
