@@ -82,7 +82,7 @@ Essentially, the application uses the identifier from the request directly, with
 
 * * *
 
-Phase 3. Real Problems and Scale
+## Phase 3. Real Problems and Scale
 
 Although Neighbour looks like a training task, similar errors regularly occur in real production applications. The problem arises when the server accepts an object identifier from the request and doesn't check whether the current user has the right to access this data.
 
@@ -97,7 +97,7 @@ If the server doesn't link the requested object with the current user session an
 
 * * *
 
-Phase 4. How to Properly Protect Against IDOR
+## Phase 4. How to Properly Protect Against IDOR
 
 To close such a vulnerability, you need to perform checks on the server side. You can't trust parameters from the URL or data coming from the client.
 
