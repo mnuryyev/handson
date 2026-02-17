@@ -65,13 +65,13 @@ const t = translations[lang];
   .footer-content {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Выравнивание по верхнему краю */
+    align-items: flex-start;
   }
 
   .footer-left {
     display: flex;
     flex-direction: column;
-    gap: 4px; /* Расстояние между лого и текстом прав */
+    gap: 12px; /* Увеличили расстояние, чтобы текст не лип к лого */
   }
 
   .footer-logo a {
@@ -85,8 +85,9 @@ const t = translations[lang];
 
   .copyright-text {
     margin: 0;
-    color: #555; /* Тот самый мелкий серый шрифт */
+    color: #555;
     font-size: 0.75rem;
+    white-space: nowrap; /* Чтобы на больших экранах не переносилось */
   }
 
   .footer-right {
@@ -125,7 +126,7 @@ const t = translations[lang];
     background: #161616;
   }
 
-  /* --- АДАПТАЦИЯ --- */
+  /* Адаптация для мобильных */
   @media (max-width: 768px) {
     .footer-content {
       flex-direction: column;
@@ -141,6 +142,9 @@ const t = translations[lang];
       justify-content: center;
       flex-wrap: wrap;
       gap: 15px;
+    }
+    .copyright-text {
+      white-space: normal; /* На мобилках пусть переносится, если экран очень узкий */
     }
   }
 </style>
