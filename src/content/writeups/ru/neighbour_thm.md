@@ -1,7 +1,7 @@
 ---
 title: "Neighbour - TryHackMe"
 description: "Разбор веб-машины Neighbour на TryHackMe: эксплуатация уязвимости IDOR, обход контроля доступа и получение данных другого пользователя"
-image: "/images/neighbour/thm_main.png"
+image: "/handson/images/neighbour/thm_main.png"
 date: "17 февраля 2026"
 ---
 
