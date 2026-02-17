@@ -16,7 +16,7 @@ In this work, we'll practically walk through setting up SSH access in such a mul
 
 ### 1. Build the Topology
 
-![topology](/images/ssh_net/topology.png)
+![topology](/handson/images/ssh_net/topology.png)
 
 The topology is as follows: in the first office, a Windows 10 client connects directly to the G0/0 interface of the Cisco router, and the Cisco router itself connects with its G1/0 interface to MikroTik via a dedicated trunk, emulating a connection between two different network segments. On the other side, MikroTik is connected to the second office where Kali Linux is located.
 
@@ -26,7 +26,7 @@ In the following steps, IP addressing will be configured: Windows will get addre
 
 ### 2. Configure IP Addresses on Cisco R1
 
-![set_ip_cisco](/images/ssh_net/set_ip_cisco.png)
+![set_ip_cisco](/handson/images/ssh_net/set_ip_cisco.png)
 
 After building the topology, the next stage is configuring IP addresses on the Cisco router to ensure operation of the first office's local network and connection between offices. In our scheme, the Cisco router has two interfaces — the first interface G0/0 is connected to the local network where the Windows 10 client is located, and the second interface G0/1 is used for connection with the MikroTik router, which is in the second office. Thus, Cisco performs the role of gateway for devices inside the first office and simultaneously provides inter-network connection.
 
@@ -52,7 +52,7 @@ As a result, the Cisco router gets two addresses:
 
 ### 3. Configure IP Addresses on MikroTik R2
 
-![set_ip_mikrotik](/images/ssh_net/set_ip_mikrotik.png)
+![set_ip_mikrotik](/handson/images/ssh_net/set_ip_mikrotik.png)
 
 When first starting MikroTik RouterOS through the console (for example, in GNS3), the device asks for login and password to enter. By default, the login is **admin**, and the password is absent (just press Enter). However, on first setup, the system mandatorily requires setting a new password, since you can't leave an empty password - this is because the new password cannot match the current (empty) one for access security. Therefore, when entering an empty password, an error will appear, and you'll need to enter a password for subsequent login.
 
@@ -71,13 +71,13 @@ For convenience and better configuration readability, I renamed the MikroTik int
 
 #### Windows 10
 
-![set_ip_windows](/images/ssh_net/set_ip_windows.png)
+![set_ip_windows](/handson/images/ssh_net/set_ip_windows.png)
 
 We assign IP addresses on client machines - Windows 10 and Kali Linux, so they can correctly interact with routers and each other within their subnets.
 
 In Windows 10, this is done through network adapter settings. You need to open "Network and Sharing Center", select the active connection, go to "Properties", then select "Internet Protocol Version 4 (TCP/IPv4)" and click "Properties". Here you manually enter the IP address, subnet mask, and default gateway. For example, for the first office this will be IP 192.168.10.10 with mask 255.255.255.0 and gateway 192.168.10.1 (Cisco address).
 
-![share_options_windows](/images/ssh_net/share_options_windows.png)
+![share_options_windows](/handson/images/ssh_net/share_options_windows.png)
 
 Additionally, in Windows 10 it's worth paying attention to firewall settings and sharing parameters (Share Options). By default, to increase security, the system blocks incoming ICMP requests (ping) and some types of traffic. For ping from other devices to successfully go through, you need to either temporarily disable the firewall, or configure rules to allow incoming ping requests and other needed protocols. Without this setting, ping may simply not reach Windows, despite correct IP and routes.
 
@@ -85,7 +85,7 @@ Additionally, in Windows 10 it's worth paying attention to firewall settings and
 
 #### Kali Linux
 
-![set_ip_kali](/images/ssh_net/set_ip_kali.png)
+![set_ip_kali](/handson/images/ssh_net/set_ip_kali.png)
 
 In Kali Linux, the IP address is assigned through the terminal with the ip addr add command, for example: sudo ip addr add 172.16.10.10/24 dev eth0, where 172.16.10.10 is the IP address, /24 is the subnet mask, and eth0 is the network interface name. To configure the default gateway, the command sudo ip route add default via 172.16.10.1 is used.
 
@@ -95,7 +95,7 @@ Manual IP address assignment is necessary since automatic IP acquisition (DHCP s
 
 ### 5. Configure Routing on Cisco
 
-![routing_cisco](/images/ssh_net/routing_cisco.png)
+![routing_cisco](/handson/images/ssh_net/routing_cisco.png)
 
 After assigning IP addresses on interfaces, we need to configure routing so devices from different subnets can reach each other. On the Cisco router, we add a static route to the second office's subnet 172.16.10.0/24, which is located behind MikroTik.
 
@@ -109,7 +109,7 @@ Thanks to this route, when Windows 10 wants to ping Kali Linux (172.16.10.10), t
 
 ### 6. Configure Routing on MikroTik
 
-![routing_mikrotik](/images/ssh_net/routing_mikrotik.png)
+![routing_mikrotik](/handson/images/ssh_net/routing_mikrotik.png)
 
 Similarly, on MikroTik we need to add a route to the first office's network so Kali Linux can reach Windows 10. We add a static route using the command:
 
@@ -125,11 +125,11 @@ Now the routers know how to reach each other's subnets, and devices in different
 
 #### From Windows 10
 
-![ping_from_windows_to_routers](/images/ssh_net/ping_from_windows_to_routers.png)
+![ping_from_windows_to_routers](/handson/images/ssh_net/ping_from_windows_to_routers.png)
 
 Now it's time to verify that everything is configured correctly. To do this, we'll send ping from both client machines to router interfaces and to each other.
 
-![ping_from_windows_to_routers2](/images/ssh_net/ping_from_windows_to_routers2.png)
+![ping_from_windows_to_routers2](/handson/images/ssh_net/ping_from_windows_to_routers2.png)
 
 The screenshot shows that from Windows 10 we first send ping to address 10.10.10.2 — this is the MikroTik interface that connects the two routers. Getting responses from MikroTik, we see that the connection with the neighboring router is established and working normally. Then we ping the final address in the other network — 172.16.10.10, where Kali Linux is located. Responses from Kali show that routing is configured correctly, and packets reach the needed device in the second office.
 
@@ -137,7 +137,7 @@ The screenshot shows that from Windows 10 we first send ping to address 10.10.10
 
 #### From Kali Linux
 
-![ping_from_kali_to_routers2](/images/ssh_net/ping_from_kali_to_routers2.png)
+![ping_from_kali_to_routers2](/handson/images/ssh_net/ping_from_kali_to_routers2.png)
 
 From Kali the situation is similar: first we send ping to 10.10.10.1 - the Cisco interface, and get responses confirming that there's connection with the first router. Then we ping Windows 10 at address 192.168.10.10, and successful responses show that devices in different offices can exchange data.
 
@@ -145,7 +145,7 @@ From Kali the situation is similar: first we send ping to 10.10.10.1 - the Cisco
 
 ### 8. Configure SSH on Cisco
 
-![ssh_on_cisco](/images/ssh_net/ssh_on_cisco.png)
+![ssh_on_cisco](/handson/images/ssh_net/ssh_on_cisco.png)
 
 Configuring SSH on Cisco is an important step for secure remote access to the router. By default, Cisco uses Telnet, which transmits data in plain text, which is insecure and vulnerable to interception. Therefore, in the vty line configuration, it's necessary to disable Telnet and enable only SSH to increase security.
 
@@ -167,7 +167,7 @@ We'll leave SSH access verification from the client machine for the following st
 
 ### 9. Configure SSH on Mikrotik
 
-![ssh_on_mikrotik](/images/ssh_net/ssh_on_mtik.png)
+![ssh_on_mikrotik](/handson/images/ssh_net/ssh_on_mtik.png)
 
 Now let's move on to enabling and configuring SSH service on MikroTik. With the command ```/ip service enable ssh``` we activate the SSH server, which allows accepting SSH connections. Next, with the command ```/ip ssh set strong-crypto=yes``` we enable the use of stronger encryption algorithms, increasing connection security. The option ```allow-none-crypto=no``` prohibits insecure encryption variants that could weaken protection.
 
@@ -181,7 +181,7 @@ I want to note that the password for SSH connection is the one we set when first
 
 #### On Kali Linux
 
-![kali_to_cisco](/images/ssh_net/kali_to_cisco.png)
+![kali_to_cisco](/handson/images/ssh_net/kali_to_cisco.png)
 
 On Kali Linux I have OpenSSH version 8.0p1 (Debian 4) with OpenSSL 1.1.1c installed. In new versions of OpenSSH, more modern and secure encryption algorithms and keys are used by default for SSH sessions. However, Cisco, especially on older IOS versions, supports a limited set of ciphers — mainly older algorithms like aes192-cbc or aes256-cbc.
 
@@ -191,7 +191,7 @@ Therefore, when simply trying to execute the command ssh admin@192.168.10.1, Kal
 
 This way we force the SSH client to use exactly those algorithms that Cisco accepts.
 
-![kali_to_mikrotik](/images/ssh_net/kali_to_mikrotik.png)
+![kali_to_mikrotik](/handson/images/ssh_net/kali_to_mikrotik.png)
 
 In the case of MikroTik, there are no such limitations, since MikroTik supports modern algorithms by default. Therefore, to connect to MikroTik, it's simply enough: ```ssh admin@172.16.10.1```
 
@@ -199,13 +199,13 @@ In the case of MikroTik, there are no such limitations, since MikroTik supports 
 
 #### On Windows 10
 
-![win_to_cisco](/images/ssh_net/win_to_cisco.png)
+![win_to_cisco](/handson/images/ssh_net/win_to_cisco.png)
 
 Similarly, when connecting from Windows using the built-in SSH client in command prompt (CMD), you also need to consider cipher support, especially when connecting to Cisco. By default, the Windows SSH client uses modern encryption algorithms that may not be supported by Cisco, especially on older IOS versions. Therefore, the simple command ```ssh admin@192.168.10.1``` won't work due to encryption algorithm incompatibility. To establish a connection, you need to specify a Cisco-compatible cipher, ```ssh -c aes256-cbc admin@192.168.10.1```
 
 Since I don't have specialized terminal emulators at hand, such as PuTTY or SecureCRT, I use the built-in CMD to perform SSH connections.
 
-![win_to_mikrotik](/images/ssh_net/win_to_mikrotik.png)
+![win_to_mikrotik](/handson/images/ssh_net/win_to_mikrotik.png)
 
 In the case of MikroTik, such additional configuration is not required, since it supports modern encryption algorithms out of the box. Therefore, to connect it's simply enough ```ssh admin@172.16.10.1```
 
@@ -213,7 +213,7 @@ In the case of MikroTik, such additional configuration is not required, since it
 
 ### 11. On MikroTik, Allow SSH Connection Only from Kali Linux(172.16.10.10), Block All Other IPs
 
-![allow_on_mikrotik](/images/ssh_net/allow_on_mikrotik.png)
+![allow_on_mikrotik](/handson/images/ssh_net/allow_on_mikrotik.png)
 
 Now let's move on to configuring security on MikroTik - we'll restrict SSH access only from the Kali Linux computer (IP 172.16.10.10). For this, we'll configure firewall rules that will allow SSH connections only from this IP, and block all other connections.
 
@@ -221,6 +221,6 @@ This will allow us to increase security so that no outsider can connect to Mikro
 
 As a result, we'll create two rules: the first — allow SSH from Kali Linux, the second — block SSH from all other addresses.
 
-![allow_demo](/images/ssh_net/allow_demo.png)
+![allow_demo](/handson/images/ssh_net/allow_demo.png)
 
 As can be seen in the screenshots, Kali connects to MikroTik via SSH without problems, while connection attempts from Windows 10 don't go through, meaning the access restriction is working correctly.
