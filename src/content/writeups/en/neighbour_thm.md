@@ -13,9 +13,9 @@ Within this work, we'll examine the **IDOR** vulnerability using the example of 
 
 ## Phase 1. Reconnaissance and Application Access
 
-![01_intro](/handson/neighbour_thm/01_intro.png)
+![01_intro](/handson/images/neighbour_thm/01_intro.png)
 
-![02_intro](/handson/neighbour_thm/02_intro.png)
+![02_intro](/handson/images/neighbour_thm/02_intro.png)
 
 The **Neighbour** machine is a web application called "Authentication Anywhere", which supposedly allows you to securely log in from anywhere.
 
@@ -25,7 +25,7 @@ The application is used to test access control. It's necessary to determine whet
 
 After starting the virtual machine, we get the target IP address, ***10.10.138.87***.
 
-![03_login_page](/handson/neighbour_thm/03_login_page.png)
+![03_login_page](/handson/images/neighbour_thm/03_login_page.png)
 
 We open a browser and go to the address: **http://10.10.138.87**
 
@@ -34,19 +34,19 @@ Don't have an account? Use the guest account! (Ctrl+U)
 
 ### Step 2. Analyzing the Page Source Code
 
-![08_code](/handson/neighbour_thm/08_code.png)
+![08_code](/handson/images/neighbour_thm/08_code.png)
 
 We press Ctrl+U to open the source HTML code. At the end of the document there's a commented fragment: guest:guest.
 
 The comment contains test user credentials. We use them to log into the system: in the Username field we enter guest, in the Password field guest, then click the Login button and perform authorization.
 
-![04_guest](screens/04_guest.png)
+![04_guest](/handson/images/neighbour_thm/screens/04_guest.png)
 
 ### Step 3. First Acquaintance with the Profile
 
 After successful login, we're redirected to the page: http://10.10.138.87/profile.php?user=guest
 
-![05_guest_page](/handson/neighbour_thm/05_guest_page.png)
+![05_guest_page](/handson/images/neighbour_thm/05_guest_page.png)
 
 We immediately pay attention to the browser's address bar. In the URL we see the parameter: **?user=guest** This means the application inserts the username directly into the request and loads the profile based on this value. That is, the page is formed based on the user parameter, which we can change manually.
 
@@ -60,13 +60,13 @@ If the server additionally doesn't check whether the current user has the right 
 
 We change the user parameter value directly in the browser's address bar: from guest to admin. **?user=admin**
 
-![06_admin](/handson/neighbour_thm/06_admin.png)
+![06_admin](/handson/images/neighbour_thm/06_admin.png)
 
 The application displays data for the administrator.
 
 We see that the server doesn't check access rights and simply uses the parameter value to select the profile.
 
-![07_flag](/handson/neighbour_thm/07_flag.png)
+![07_flag](/handson/images/neighbour_thm/07_flag.png)
 
 ### Step 5. Confirmation and Analysis
 
