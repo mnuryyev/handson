@@ -1,5 +1,5 @@
 ---
-title: "Neighbour - TryHackMe"
+title: "Neighbour - TryHackMe (Easy)"
 description: "Разбор веб-машины Neighbour на TryHackMe: эксплуатация уязвимости IDOR, обход контроля доступа и получение данных другого пользователя"
 image: "/images/neighbour_thm/thm_main.png"
 date: "17 февраля 2026"
