@@ -1,89 +1,111 @@
+/* --- ПЕРЕМЕННЫЕ --- */
 :root {
   --bg-color: #0f0f0f;
   --card-bg: #1e1e1e;
   --text-primary: #ffffff;
   --text-secondary: #aaaaaa;
   --accent: #3ea6ff;
+  --accent-rgb: 62, 166, 255;
+}
+
+/* --- БАЗОВЫЕ СТИЛИ --- */
+* {
+  box-sizing: border-box;
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
-  font-family: 'Roboto', Arial, sans-serif;
+  font-family: 'Roboto', system-ui, -apple-system, Arial, sans-serif;
   margin: 0;
   padding: 0;
+  line-height: 1.5;
+  overflow-x: hidden; /* Защита от горизонтальной прокрутки */
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
+  width: 100%;
 }
 
-h1, h2 { border-bottom: 1px solid #333; padding-bottom: 10px; }
-a { color: inherit; text-decoration: none; }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 
-/* Navbar Container */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+h1, h2 {
+  border-bottom: 1px solid #222;
+  padding-bottom: 10px;
+  margin-top: 0;
+}
+
+/* --- НАВИГАЦИЯ (NAVBAR) --- */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: rgba(15, 15, 15, 0.8); /* Полупрозрачный черный */
-  backdrop-filter: blur(12px); /* Эффект матового стекла */
+  background-color: rgba(15, 15, 15, 0.8);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid #222;
-  height: 64px;
+  min-height: 64px;
   display: flex;
   align-items: center;
 }
 
 .nav-wrapper {
   display: flex;
-  justify-content: space-between; /* Это разносит лого влево, а ссылки вправо */
+  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
 
-/* Логотип */
 .nav-logo a {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: -1px;
   color: #fff;
-  text-decoration: none;
 }
 
 .nav-logo span {
-  color: var(--accent); /* Твой основной синий цвет */
+  color: var(--accent);
 }
 
-/* Ссылки справа */
 .nav-links {
   display: flex;
   list-style: none;
   gap: 32px;
   margin: 0;
   padding: 0;
+  align-items: center;
 }
 
 .nav-links a {
   color: #aaa;
-  text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
-  transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
   color: #fff;
 }
 
-/* Акцентная кнопка для Проектов */
+/* Кнопка GitHub / Проекты */
 .btn-projects {
   background: #222;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 20px;
   border: 1px solid #333;
   color: #fff !important;
+  font-size: 0.9rem;
 }
 
 .btn-projects:hover {
@@ -91,25 +113,72 @@ a { color: inherit; text-decoration: none; }
   border-color: var(--accent);
 }
 
-/* Мобильная адаптация */
-@media (max-width: 600px) {
-  .nav-links { gap: 16px; }
-  .nav-links a { font-size: 0.85rem; }
-}
-
+/* --- СЕТКА КАРТОЧЕК (GRID) --- */
 .grid {
   display: grid;
-  /* Автоматическое создание колонок: минимум 300px, максимум 1 часть пространства */
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+  /* На десктопе карточки по 320px+, на мобилках растягиваются */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
   width: 100%;
+  margin-top: 20px;
 }
 
-/* Контейнер, который держит всё по центру */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
-  box-sizing: border-box; /* Чтобы padding не раздувал ширину */
+/* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ --- */
+
+
+
+@media (max-width: 900px) {
+  .nav-links {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 0;
+  }
+
+  .nav-wrapper {
+    flex-direction: column; /* Лого сверху, меню снизу */
+    gap: 15px;
+    text-align: center;
+  }
+
+  .nav-links {
+    flex-wrap: wrap; /* Если не влезает в ряд, переносится */
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .nav-links li {
+    margin: 0 5px;
+  }
+
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.4rem; }
+
+  .container {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-links {
+    gap: 10px;
+  }
+  
+  .nav-links a {
+    font-size: 0.85rem;
+  }
+
+  .grid {
+    /* На совсем маленьких экранах только одна колонка */
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .btn-projects {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
 }
