@@ -15,7 +15,7 @@ The 192.168.10.0/24 subnet is designed for 254 working hosts. The first address 
 
 ### 1. Build the Topology
 
-![01_topology](/images/dhcp_net/01_topology.png)
+![01_topology](/handson/images/dhcp_net/01_topology.png)
 
 For starters, we'll build a simple network in GNS3. It includes three clients — Windows 10, Ubuntu, and a lightweight VPCS emulator. They all connect to Switch-1, and the switch is linked to a MikroTik router. At this stage, the router will exclusively perform the role of a DHCP server, distributing IP addresses to clients within the network.
 
@@ -25,15 +25,15 @@ The *192.168.10.0/24* subnet is designed for 254 working hosts. The first addres
 
 ### 2. Configuring DHCP on MikroTik
 
-![02_mikrotik_admin](/images/dhcp_net/02_mikrotik_admin.png)
+![02_mikrotik_admin](/handson/images/dhcp_net/02_mikrotik_admin.png)
 
-![03_mikrotik_password](/images/dhcp_net/03_mikrotik_password.png)
+![03_mikrotik_password](/handson/images/dhcp_net/03_mikrotik_password.png)
 
 Let's proceed to MikroTik configuration. When launching MikroTik for the first time through the console, the device requests a login and password. By default, the login is **admin**, and there is no password (just press Enter). However, during initial setup, the system requires setting a new password, as an empty password cannot be left - this is because the new password cannot match the current one (i.e., empty) for security access. Therefore, when entering an empty password, an error will appear, and you'll need to enter a password for subsequent login.
 
 * * *
 
-![04_setting_mikrotik](/images/dhcp_net/04_setting_mikrotik.png)
+![04_setting_mikrotik](/handson/images/dhcp_net/04_setting_mikrotik.png)
 
 After login, the first step is to assign an IP address to the interface through which clients will be connected — in our case, ether1. The IP address is set within the 192.168.10.0/24 subnet, where "/24" indicates the subnet mask 255.255.255.0. The subnet mask determines which addresses are considered part of the local network and allows devices to correctly exchange data with each other. Without assigning IP and mask, clients won't be able to interact with the DHCP server.
 
@@ -45,19 +45,19 @@ Using a pool also simplifies network organization: addresses outside the pool ca
 
 ### 3. DORA Analysis
 
-![05_dora_win](/images/dhcp_net/05_dora_win.png)
+![05_dora_win](/handson/images/dhcp_net/05_dora_win.png)
 
 * * *
 
-![06_dora_ubuntu](/images/dhcp_net/06_dora_ubuntu.png)
+![06_dora_ubuntu](/handson/images/dhcp_net/06_dora_ubuntu.png)
 
 * * *
 
-![07_dora_vpcs](/images/dhcp_net/07_dora_vpcs.png)
+![07_dora_vpcs](/handson/images/dhcp_net/07_dora_vpcs.png)
 
 * * *
 
-![08_ip_all](/images/dhcp_net/08_ip_all.png)
+![08_ip_all](/handson/images/dhcp_net/08_ip_all.png)
 
 After the DHCP server was brought up and enabled, all devices on the network automatically received their settings. Each client received an IP address that is unique within the pool defined on the server, a subnet mask to understand which addresses belong to the local network, a gateway that will allow devices to access other networks in future tasks, and a DNS server to correctly resolve domain names. In addition, other parameters necessary for normal network operation are transmitted, such as the address lease time.
 
@@ -67,7 +67,7 @@ Now let's move on to the DORA process itself and examine each stage in detail us
 
 * * *
 
-![09_discover](/images/dhcp_net/09_discover.png)
+![09_discover](/handson/images/dhcp_net/09_discover.png)
 
 When a device connects to the network and doesn't yet have an IP address, it sends **DHCP Discover** — the first step of the DORA process. Simply put, the client informs the network that it's new and wants to receive settings for operation. Let's examine what actually happens at each level.
 
@@ -83,7 +83,7 @@ So, **Discover** is simply the client's request to receive IP and other settings
 
 * * *
 
-![10_offer](/images/dhcp_net/10_offer.png)
+![10_offer](/handson/images/dhcp_net/10_offer.png)
 
 When the DHCP server receives Discover from the client, it responds with **DHCP Offer** — the second step of the DORA process. The server offers the client a specific IP address and necessary network parameters. The packet is sent unicast so the selected client receives the offer directly, and other servers understand that the address is taken.
 
@@ -99,7 +99,7 @@ When the DHCP server receives Discover from the client, it responds with **DHCP 
 
 * * *
 
-![11_request](/images/dhcp_net/11_request.png)
+![11_request](/handson/images/dhcp_net/11_request.png)
 
 After the client receives an offer from the server (**Offer**), it sends **DHCP Request** — the third step of the DORA process. In this packet, the client confirms its IP choice and notifies the network that it's going to use the offered address. The packet is sent broadcast so the selected server understands that its offer is accepted, and other DHCP servers can free their offers.
 
@@ -115,7 +115,7 @@ After the client receives an offer from the server (**Offer**), it sends **DHCP 
 
 * * *
 
-![12_ack](/images/dhcp_net/12_ack.png)
+![12_ack](/handson/images/dhcp_net/12_ack.png)
 
 After the client sends **Request**, the server confirms the final selection of IP address and network parameters using **DHCP ACK** — the fourth and final step of the DORA process. This packet officially assigns the client the IP and all network settings, after which the device can begin full-fledged work on the local network.
 
@@ -131,7 +131,7 @@ After the client sends **Request**, the server confirms the final selection of I
 
 * * *
 
-![13_mikrotik](/images/dhcp_net/13_mikrotik_lease_print.png)
+![13_mikrotik](/handson/images/dhcp_net/13_mikrotik_lease_print.png)
 
 The `ip dhcp-server lease print` command on MikroTik shows which IP addresses the DHCP server has currently issued to devices on the network. In our case, the dhcp1 server distributed addresses to three devices: Windows, Ubuntu, and VPCS.
 
@@ -145,11 +145,11 @@ The DHCP server successfully performed its work: all three devices automatically
 
 #### Release
 
-![14_release_win](/images/dhcp_net/14_release_win.png)
+![14_release_win](/handson/images/dhcp_net/14_release_win.png)
 
 * * *
 
-![15_release_wireshark](/images/dhcp_net/15_release_wireshark.png)
+![15_release_wireshark](/handson/images/dhcp_net/15_release_wireshark.png)
 
 * * *
 
@@ -167,7 +167,7 @@ Simply put, **DHCP Release** is the client's way to correctly "return" the IP to
 
 #### NAK
 
-![16_nak_wireshark](/images/dhcp_net/16_nak_wireshark.png)
+![16_nak_wireshark](/handson/images/dhcp_net/16_nak_wireshark.png)
 
 After the Windows client freed IP address 192.168.10.100 using the **ipconfig /release** command, the server returned this address to the free pool. Later, the DHCP pool was changed with the command `/ip pool set dhcp_pool ranges=192.168.10.10-192.168.10.99` and now includes only addresses **192.168.10.10–192.168.10.99**. When Windows tried to obtain IP 192.168.10.100 again, the server responded with a negative acknowledgment — **DHCP NAK**. This message tells the client that the requested address is invalid and cannot be used.
 
@@ -201,15 +201,15 @@ Usage example: Windows and Linux automatically send DECLINE if they detect an IP
 
 ### 5. Static IP Binding
 
-![17_fixed_ip](/images/dhcp_net/17_fixed_ip_ubuntu.png)
+![17_fixed_ip](/handson/images/dhcp_net/17_fixed_ip_ubuntu.png)
 
 * * *
 
-![18_fixed_ip_ubuntu_wireshark](/images/dhcp_net/18_fixed_ip_ubuntu_wireshark.png)
+![18_fixed_ip_ubuntu_wireshark](/handson/images/dhcp_net/18_fixed_ip_ubuntu_wireshark.png)
 
 * * *
 
-![19_fixed_ip_mikrotik](/images/dhcp_net/19_fixed_ip_mikrotik.png)
+![19_fixed_ip_mikrotik](/handson/images/dhcp_net/19_fixed_ip_mikrotik.png)
 
 In DHCP, there's a capability to **assign a specific IP address to a particular device** using its MAC address. This mechanism is called **Static Lease** and allows guaranteeing that the selected client will always receive the same address, regardless of the dynamic pool.
 
@@ -221,46 +221,46 @@ After applying this setting, the DHCP server will never issue this IP to another
 
 ### 6. Configuring DHCP on Ubuntu
 
-![20_topology2](/images/dhcp_net/20_topology_2.png)
+![20_topology2](/handson/images/dhcp_net/20_topology_2.png)
 
 * * *
 
-![21_disable_dhcp](/images/dhcp_net/21_disable_dhcp_mikrotik.png)
+![21_disable_dhcp](/handson/images/dhcp_net/21_disable_dhcp_mikrotik.png)
 
 We're moving the DHCP server from MikroTik to Ubuntu. Previously, addresses were distributed by MikroTik with IP 192.168.10.1, now it will be a dedicated Ubuntu server. First, we disable DHCP on MikroTik so clients no longer receive IPs from it.
 
 * * *
 
-![22_isc_dhcp_server](/images/dhcp_net/22_isc_dhcp_server.png)
+![22_isc_dhcp_server](/handson/images/dhcp_net/22_isc_dhcp_server.png)
 
 First, you need to make sure the package itself is installed. If not, install it with the command: `sudo apt install isc-dhcp-server`. After installation, you need to tell the server which network interface to listen for client requests on. This is done in the `/etc/default/isc-dhcp-server` file. Open it and edit the line: `INTERFACESv4="ens3"`. **ens3** is the name of my network interface, yours may be different.
 
 * * *
 
-![23_dhcpd](/images/dhcp_net/23_dhcpd.png)
+![23_dhcpd](/handson/images/dhcp_net/23_dhcpd.png)
 
 Next, we go to the main configuration file `/etc/dhcp/dhcpd.conf`. There we set network parameters: pool of issued addresses, gateway, DNS, and lease time.
 So now the server knows which addresses to distribute to whom, through which gateway, which DNS to provide, and for how long to issue the lease.
 
 * * *
 
-![24_restart_isc](/images/dhcp_net/24_restart_isc_dhcp.png)
+![24_restart_isc](/handson/images/dhcp_net/24_restart_isc_dhcp.png)
 
 We assign the server a static IP **192.168.10.2/24**. Now Ubuntu Server is ready to issue IP addresses to clients. Start the service with the command `sudo systemctl start isc-dhcp-server`. To check the status: `sudo systemctl status isc-dhcp-server`
 
 * * *
 
-![25_requested_ip](/images/dhcp_net/25_requested_ip_win.png)
+![25_requested_ip](/handson/images/dhcp_net/25_requested_ip_win.png)
 
 * * *
 
-![26_requested_ip_ubuntu](/images/dhcp_net/26_requested_ip_ubuntu.png)
+![26_requested_ip_ubuntu](/handson/images/dhcp_net/26_requested_ip_ubuntu.png)
 
 When clients start communicating with the new server, here's what happens: Windows tried to take its old address 192.168.10.97 — the server confirmed it because the address was free in the new pool. But the Ubuntu client, which previously had static address 192.168.10.105 on MikroTik, can no longer obtain it, as the address is not included in the new range. The server ignores this request, and the client sends Discover again, receives Offer, makes Request, and ultimately receives a new address from the pool — 192.168.10.12.
 
 * * *
 
-![27_ubuntuserver_print](/images/dhcp_net/27_ubuntuserver_print.png)
+![27_ubuntuserver_print](/handson/images/dhcp_net/27_ubuntuserver_print.png)
 
 In the end, checking the lease table shows: Windows kept its old address, Ubuntu received a new one, and vpc also received its IP from the new range.
 
@@ -268,7 +268,7 @@ In the end, checking the lease table shows: Windows kept its old address, Ubuntu
 
 ### 7. Configuring DHCP Relay
 
-![28_topology_3](/images/dhcp_net/28_topology_3.png)
+![28_topology_3](/handson/images/dhcp_net/28_topology_3.png)
 
 Our network now has two subnets: the old 192.168.10.0/24 and the new 172.16.10.0/24. The DHCP server (Ubuntu Server, 192.168.10.2) currently only knows the pool for the first subnet. That is, if clients from the new subnet (PC2, PC3) send DHCP Discover, the server simply doesn't see them — broadcast packets don't cross the router.
 
@@ -278,7 +278,7 @@ To fix this, we use MikroTik as DHCP Relay and configure routing.
 
 #### 1. Configuring Routing on MikroTik
 
-![29_route_mikroik](/images/dhcp_net/29_route_mikrotik.png)
+![29_route_mikroik](/handson/images/dhcp_net/29_route_mikrotik.png)
 
 On interface ether2, which faces the new subnet 172.16.10.0/24, we assign IP address 172.16.10.1/24. Now the router knows that packets destined for this subnet go through ether2 and can correctly route traffic between networks. Routing is also needed for the return path: when the DHCP server responds, the packet should get back to 172.16.10.0/24.
 
@@ -286,7 +286,7 @@ On interface ether2, which faces the new subnet 172.16.10.0/24, we assign IP add
 
 #### 2. Configuring DHCP Relay on MikroTik
 
-![30_dhcp_relay](/images/dhcp_net/30_dhcp_relay.png)
+![30_dhcp_relay](/handson/images/dhcp_net/30_dhcp_relay.png)
 
 DHCP Relay is a mechanism that allows clients from one subnet to contact a server in another subnet, even if the server is not in the same broadcast domain. Relay "listens" for DHCP packets on the client network interface and forwards them to the server as regular unicast packets.
 
@@ -302,21 +302,21 @@ On MikroTik it looks like this:
 
 * * *
 
-![31_cant_find](/images/dhcp_net/31_cant_find_pc2.png)
+![31_cant_find](/handson/images/dhcp_net/31_cant_find_pc2.png)
 
 * * *
 
-![32_add_subnet](/images/dhcp_net/32_add_subnet.png)
+![32_add_subnet](/handson/images/dhcp_net/32_add_subnet.png)
 
 While the server only knows network 192.168.10.0/24, Relay will "deliver" Discover to the server, but the server won't be able to issue an address, and the client will remain without an IP. Therefore, before starting Relay, you need to add the new subnet to the DHCP server configuration (/etc/dhcp/dhcpd.conf):
 
 * * *
 
-![33_pc2_pc3](/images/dhcp_net/33_pc2_pc3.png)
+![33_pc2_pc3](/handson/images/dhcp_net/33_pc2_pc3.png)
 
 * * *
 
-![34_offer_pc2](/images/dhcp_net/34_offer_pc2.png)
+![34_offer_pc2](/handson/images/dhcp_net/34_offer_pc2.png)
 
 PC1 and PC2 received addresses. Let's analyze DHCP Offer for client PC2. The Ubuntu server itself wants to issue the client an address from its pool in the first subnet, but the client is located in the second subnet 172.16.10.0/24. The packet reaches the client through MikroTik, which acts as DHCP Relay. The router substitutes its local IP 172.16.10.1 as the source so the packet correctly reaches the client, who has no direct route to the server. The packet destination is IP 172.16.10.10, which the server is offering to the client. The Next Server IP Address field remains 192.168.10.2, showing that the real DHCP server is located in the first subnet. That is, the packet visually goes "from" MikroTik, but in fact it's an offer from the Ubuntu server, and this mechanism allows a client in an isolated subnet to receive an IP address and network parameters.
 
