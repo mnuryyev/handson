@@ -16,8 +16,8 @@ const nav = {
     articles: 'Сети и администрирование',
     labs: 'Безопасность',
     projects: 'Проекты',
-    writeups: 'Writeups', // Добавили
-    tools: 'Tools',       // Добавили
+    writeups: 'Writeups',
+    tools: 'Tools',
   },
   en: {
     articles: 'Networks & Administration',
@@ -45,7 +45,6 @@ const t = nav[lang];
         </div>
 
         <ul class="nav-links">
-          {/* Добавляем {base} перед каждой ссылкой и убираем лишний начальный слеш */}
           <li><a href={`${base}${lang}/articles/1`}>{t.articles}</a></li>
           <li><a href={`${base}${lang}/labs/1`}>{t.labs}</a></li>
           <li><a href={`${base}${lang}/writeups/1`}>{t.writeups}</a></li>
@@ -71,7 +70,6 @@ const t = nav[lang];
 </html>
 
 <style is:global>
-  /* Стили остаются без изменений */
   body {
     display: flex;
     flex-direction: column;
@@ -115,7 +113,7 @@ const t = nav[lang];
     display: flex;
     align-items: center;
     list-style: none;
-    gap: 25px; /* Немного уменьшил отступ, чтобы всё влезло */
+    gap: 25px;
     margin: 0;
     padding: 0;
   }
@@ -125,7 +123,7 @@ const t = nav[lang];
     color: #888;
     font-weight: 500;
     transition: 0.3s;
-    font-size: 0.95rem; /* Чуть-чуть меньше шрифт для компактности */
+    font-size: 0.95rem;
   }
 
   .nav-links a:hover {
@@ -160,5 +158,45 @@ const t = nav[lang];
   .btn-projects:hover {
     background: var(--accent) !important;
     color: #fff !important;
+  }
+
+  /* --- АДАПТИВНАЯ ВЕРСТКА ДЛЯ МОБИЛЬНЫХ --- */
+
+  @media (max-width: 768px) {
+    .nav-wrapper {
+      flex-direction: column; /* Элементы один под другим */
+      height: auto;
+      padding: 20px 0;
+      gap: 15px;
+    }
+
+    .nav-links {
+      flex-wrap: wrap; /* Разрешаем перенос ссылок на новую строку */
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .nav-actions {
+      border: none; /* Убираем линии по бокам на мобилках */
+      padding: 0;
+    }
+
+    .main-content {
+      padding-top: 20px;
+    }
+
+    /* Делаем все сетки (grid) на сайте в одну колонку */
+    .grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-links a {
+      font-size: 0.85rem; /* Еще чуть меньше шрифт для совсем маленьких экранов */
+    }
+    .nav-logo a {
+      font-size: 1.2rem;
+    }
   }
 </style>
