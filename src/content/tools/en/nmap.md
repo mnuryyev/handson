@@ -237,35 +237,17 @@ The **-T** parameter sets Nmap's aggressiveness and speed. Essentially, these ar
 
 Values go from 0 to 5:
 
-**-T0 - paranoid**
+**-T0 - paranoid**: Very slow mode. Packets are sent with large pauses. Used if you need to be maximally undetectable. In practice, it's used rarely — scanning can take very long.
 
-Very slow mode. Packets are sent with large pauses.
-Used if you need to be maximally undetectable. In practice, it's used rarely — scanning can take very long.
+**-T1 - sneaky**: Also a slow mode, but a bit faster than the previous one. Suitable if you want to reduce the probability of detection, but not wait forever.
 
-**-T1 - sneaky**
+**-T2 - polite**: Polite mode. Reduces load on the network and target host. Suitable for careful scanning of someone else's infrastructure by agreement, so as not to create extra load.
 
-Also a slow mode, but a bit faster than the previous one.
-Suitable if you want to reduce the probability of detection, but not wait forever.
+**-T3 - normal**: Default mode. Balance between speed and stability. In most cases it's sufficient.
 
-**-T2 - polite**
+**-T4 - aggressive**: Accelerated scanning. Timeouts are reduced, packets are sent faster. Often used in the local network or in the lab where there are no strict limitations.
 
-Polite mode. Reduces load on the network and target host.
-Suitable for careful scanning of someone else's infrastructure by agreement, so as not to create extra load.
-
-**-T3 - normal**
-
-Default mode.
-Balance between speed and stability. In most cases it's sufficient.
-
-**-T4 - aggressive**
-
-Accelerated scanning. Timeouts are reduced, packets are sent faster.
-Often used in the local network or in the lab where there are no strict limitations.
-
-**-T5 - insane**
-
-Maximally fast mode.
-Suitable for very fast and stable networks. In real conditions, it can miss ports due to too aggressive timeouts.
+**-T5 - insane**: Maximally fast mode. Suitable for very fast and stable networks. In real conditions, it can miss ports due to too aggressive timeouts.
 
 ### -A - aggressive scanning
 
