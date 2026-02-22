@@ -1,14 +1,18 @@
-# Dancing - HackTheBox (Easy)
-
+---
+title: "Dancing - HackTheBox (Easy)"
+description: "Разбор машины Dancing на HackTheBox: работа с протоколом SMB, анализ доступных шары, использование анонимного доступа и получение флага через SMB shell."
+image: "/images/meow_htb/htb_main.png"
+date: "23 февраля 2026"
+---
 **Dancing** - это простая машина на платформе HTB, которая даёт возможность попрактиковаться с уязвимостями **SMB (Server Message Block)** и эксплуатацией сетевых сервисов. В этой задаче мы будем работать с протоколом **SMB**, искать доступные шары и использовать различные инструменты для получения флага.
 
-![01_ip_machine](screens/01_ip_machine.png)
+![01_ip_machine](/handson/images/dancing_htb/01_ip_machine.png)
 
 * * *
 
 ## Task 1: Что означает аббревиатура SMB?
 
-![02_task1](screens/02_task1.png)
+![02_task1](/handson/images/dancing_htb/02_task1.png)
 
 **SMB** расшифровывается как **Server Message Block**. Это протокол, используемый для обмена файлами и принтерами в сетях, а также для доступа к другим ресурсам (например, общим каталогам) в операционных системах Windows. Он используется для взаимодействия между компьютерами в локальной сети или через интернет.
 
@@ -16,7 +20,7 @@
 
 ## Task 2: На каком порту работает SMB?
 
-![03_task2](screens/03_task2.png)
+![03_task2](/handson/images/dancing_htb/03_task2.png)
 
 **SMB** обычно использует порты **137**, **138**, **139** и **445** для своей работы. Порт **445** является основным для новых версий SMB (например, SMB 2 и 3), в то время как более старые версии SMB могут использовать порты **137**, **138** и **139** для различных целей.
 
@@ -24,9 +28,9 @@
 
 ## Task 3: Какое имя сервиса на порту 445, обнаруженное в сканировании Nmap?
 
-![04_task3](screens/04_task3.png)
+![04_task3](/handson/images/dancing_htb/04_task3.png)
 
-![05_nmap_scan](screens/05_nmap_scan.png)
+![05_nmap_scan](/handson/images/dancing_htb/05_nmap_scan.png)
 
 При сканировании с помощью **Nmap** на порту **445** мы обнаруживаем сервис с именем **microsoft-ds**. Это сервис, который работает по протоколу **SMB** и используется для предоставления доступа к файлам и другим ресурсам в сети.
 
@@ -34,7 +38,7 @@
 
 ## Task 4: Какой флаг или switch мы можем использовать в утилите **smbclient**, чтобы 'списать' доступные шары на Dancing?
 
-![06_task4](screens/06_task4.png)
+![06_task4](/handson/images/dancing_htb/06_task4.png)
 
 Для того чтобы увидеть доступные шары на сервере через **smbclient**, используем флаг **-L**. Команда будет выглядеть так:
 
@@ -48,9 +52,9 @@ smbclient -L //10.129.6.202
 
 ## Task 5: Сколько шары на Dancing?
 
-![07_task5](screens/07_task5.png)
+![07_task5](/handson/images/dancing_htb/07_task5.png)
 
-![08_L](screens/08_L.png)
+![08_L](/handson/images/dancing_htb/08_L.png)
 
 После выполнения команды **smbclient -L** для получения списка шары на машине **Dancing**, мы обнаруживаем **4 шары**.
 
@@ -58,7 +62,7 @@ smbclient -L //10.129.6.202
 
 ## Task 6: Как называется шары, к которой мы можем получить доступ в конце с пустым паролем?
 
-![09_task6](screens/09_task6.png)
+![09_task6](/handson/images/dancing_htb/09_task6.png)
 
 Для доступа к одной из шары на **Dancing** с пустым паролем мы можем использовать **Guest** или **Anonymous** логин. В данном случае, шары, к которой мы получаем доступ, называется **WorkShares**.
 
@@ -66,7 +70,7 @@ smbclient -L //10.129.6.202
 
 ## Task 7: Какая команда используется в SMB shell для скачивания найденных файлов?
 
-![10_task7](screens/10_task7.png)
+![10_task7](/handson/images/dancing_htb/10_task7.png)
 
 В **SMB shell** для скачивания файлов с удалённого сервера используется команда **get**. Например:
 
@@ -80,14 +84,14 @@ get filename
 
 ## Получение флага
 
-![11_amy](screens/11_amy.png)
+![11_amy](/handson/images/dancing_htb/11_amy.png)
 
 После того как мы подключились к шару **WorkShares**, мы видим две папки: **Amy.J** и **James.P**. Посмотрим папку **Amy.J**.
 
 Мы зашли в папку **Amy.J** и видим файл **worknotes.txt**, но флаг в этом файле не оказался.
 
-![12_flag](screens/12_flag.png)
+![12_flag](/handson/images/dancing_htb/12_flag.png)
 
 Затем мы вернулись в корневую директорию и перешли в папку **James.P**. Здесь мы обнаружили файл **flag.txt**, это и есть наш флаг.
 
-![13_result](screens/13_result.png)
+![13_result](/handson/images/dancing_htb/13_result.png)
