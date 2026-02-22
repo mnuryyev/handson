@@ -1,7 +1,7 @@
 ---
 title: "Fawn - HackTheBox (Easy)"
 description: "Walkthrough of the Fawn machine on HackTheBox: using FTP to gain access to files, analyzing services, and obtaining the flag through anonymous access."
-image: "/images/meow_htb/htb_main.png"
+image: "/images/meow_htb/htb_main.jpg"
 date: "February 22, 2026"
 ---
 **Fawn** is one of the simple machines on the HTB platform, located in the *Starting Point* section. In this task, we'll work with the **FTP** protocol, as well as basic methods for bypassing authentication and obtaining the flag.
