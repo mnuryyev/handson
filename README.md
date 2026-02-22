@@ -14,5 +14,5 @@
 
 ## Профили на платформах
 
-- **Hack The Box (HTB)**: [mnuryyev на HTB](https://profile.hackthebox.com/profile/019c5cc8-dfa6-71c7-a1db-d688819e176a)
-- **TryHackMe (THM)**: [mnuryyev на THM](https://tryhackme.com/p/mnuryyev)
+- **Hack The Box (HTB)**: <a href="https://profile.hackthebox.com/profile/019c5cc8-dfa6-71c7-a1db-d688819e176a" target="_blank">HTB</a>
+- **TryHackMe (THM)**: <a href="https://tryhackme.com/p/mnuryyev" target="_blank">THM</a>
