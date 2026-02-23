@@ -1,20 +1,24 @@
-# Redeemer - HackTheBox (Easy)
-
+---
+title: "Redeemer - HackTheBox (Easy)"
+description: "Разбор машины Redeemer на HackTheBox: сканирование открытых портов, подключение к Redis без пароля, исследование ключей базы данных и получение флага напрямую из сервиса"
+image: "/images/meow_htb/htb_main.jpg"
+date: "23 февраля 2026"
+---
 **Redeemer** - это простая машина на платформе HTB в разделе *Starting Point*.
 
 Машина демонстрирует типичную проблему безопасности, то есть неправильно настроенный сервис **Redis**, который доступен по сети без аутентификации. В процессе решения мы обнаружим открытый порт, подключимся к базе данных и получим флаг напрямую из хранилища.
 
 Основная уязвимость заключается в том, что **Redis** запущен без пароля и доступен извне, что позволяет любому подключиться и прочитать данные.
 
-![01_ip_machine](screens/01_ip_machine.png)
+![01_ip_machine](/handson/images/redeemer_htb/01_ip_machine.png)
 
 ---
 
 ## Task 1: Какой TCP порт открыт на целевой машине?
 
-![02_task1](screens/02_task1.png)
+![02_task1](/handson/images/redeemer_htb/02_task1.png)
 
-![03_nmap_scan](screens/03_nmap_scan.png)
+![03_nmap_scan](/handson/images/redeemer_htb/03_nmap_scan.png)
 
 Для начала просканируем целевую машину, чтобы определить открытые порты.
 
@@ -32,7 +36,7 @@ Redis - это in‑memory база данных типа ключ → знач�
 
 ## Task 2: Какой сервис работает на открытом порту?
 
-![04_task2](screens/04_task2.png)
+![04_task2](/handson/images/redeemer_htb/04_task2.png)
 
 На открытом **6379** порту работает сервис *Redis*
 
@@ -40,7 +44,7 @@ Redis - это in‑memory база данных типа ключ → знач�
 
 ## Task 3: Какой тип базы данных Redis? (i) In-memory Database, (ii) Traditional Database
 
-![05_task3](screens/05_task3.png)
+![05_task3](/handson/images/redeemer_htb/05_task3.png)
 
 
 Redis является **In-memory Database**.
@@ -51,9 +55,9 @@ Redis является **In-memory Database**.
 
 ## Task 4: Какая утилита используется для взаимодействия с Redis через командную строку?
 
-![06_task4](screens/06_task4.png)
+![06_task4](/handson/images/redeemer_htb/06_task4.png)
 
-![07_redis](screens/07_redis.png)
+![07_redis](/handson/images/redeemer_htb/07_redis.png)
 
 
 Для взаимодействия с Redis используется утилита **redis-cli**. Это официальный клиент командной строки для работы с Redis-сервером.
@@ -62,7 +66,7 @@ Redis является **In-memory Database**.
 
 ## Task 5: Какой флаг используется в redis-cli для указания хоста?
 
-![08_task5](screens/08_task5.png)
+![08_task5](/handson/images/redeemer_htb/08_task5.png)
 
 Чтобы подключиться к удалённому Redis-серверу, необходимо указать его IP-адрес.
 
@@ -72,9 +76,9 @@ Redis является **In-memory Database**.
 
 ## Task 6: Какая команда используется для получения информации и статистики о Redis?
 
-![09_task6](screens/09_task6.png)
+![09_task6](/handson/images/redeemer_htb/09_task6.png)
 
-![10_info](screens/10_info.png)
+![10_info](/handson/images/redeemer_htb/10_info.png)
 
 После подключения к серверу Redis можно получить информацию о системе с помощью команды **info**. 
 
@@ -89,7 +93,7 @@ Redis является **In-memory Database**.
 
 ## Task 7: Какая версия Redis установлена на целевой машине?
 
-![11_task7](screens/11_task7.png)
+![11_task7](/handson/images/redeemer_htb/11_task7.png)
 
 Версия Redis на целевой машине: **5.0.7**
 
@@ -97,7 +101,7 @@ Redis является **In-memory Database**.
 
 ## Task 8: Какая команда используется для выбора нужной базы данных в Redis?
 
-![12_task8](screens/12_task8.png)
+![12_task8](/handson/images/redeemer_htb/12_task8.png)
 
 Redis поддерживает несколько логических баз данных (по умолчанию от 0 до 15).
 
@@ -107,9 +111,9 @@ Redis поддерживает несколько логических баз д
 
 ## Task 9: Сколько ключей находится в базе с индексом 0?
 
-![13_task9](screens/13_task9.png)
+![13_task9](/handson/images/redeemer_htb/13_task9.png)
 
-![14_keys](screens/14_keys.png)
+![14_keys](/handson/images/redeemer_htb/14_keys.png)
 
 В выводе команды *info* в разделе Keyspace было указано *db0:keys=4*
 
@@ -119,7 +123,7 @@ Redis поддерживает несколько логических баз д
 
 ## Task 10: Какая команда используется для получения всех ключей из базы?
 
-![15_task10](screens/15_task10.png)
+![15_task10](/handson/images/redeemer_htb/15_task10.png)
 
 Чтобы получить список всех ключей в базе данных, используется команда KEYS *. Команда KEYS * выводит все сохранённые ключи.
 
@@ -138,8 +142,8 @@ Redis поддерживает несколько логических баз д
 
 После выполнения команды Redis возвращает содержимое ключа flag, и это и есть флаг машины Redeemer.
 
-![16_get_flag](screens/16_get_flag.png)
+![16_get_flag](/handson/images/redeemer_htb/16_get_flag.png)
 
-![17_result](screens/17_result.png)
+![17_result](/handson/images/redeemer_htb/17_result.png)
 
 
