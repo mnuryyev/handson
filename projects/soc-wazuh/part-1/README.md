@@ -75,4 +75,4 @@ Kali подключен к свитчу так же, как и все остал
 
 ---
 
-![Вторая Часть](/../part-2/README.md)
+![Вторая Часть](projects/soc-wazuh/part-2/README.md)
