@@ -4,23 +4,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
-// 1. DATA PREPARATION (Server-side)
-const lang = "en"; // Current language
+// ДОБАВЛЯЕМ BASE ДЛЯ GITHUB PAGES
+const base = import.meta.env.BASE_URL;
+const lang = "en"; 
 const projectsDir = path.resolve(`./src/content/projects/${lang}`);
 
-// Check if folder exists
-if (!fs.existsSync(projectsDir)) {
-  // We don't create it automatically to avoid empty dirs, but ensure the app doesn't crash
-}
-
-// Read project folders inside /en/
 const projectFolders = fs.existsSync(projectsDir) 
   ? fs.readdirSync(projectsDir).filter(f => 
       fs.statSync(path.join(projectsDir, f)).isDirectory()
     )
   : [];
 
-// Collect data about projects and their cards
 const allProjects = projectFolders.map(folder => {
   const folderPath = path.join(projectsDir, folder);
   const files = fs.readdirSync(folderPath).filter(f => f.endsWith('.md'));
@@ -28,11 +22,7 @@ const allProjects = projectFolders.map(folder => {
   const cards = files.map(file => {
     const fileContent = fs.readFileSync(path.join(folderPath, file), 'utf-8');
     const { data } = matter(fileContent);
-    
-    return { 
-      ...data, 
-      fileName: file.replace('.md', '') 
-    }; 
+    return { ...data, fileName: file.replace('.md', '') }; 
   });
 
   return { folder, cards };
@@ -46,12 +36,6 @@ const allProjects = projectFolders.map(folder => {
       <p>Projects & Guides.</p>
     </header>
     
-    {allProjects.length === 0 && (
-      <div class="empty-state">
-        <p>No projects yet. Create a folder in <code>src/content/projects/{lang}/name</code></p>
-      </div>
-    )}
-
     {allProjects.map(project => (
       <div class="project-group">
         <div class="project-title">
@@ -60,8 +44,8 @@ const allProjects = projectFolders.map(folder => {
         
         <div class="cards-preview-grid">
           {project.cards.map(card => (
-            /* FIXED URL: Added /en/ prefix */
-            <a href={`/${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
+            /* ИСПРАВЛЕН URL: Добавлен ${base} */
+            <a href={`${base}${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
               <div class="mini-card">
                 <div class="card-icon">📝</div>
                 <div class="card-body">
