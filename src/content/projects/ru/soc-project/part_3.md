@@ -10,7 +10,7 @@ description: "Развертывание Wazuh SIEM для мониторинг�
 
 Первым делом после входа в систему мы проверяем текущие сетевые настройки. Открываем терминал и выполняем команду: **ip a**
 
-![01_ip_a](screens/01_ip_a.png)
+![01_ip_a](/handson/images/soc_project/part_3/01_ip_a.png)
 
 Мы видим, что интерфейс **ens33** получил динамический IP-адрес **10.10.70.139** по DHCP. Это нас не устраивает. Wazuh сервер должен иметь постоянный статический адрес, иначе агенты на Windows-машинах потеряют с ним связь после каждой перезагрузки.
 
@@ -25,11 +25,11 @@ ls /etc/netplan/
 sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
-![02_netplan](screens/02_netplan.png)
+![02_netplan](/handson/images/soc_project/part_3/02_netplan.png)
 
 Нас встречает файл с настройками по умолчанию, где DHCP включён. Нам нужно изменить его так, чтобы интерфейс **ens33** получил статический адрес **10.10.70.30**, именно этот IP мы указали в нашей диаграмме для Wazuh сервера.
 
-![03_netplan_editing](screens/03_netplan_editing.png)
+![03_netplan_editing](/handson/images/soc_project/part_3/03_netplan_editing.png)
 
 Редактируем файл следующим образом:
 
@@ -66,7 +66,7 @@ ip a
 ping 8.8.8.8
 ```
 
-![05_ip_a_ping](screens/05_ip_a_ping.png)
+![05_ip_a_ping](/handson/images/soc_project/part_3/05_ip_a_ping.png)
 
 Мы видим, что интерфейс **ens33** теперь имеет адрес **10.10.70.30/24** - именно то, что нам нужно. Пинг до 8.8.8.8 проходит успешно, интернет-соединение работает. Переходим к следующему шагу.
 
@@ -79,7 +79,7 @@ ping 8.8.8.8
 sudo apt-get update && sudo apt-get upgrade -y
 ```
 
-![06_apt_update](screens/06_apt_update.png)
+![06_apt_update](/handson/images/soc_project/part_3/06_apt_update.png)
 
 Это стандартная практика перед установкой любого серьёзного программного обеспечения. Мы убеждаемся, что система имеет последние патчи безопасности и актуальные зависимости.
 
@@ -89,7 +89,7 @@ sudo apt-get update && sudo apt-get upgrade -y
 
 Мы будем устанавливать Wazuh в режиме all-in-one - все три компонента (Manager, Indexer и Dashboard) на одной машине. Перед запуском установщика нам нужно создать конфигурационный файл config.yml, в котором мы укажем IP-адрес нашего сервера для каждого компонента: 
 
-![10_config](screens/10_config.png)
+![10_config](/handson/images/soc_project/part_3/10_config.png)
 
 В файле прописываем следующее:
 
@@ -116,13 +116,13 @@ nodes:
 
 ``` curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh ```
 
-![07_downloading_wazuh](screens/07_downloading_wazuh.png)
+![07_downloading_wazuh](/handson/images/soc_project/part_3/07_downloading_wazuh.png)
 
 Теперь запускаем генерацию SSL-сертификатов на основе нашего config.yml. Эти сертификаты обеспечивают защищённое соединение между компонентами Wazuh:
 
 ``` sudo bash wazuh-install.sh -g -c config.yml ```
 
-![11_certificate](screens/11_certificate.png)
+![11_certificate](/handson/images/soc_project/part_3/11_certificate.png)
 
 Скрипт генерирует все необходимые сертификаты  для индексера, сервера, Dashboard и административного пользователя и упаковывает их в архив **wazuh-install-files.tar**. Без этого архива дальнейшая установка не пройдёт.
 
@@ -134,11 +134,11 @@ nodes:
 
 ``` sudo bash wazuh-install.sh -a ```
 
-![08_downloading_wazuh](screens/08_downloading_wazuh.png)
+![08_downloading_wazuh](/handson/images/soc_project/part_3/08_downloading_wazuh.png)
 
 Установка займёт несколько минут. Скрипт последовательно установит и настроит Wazuh Indexer, Wazuh Manager, Filebeat и Wazuh Dashboard. Мы наблюдаем за процессом в терминале — каждый компонент устанавливается и настраивается поочерёдно.
 
-![12_finished](screens/12_finished.png)
+![12_finished](/handson/images/soc_project/part_3/12_finished.png)
 
 После завершения на экране появляется итоговая информация: адрес для входа в веб-интерфейс, имя пользователя **admin** и **сгенерированный пароль**. Этот пароль нужно обязательно сохранить, он понадобится нам при первом входе в Dashboard и больше нигде не отображается.
 
@@ -150,14 +150,14 @@ nodes:
 
 ``` https://10.10.70.30 ```
 
-![13_wazuh_main](screens/13_wazuh_main.png)
+![13_wazuh_main](/handson/images/soc_project/part_3/13_wazuh_main.png)
 
 Нас встречает страница входа в **Wazuh Dashboard**. Вводим логин admin и пароль, который был показан по завершении установки.
 
-![14_starting](screens/14_starting.png)
+![14_starting](/handson/images/soc_project/part_3/14_starting.png)
 
 После первого входа система выполняет инициализацию: проверяет соединение с API Wazuh, версию API и наличие индексов. В нижней части экрана появится сообщение "Default API has been updated" - это означает, что первоначальная настройка прошла успешно.
 
-![15_main](screens/15_main.png)
+![15_main](/handson/images/soc_project/part_3/15_main.png)
 
 Мы попадаем на главную панель управления **Wazuh**. Здесь мы видим сообщение "This instance has no agents registered" - это абсолютно нормально для свежеустановленной системы. На панели отображаются основные возможности платформы: Endpoint Security, Threat Intelligence, обнаружение уязвимостей и мониторинг целостности файлов. Wazuh установлен и готов к работе.
