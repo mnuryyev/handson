@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
+// ДОБАВЛЯЕМ BASE ДЛЯ GITHUB PAGES
+const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths() {
   const lang = "en";
   const projectsDir = `./src/content/projects/${lang}`;
@@ -24,11 +27,8 @@ const { slug } = Astro.params;
 const { lang } = Astro.props;
 const projectPath = path.join(`./src/content/projects/${lang}`, slug);
 
-// Читаем файлы и берем только данные (data)
-// 1. Читаем список файлов
 const files = fs.readdirSync(projectPath).filter(f => f.endsWith('.md'));
 
-// 2. Сначала маппим данные, чтобы получить доступ к frontmatter (order)
 const cards = files.map(file => {
   const filePath = path.join(projectPath, file);
   const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -38,8 +38,6 @@ const cards = files.map(file => {
     data 
   };
 })
-// 3. ТЕПЕРЬ СОРТИРУЕМ по полю order
-// Если order не указан, ставим 99 (улетит в конец)
 .sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
 ---
 
@@ -54,8 +52,8 @@ const cards = files.map(file => {
 
   <div class="articles-grid">
     {cards.map(card => (
-      /* URL FIX: Added /en/ prefix for internal navigation */
-      <a href={`/${lang}/projects/${slug}/${card.id}`} class="step-card">
+      /* ИСПРАВЛЕН URL: Добавлен ${base} */
+      <a href={`${base}${lang}/projects/${slug}/${card.id}`} class="step-card">
         <div class="card-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
         </div>
