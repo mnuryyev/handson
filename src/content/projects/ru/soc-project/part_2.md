@@ -15,7 +15,7 @@ description: "Развертывание Wazuh SIEM для мониторинг�
 
 Windows 10 у нас уже установлена и готова к работе, поэтому подробно останавливаться на этом шаге мы не будем.
 
-![windows_installed](screens/windows_installed.png)
+![windows_installed](/handson/images/soc_project/part_2/windows_installed.png)
 
 
 
@@ -23,7 +23,7 @@ Windows 10 у нас уже установлена и готова к работ
 
 Kali Linux также уже установлен и готов к работе.
 
-![windows_installed](screens/kali_installed.png)
+![windows_installed](/handson/images/soc_project/part_2/kali_installed.png)
 
 
 
@@ -39,18 +39,18 @@ Windows Server 2022 будет выполнять роль контроллер�
 
 На экране выбора версии операционной системы нам нужно выбрать **Windows Server 2022 Standard Evaluation (Desktop Experience)**. Если выбрать версию без Desktop Experience, мы получим только командную строку без графического интерфейса.
 
-![windows_installed](screens/installing_win_serv.png)
+![windows_installed](/handson/images/soc_project/part_2/installing_win_serv.png)
 
 Как обычно принимаем лицензионное соглашение.
 
 После завершения установки система попросит нас задать пароль для учётной записи **Administrator**. Вводим надёжный пароль и нажимаем Finish.
 
-![windows_installed](screens/pass_winser.png)
+![windows_installed](/handson/images/soc_project/part_2/pass_winser.png)
 
 
 Windows Server установлен и готов к работе. Переходим к последней машине.
 
-![windows_installed](screens/winser_installed.png)
+![windows_installed](/handson/images/soc_project/part_2/winser_installed.png)
 
 
 
@@ -66,17 +66,17 @@ Ubuntu Server будет основой нашей системы монитор
 
 Следующий важный экран, это создание учётной записи. Здесь нам нужно заполнить несколько полей. В поле Your name вводим любое имя. В поле Your server's name вводим **soc** — это будет имя хоста нашего сервера. В поле Username и Password задаём учётные данные, которые обязательно запомним, они понадобятся нам при каждом входе в систему. Нажимаем Done.
 
-![windows_installed](screens/ubuntu_server1.png)
+![windows_installed](/handson/images/soc_project/part_2/ubuntu_server1.png)
 
 Предложение установить Ubuntu Pro пропускаем. А OpenSSH устанавливаем.
 
-![windows_installed](screens/ubuntu_server2.png)
+![windows_installed](/handson/images/soc_project/part_2/ubuntu_server2.png)
 
 Когда процесс завершится, в нижней части экрана появится кнопка Reboot Now — нажимаем её. Система может показать ошибку вида **Failed unmounting /cdrom** - это нормальное поведение, просто нажимаем Enter и ждём перезагрузки.
 
-![windows_installed](screens/complete_installation.png)
+![windows_installed](/handson/images/soc_project/part_2/complete_installation.png)
 
 После перезагрузки нас встречает экран входа в систему. Вводим имя пользователя и пароль, которые мы задали при установке.
 
-![windows_installed](screens/start_ubuntu_server.png)
+![windows_installed](/handson/images/soc_project/part_2/start_ubuntu_server.png)
 
