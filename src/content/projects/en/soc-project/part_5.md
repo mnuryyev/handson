@@ -117,7 +117,7 @@ On the next screen we set key parameters. We leave forest and domain functional 
 
 ![13_pass](/handson/images/soc_project/part_5/13_pass.png)
 
-![14_next](/handson/images/soc_project_part_5/14_next.png)
+![14_next](/handson/images/soc_project/part_5/14_next.png)
 
 
 
