@@ -5,32 +5,28 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
+// Добавляем base
+const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths({ paginate }) {
-  // 1. Путь к папке с русским контентом
-  const labsDir = './src/content/tools/ru';     
-  
+  const labsDir = './src/content/tools/ru';      
   if (!fs.existsSync(labsDir)) return [];
 
-  // 2. Читаем все .md файлы
   const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
 
   const allLabs = files.map(file => {
     const fileContent = fs.readFileSync(path.join(labsDir, file), 'utf-8');
     const { data } = matter(fileContent);
-    
-    // Возвращаем плоский объект
     return {
       slug: file.replace('.md', ''),
-      ...data // Все поля из Frontmatter (title, date, image, desc) теперь на верхнем уровне
+      ...data 
     };
   }).sort((a, b) => {
-    // 3. Сортировка по дате (исправлено: обращаемся напрямую к .date)
     const dateA = new Date(a.date || 0).getTime();
     const dateB = new Date(b.date || 0).getTime();
-    return dateB - dateA; // Сначала новые
+    return dateB - dateA;
   });
 
-  // 4. Пагинация
   return paginate(allLabs, { pageSize: 12 });
 }
 
@@ -51,7 +47,8 @@ const lang = "ru";
           title={lab.title} 
           desc={lab.description} 
           date={lab.date} 
-          url={`/${lang}/labs/${lab.slug}`} 
+          /* ИСПРАВЛЕНО: путь tools вместо labs и добавлен base */
+          url={`${base}${lang}/tools/${lab.slug}`} 
           image={lab.image}
         />
       ))}
@@ -59,7 +56,8 @@ const lang = "ru";
 
     <nav class="pagination">
       {page.url.prev ? (
-        <a href={page.url.prev} class="p-btn">← Назад</a>
+        /* ИСПРАВЛЕНО: везде добавлен base для ссылок пагинации */
+        <a href={`${base}${page.url.prev.replace(/^\//, '')}`} class="p-btn">← Назад</a>
       ) : (
         <span class="p-btn disabled">← Назад</span>
       )}
@@ -69,7 +67,7 @@ const lang = "ru";
       </div>
 
       {page.url.next ? (
-        <a href={page.url.next} class="p-btn">Вперед →</a>
+        <a href={`${base}${page.url.next.replace(/^\//, '')}`} class="p-btn">Вперед →</a>
       ) : (
         <span class="p-btn disabled">Вперед →</span>
       )}
