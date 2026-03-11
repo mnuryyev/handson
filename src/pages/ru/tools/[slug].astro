@@ -1,14 +1,15 @@
 ---
-import MainLayout from '../../../layouts/MainLayout.astro'; // Исправили путь (3 уровня вверх)
+import MainLayout from '../../../layouts/MainLayout.astro';
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
+// 1. Добавляем base для GitHub Pages
+const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths() {
-  // Теперь ищем файлы в папке контента для русского языка
   const labsDir = './src/content/tools/ru';
-  
   if (!fs.existsSync(labsDir)) return [];
 
   const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
@@ -19,21 +20,19 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const lang = "ru"; // Указываем язык текущей страницы
+const lang = "ru";
 
-// Путь к конкретному файлу тоже теперь включает /ru/
 const filePath = path.join('./src/content/tools/ru', `${slug}.md`);
 const fileContent = fs.readFileSync(filePath, 'utf-8');
 const { data, content } = matter(fileContent);
 
-// Превращаем Markdown в HTML
 const htmlContent = marked.parse(content);
 ---
 
 <MainLayout title={data.title}>
   <div class="article-container">
     <nav class="breadcrumb">
-      <a href={`/${lang}/labs`}>Tools</a> 
+      <a href={`${base}${lang}/tools/1`}>Tools</a> 
       <span class="sep">/</span> 
       <span class="current">{data.title}</span>
     </nav>
@@ -49,6 +48,7 @@ const htmlContent = marked.parse(content);
 </MainLayout>
 
 <style>
+  /* Стили остаются без изменений, они у тебя отличные */
   .article-container {
     max-width: 1100px; 
     margin: 60px auto;
@@ -57,11 +57,11 @@ const htmlContent = marked.parse(content);
 
   .breadcrumb { margin-bottom: 25px; font-size: 0.9rem; color: #666; }
   .breadcrumb a { color: var(--accent); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
   .breadcrumb .sep { margin: 0 10px; opacity: 0.3; }
 
   .article-header h1 { font-size: 2.8rem; margin-bottom: 12px; letter-spacing: -1.2px; color: #fff; }
   
-  /* ТЕКСТ */
   .article-body {
     line-height: 1.7;
     font-size: 1.10rem;
@@ -73,7 +73,6 @@ const htmlContent = marked.parse(content);
   .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; text-align: left; }
   .article-body :global(p) { margin-bottom: 1.2em; }
 
-  /* КОД */
   .article-body :global(pre) {
     background: #0b0b0b;
     padding: 20px;
@@ -84,7 +83,6 @@ const htmlContent = marked.parse(content);
     overflow-x: auto;
   }
 
-  /* КАРТИНКИ */
   .article-body :global(img) {
     display: block;
     width: 100%;
