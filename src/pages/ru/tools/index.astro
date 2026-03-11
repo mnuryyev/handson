@@ -1,5 +1,7 @@
 ---
 const base = import.meta.env.BASE_URL;
-// Исправляем путь редиректа
-return Astro.redirect(`${base}ru/tools/1`);
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
+
+// Редирект с учетом базового пути
+return Astro.redirect(`${cleanBase}ru/tools/1`);
 ---
