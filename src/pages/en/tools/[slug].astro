@@ -5,8 +5,10 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
+// 1. Получаем базовый URL проекта
+const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths() {
-  // Читаем файлы из английской папки
   const labsDir = './src/content/tools/en';
   
   if (!fs.existsSync(labsDir)) return [];
@@ -21,19 +23,17 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const lang = "en";
 
-// Путь к контенту с учетом языка
 const filePath = path.join('./src/content/tools/en', `${slug}.md`);
 const fileContent = fs.readFileSync(filePath, 'utf-8');
 const { data, content } = matter(fileContent);
 
-// Превращаем Markdown в HTML
 const htmlContent = marked.parse(content);
 ---
 
 <MainLayout title={data.title}>
   <div class="article-container">
     <nav class="breadcrumb">
-      <a href={`/${lang}/labs`}>Security</a> 
+      <a href={`${base}${lang}/tools/1`}>Tools</a> 
       <span class="sep">/</span> 
       <span class="current">{data.title}</span>
     </nav>
@@ -61,7 +61,6 @@ const htmlContent = marked.parse(content);
 
   .article-header h1 { font-size: 2.8rem; margin-bottom: 12px; letter-spacing: -1.2px; color: #fff; }
 
-  /* ТЕКСТ */
   .article-body {
     line-height: 1.7;
     font-size: 1.10rem;
@@ -73,7 +72,6 @@ const htmlContent = marked.parse(content);
   .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; text-align: left; }
   .article-body :global(p) { margin-bottom: 1.2em; }
 
-  /* КОД */
   .article-body :global(pre) {
     background: #0b0b0b;
     padding: 20px;
@@ -84,7 +82,6 @@ const htmlContent = marked.parse(content);
     overflow-x: auto;
   }
 
-  /* КАРТИНКИ */
   .article-body :global(img) {
     display: block;
     width: 100%;
