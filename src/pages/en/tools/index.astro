@@ -1,4 +1,4 @@
 ---
-// src/pages/ru/labs/index.astro
-return Astro.redirect('/en/tools/1');
+const base = import.meta.env.BASE_URL;
+return Astro.redirect(`${base}en/tools/1`);
 ---
