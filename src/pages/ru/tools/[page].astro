@@ -5,13 +5,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
-// ГАРАНТИРОВАННО ПРАВИЛЬНЫЙ BASE
-const base = import.meta.env.BASE_URL;
-const cleanBase = base.endsWith('/') ? base : `${base}/`;
-
 export async function getStaticPaths({ paginate }) {
   const labsDir = './src/content/tools/ru';      
-  
   if (!fs.existsSync(labsDir)) return [];
 
   const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
@@ -19,7 +14,6 @@ export async function getStaticPaths({ paginate }) {
   const allLabs = files.map(file => {
     const fileContent = fs.readFileSync(path.join(labsDir, file), 'utf-8');
     const { data } = matter(fileContent);
-    
     return {
       slug: file.replace('.md', ''),
       ...data 
@@ -27,7 +21,7 @@ export async function getStaticPaths({ paginate }) {
   }).sort((a, b) => {
     const dateA = new Date(a.date || 0).getTime();
     const dateB = new Date(b.date || 0).getTime();
-    return dateB - dateA; 
+    return dateB - dateA;
   });
 
   return paginate(allLabs, { pageSize: 12 });
@@ -50,8 +44,8 @@ const lang = "ru";
           title={lab.title} 
           desc={lab.description} 
           date={lab.date} 
-          /* ИСПРАВЛЕНО: Убрали лишние слеши, используем cleanBase и раздел tools */
-          url={`${cleanBase}${lang}/tools/${lab.slug}`} 
+          /* СДЕЛАНО КАК В WRITEUPS: прямой путь */
+          url={`/${lang}/tools/${lab.slug}`} 
           image={lab.image}
         />
       ))}
@@ -59,8 +53,7 @@ const lang = "ru";
 
     <nav class="pagination">
       {page.url.prev ? (
-        /* Очищаем url.prev от начального слеша, чтобы не было двойного base */
-        <a href={`${cleanBase}${page.url.prev.replace(/^\//, '')}`} class="p-btn">← Назад</a>
+        <a href={page.url.prev} class="p-btn">← Назад</a>
       ) : (
         <span class="p-btn disabled">← Назад</span>
       )}
@@ -70,7 +63,7 @@ const lang = "ru";
       </div>
 
       {page.url.next ? (
-        <a href={`${cleanBase}${page.url.next.replace(/^\//, '')}`} class="p-btn">Вперед →</a>
+        <a href={page.url.next} class="p-btn">Вперед →</a>
       ) : (
         <span class="p-btn disabled">Вперед →</span>
       )}
