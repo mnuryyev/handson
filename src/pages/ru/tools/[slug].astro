@@ -5,15 +5,10 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
 
-// 1. Добавляем base для GitHub Pages
-const base = import.meta.env.BASE_URL;
-
 export async function getStaticPaths() {
   const labsDir = './src/content/tools/ru';
   if (!fs.existsSync(labsDir)) return [];
-
   const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
-
   return files.map(file => ({
     params: { slug: file.replace('.md', '') }
   }));
@@ -25,14 +20,13 @@ const lang = "ru";
 const filePath = path.join('./src/content/tools/ru', `${slug}.md`);
 const fileContent = fs.readFileSync(filePath, 'utf-8');
 const { data, content } = matter(fileContent);
-
 const htmlContent = marked.parse(content);
 ---
 
 <MainLayout title={data.title}>
   <div class="article-container">
     <nav class="breadcrumb">
-      <a href={`${base}${lang}/tools/1`}>Tools</a> 
+      <a href={`/${lang}/tools/1`}>Tools</a> 
       <span class="sep">/</span> 
       <span class="current">{data.title}</span>
     </nav>
@@ -41,7 +35,6 @@ const htmlContent = marked.parse(content);
       <header class="article-header">
         <h1>{data.title}</h1>
       </header>
-      
       <div class="article-body" set:html={htmlContent} />
     </article>
   </div>
