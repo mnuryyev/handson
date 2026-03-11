@@ -5,9 +5,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
-// Добавляем base для GitHub Pages
-const base = import.meta.env.BASE_URL;
-
 export async function getStaticPaths({ paginate }) {
   const labsDir = './src/content/tools/en'; 
   
@@ -48,8 +45,8 @@ const lang = "en";
           title={lab.title} 
           desc={lab.description} 
           date={lab.date} 
-          /* ИСПРАВЛЕНО: tools вместо labs и добавлен base */
-          url={`${base}${lang}/tools/${lab.slug}`} 
+          /* ИСПРАВЛЕНО: путь /en/tools/ вместо /en/labs/ */
+          url={`/${lang}/tools/${lab.slug}`} 
           image={lab.image}
         />
       ))}
@@ -57,8 +54,7 @@ const lang = "en";
 
     <nav class="pagination">
       {page.url.prev ? (
-        /* ИСПРАВЛЕНО: добавлен base */
-        <a href={`${base}${page.url.prev.replace(/^\//, '')}`} class="p-btn">← Previous</a>
+        <a href={page.url.prev} class="p-btn">← Previous</a>
       ) : (
         <span class="p-btn disabled">← Previous</span>
       )}
@@ -68,8 +64,7 @@ const lang = "en";
       </div>
 
       {page.url.next ? (
-        /* ИСПРАВЛЕНО: добавлен base */
-        <a href={`${base}${page.url.next.replace(/^\//, '')}`} class="p-btn">Next →</a>
+        <a href={page.url.next} class="p-btn">Next →</a>
       ) : (
         <span class="p-btn disabled">Next →</span>
       )}
@@ -78,6 +73,7 @@ const lang = "en";
 </MainLayout>
 
 <style>
+  /* Стили остаются без изменений */
   .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
   .page-header { margin-bottom: 50px; border-bottom: 1px solid #222; padding-bottom: 30px; }
   .grid {
