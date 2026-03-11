@@ -5,8 +5,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
+// Добавляем base для GitHub Pages
+const base = import.meta.env.BASE_URL;
+
 export async function getStaticPaths({ paginate }) {
-  // 1. Путь именно к папке EN
   const labsDir = './src/content/tools/en'; 
   
   if (!fs.existsSync(labsDir)) return [];
@@ -30,7 +32,7 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { page } = Astro.props;
-const lang = "en"; // Исправлено на en
+const lang = "en"; 
 ---
 
 <MainLayout title={`Tools - Page ${page.currentPage}`}>
@@ -46,7 +48,8 @@ const lang = "en"; // Исправлено на en
           title={lab.title} 
           desc={lab.description} 
           date={lab.date} 
-          url={`/${lang}/labs/${lab.slug}`} 
+          /* ИСПРАВЛЕНО: tools вместо labs и добавлен base */
+          url={`${base}${lang}/tools/${lab.slug}`} 
           image={lab.image}
         />
       ))}
@@ -54,7 +57,8 @@ const lang = "en"; // Исправлено на en
 
     <nav class="pagination">
       {page.url.prev ? (
-        <a href={page.url.prev} class="p-btn">← Previous</a>
+        /* ИСПРАВЛЕНО: добавлен base */
+        <a href={`${base}${page.url.prev.replace(/^\//, '')}`} class="p-btn">← Previous</a>
       ) : (
         <span class="p-btn disabled">← Previous</span>
       )}
@@ -64,7 +68,8 @@ const lang = "en"; // Исправлено на en
       </div>
 
       {page.url.next ? (
-        <a href={page.url.next} class="p-btn">Next →</a>
+        /* ИСПРАВЛЕНО: добавлен base */
+        <a href={`${base}${page.url.next.replace(/^\//, '')}`} class="p-btn">Next →</a>
       ) : (
         <span class="p-btn disabled">Next →</span>
       )}
