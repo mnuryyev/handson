@@ -39,13 +39,13 @@ date: "14 марта 2026"
 
 ``` mkdir ~/hash_lab && cd ~/hash_lab ```
 
-![01_mkdir](/handson/images//01_mkdir.png)
+![01_mkdir](/handson/images/hash_functions_sec/01_mkdir.png)
 
 Создадим основной тестовый файл с произвольным содержимым:
 
 ``` echo 'Test File' > data.txt && cat data.txt ```
 
-![02_test_file](screens/02_test_file.png)
+![02_test_file](/handson/images/hash_functions_sec/02_test_file.png)
 
 ### Шаг 2. Проверка наличия инструментов
 
@@ -59,7 +59,7 @@ date: "14 марта 2026"
 # /usr/bin/sha256sum
 ```
 
-![03_check_instruments](screens/03_check_instruments.png)
+![03_check_instruments](/handson/images/hash_functions_sec/03_check_instruments.png)
 
 ---
 
@@ -71,7 +71,7 @@ date: "14 марта 2026"
 
 ``` md5sum data.txt ```
 
-![04_demo_md5](screens/04_demo_md5.png)
+![04_demo_md5](/handson/images/hash_functions_sec/04_demo_md5.png)
 
 
 ### Шаг 4. Демонстрация лавинного эффекта
@@ -83,7 +83,7 @@ echo 'Test File!' > data.txt
 md5sum data.txt
 ```
 
-![05_md5_lavin_effect](screens/05_md5_lavin_effect.png)
+![05_md5_lavin_effect](/handson/images/hash_functions_sec/05_md5_lavin_effect.png)
 
 Результат полностью отличается от предыдущего, несмотря на то что мы добавили лишь один символ - восклицательный знак. Это свойство называется **лавинным эффектом** и является обязательным требованием к любой надёжной хэш-функции.
 
@@ -97,7 +97,7 @@ echo -n 'pass123' | md5sum
 echo -n 'Pass' | md5sum
 ```
 
-![06_hash_demo_direct](screens/06_hash_demo_direct.png)
+![06_hash_demo_direct](/handson/images/hash_functions_sec/06_hash_demo_direct.png)
 
 > Флаг -n важен: без него echo добавляет символ новой строки, что меняет хэш. Всегда лучше использовать **-n** при хэшировании строк.
 
@@ -114,15 +114,15 @@ echo -n 'qwerty' | md5sum | cut -d' ' -f1 >> hashes_md5.txt
 cat hashes_md5.txt
 ```
 
-![07_demo_vulnerability](screens/07_demo_vulnerability.png)
+![07_demo_vulnerability](/handson/images/hash_functions_sec/07_demo_vulnerability.png)
 
 Запустим атаку по словарю с помощью **hashcat**, одного из самых мощных инструментов для восстановления паролей:
 
 ``` hashcat -m 0 -a 0 hashes_md5.txt /usr/share/wordlists/rockyou.txt ```
 
-![08_start_attack](screens/08_start_attack.png)
+![08_start_attack](/handson/images/hash_functions_sec/08_start_attack.png)
 
-![09_result](screens/09_result.png)
+![09_result](/handson/images/hash_functions_sec/09_result.png)
 
 
 Альтернативно через **John the Ripper**:
@@ -132,7 +132,7 @@ john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hashes_md5.txt
 john --format=raw-md5 --show hashes_md5.txt
 ```
 
-![10_john_ripper](screens/10_john_ripper.png)
+![10_john_ripper](/handson/images/hash_functions_sec/10_john_ripper.png)
 
 В считанные секунды hashcat восстанавливает пароли из хэшей. Это наглядно показывает, почему хранение паролей в MD5, это грубая ошибка. Алгоритм MD5 слишком быстрый: современные видеокарты способны вычислять десятки миллиардов MD5-хэшей в секунду.
 
@@ -141,11 +141,11 @@ john --format=raw-md5 --show hashes_md5.txt
 В 2004 году исследователи публично представили первую практическую коллизию MD5 - два разных файла с одинаковым хэшем. В 2005 году атаки были улучшены настолько, что генерация коллизии стала занимать секунды.
 Для демонстрации скачиваем файлы из гитхаба:
 
-![11_download_files](screens/11_download_files.png)
+![11_download_files](/handson/images/hash_functions_sec/11_download_files.png)
 
-![12_collision](screens/12_collision.png)
+![12_collision](/handson/images/hash_functions_sec/12_collision.png)
 
-![13_collision](screens/13_collision.png)
+![13_collision](/handson/images/hash_functions_sec/13_collision.png)
 
 Вывод md5sum покажет одинаковые хэши для обоих файлов, тогда как sha256sum выдаст разные. Это объясняет, почему MD5 нельзя использовать для верификации программного обеспечения или в системах безопасности.
 
@@ -159,7 +159,7 @@ john --format=raw-md5 --show hashes_md5.txt
 
 ``` sha1sum data.txt ```
 
-![14_demo_sha1](screens/14_demo_sha1.png)
+![14_demo_sha1](/handson/images/hash_functions_sec/14_demo_sha1.png)
 
 ### Шаг 9. Взлом SHA-1 через hashcat
 
@@ -173,20 +173,20 @@ echo -n '123456' | sha1sum | cut -d' ' -f1 >> hashes_sha1.txt
 hashcat -m 100 -a 0 hashes_sha1.txt /usr/share/wordlists/rockyou.txt
 ```
 
-![15_add_hashes](screens/15_add_hashes.png)
+![15_add_hashes](/handson/images/hash_functions_sec/15_add_hashes.png)
 
-![16_attack1](screens/16_attack1.png)
+![16_attack1](/handson/images/hash_functions_sec/16_attack1.png)
 
-![17_attack2](screens/17_attack2.png)
+![17_attack2](/handson/images/hash_functions_sec/17_attack2.png)
 
 ### Шаг 10. Атака SHAttered - теоретическое объяснение
 
 В 2017 году исследователи Google и CWI Amsterdam опубликовали результаты проекта SHAttered. Им удалось впервые в истории найти практическую коллизию SHA-1.
 Два PDF-файла с разным визуальным содержимым получили абсолютно одинаковый SHA-1 хэш. Это означало, что злоумышленник теоретически мог создать вредоносный документ, имеющий такой же хэш, что и легитимный - и система верификации не обнаружила бы подмену.
 
-![18_download_files](screens/18_download_files.png)
+![18_download_files](/handson/images/hash_functions_sec/18_download_files.png)
 
-![19_collision](screens/19_collision.png)
+![19_collision](/handson/images/hash_functions_sec/19_collision.png)
 
 После этой публикации браузеры Chrome и Firefox перестали доверять TLS-сертификатам, подписанным SHA-1. Git также перешёл на SHA-256 в качестве основного алгоритма.
 
@@ -196,7 +196,7 @@ hashcat -m 100 -a 0 hashes_sha1.txt /usr/share/wordlists/rockyou.txt
 
 SHA-256 входит в семейство SHA-2, разработанное АНБ США и стандартизированное NIST в 2001 году. Длина хэша - 256 бит (64 шестнадцатеричных символа). На сегодняшний день ни одной практической атаки на коллизию SHA-256 не существует. Именно поэтому он является стандартом де-факто в современной криптографии.
 
-![20_sha256_demo](screens/20_sha256_demo.png)
+![20_sha256_demo](/handson/images/hash_functions_sec/20_sha256_demo.png)
 
 ### Шаг 12. Итоговое сравнение всех алгоритмов
 
@@ -216,7 +216,7 @@ echo 'SHA-1:  '; sha1sum compare.txt
 echo 'SHA-256:'; sha256sum compare.txt
 ```
 
-![21_compare](screens/21_compare.png)
+![21_compare](/handson/images/hash_functions_sec/21_compare.png)
 
 ### Шаг 13. Демонстрация лавинного эффекта
 
@@ -227,7 +227,7 @@ echo -n 'password123' | sha256sum
 echo -n 'password124' | sha256sum
 ```
 
-![22_lavin_effect](screens/22_lavin_effect.png)
+![22_lavin_effect](/handson/images/hash_functions_sec/22_lavin_effect.png)
 
 ## Фаза 5. Реальное применение SHA-256
 
@@ -235,13 +235,13 @@ echo -n 'password124' | sha256sum
 
 Одно из наиболее распространённых применений хэш-функций — верификация загруженных файлов. Любой дистрибутив Linux публикует SHA-256-хэш своих ISO-образов, чтобы пользователи могли убедиться в их подлинности.
 
-![23_iso_test](screens/23_iso_test.png)
+![23_iso_test](/handson/images/hash_functions_sec/23_iso_test.png)
 
 ### Шаг 15. Современное хранение паролей
 
 Хранить пароли в MD5 или SHA-1 недопустимо. Современные системы используют специализированные алгоритмы на основе SHA-256 с солью и большим числом итераций: bcrypt, scrypt, Argon2. Они намеренно медленные - это делает перебор паролей экономически нецелесообразным.
 
-![24_safe_pass](screens/24_safe_pass.png)
+![24_safe_pass](/handson/images/hash_functions_sec/24_safe_pass.png)
 
 ---
 
