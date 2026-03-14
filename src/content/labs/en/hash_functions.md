@@ -1,7 +1,7 @@
 ---
 title: "Analysis of Cryptographic Hash Functions"
 description: "In this work, we'll examine how cryptographic hash functions work: from computing hashes to analyzing MD5, SHA-1, and SHA-256 algorithms and verifying file integrity"
-image: "/images/hash_functions_sec/hash.png"
+image: "/images/hash_functions_sec/hash.jpg"
 date: "March 14, 2026"
 ---
 
