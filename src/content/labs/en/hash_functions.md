@@ -264,10 +264,10 @@ Storing passwords in MD5 or SHA-1 is unacceptable. Modern systems use specialize
 ### Conclusion
 
 During this practical work, the operation of cryptographic hash functions MD5, SHA-1, and SHA-256 was investigated. Specific examples demonstrated:
-    • Hash function determinism: the same data always produces the same result.
-    • Avalanche effect: changing even one character completely changes the hash.
-    • MD5 vulnerability: collisions and dictionary cracking show the algorithm's practical unsuitability.
-    • SHA-1 vulnerability: the SHAttered attack (2017) proved that a 160-bit hash is insufficient for modern threats.
-    • SHA-256 reliability: the absence of practical attacks and use in operating systems confirms its relevance.
+- Hash function determinism: the same data always produces the same result.
+- Avalanche effect: changing even one character completely changes the hash.
+- MD5 vulnerability: collisions and dictionary cracking show the algorithm's practical unsuitability.
+- SHA-1 vulnerability: the SHAttered attack (2017) proved that a 160-bit hash is insufficient for modern threats.
+- SHA-256 reliability: the absence of practical attacks and use in operating systems confirms its relevance.
 
 Key conclusion: the choice of hashing algorithm should be determined not by its speed, but by its cryptographic strength and compliance with current security standards. SHA-256 (and in the context of password storage - Argon2, bcrypt or scrypt) is the right choice for any modern system.
