@@ -13,7 +13,7 @@ In this work, we'll examine the **SSL/TLS** protocol both from a theoretical per
 
 ## Theoretical Foundation
 
-### History: from SSL to TLS**
+### History: from SSL to TLS
 
 The **SSL (Secure Sockets Layer)** protocol was developed by Netscape in 1994 to protect HTTP traffic. Over three decades, it has gone from vulnerable early versions to modern **TLS 1.3**.
 
