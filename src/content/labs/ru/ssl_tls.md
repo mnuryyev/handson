@@ -1,6 +1,6 @@
 ---
 title: "SSL/TLS. Анализ процесса установки защищённого соединения"
-description: "В данной работе рассмотрим протокол SSL/TLS как с теоретической точки зрения, так и проведём полную практическую демонстрацию"
+description: "В данной работе рассмотрим протокол SSL/TLS, проверим конфигурацию реальных серверов на уязвимости и воспроизведём последствия использования устаревших версий протокола"
 image: "/images/ssl_tls_sec/main.jpg"
 date: "18 марта 2026"
 ---
@@ -9,7 +9,7 @@ date: "18 марта 2026"
 Каждый раз, когда в адресной строке браузера появляется замок и буквы HTTPS, между устройством и сервером происходит сложный криптографический процесс - **TLS Handshake**. Именно он гарантирует три вещи: что мы общаемся именно с тем сервером (аутентификация), что данные не могут быть прочитаны третьими лицами (конфиденциальность) и что они не были изменены в пути (целостность).
 В данной работе рассмотрим протокол **SSL/TLS** как с теоретической точки зрения, так и проведём полную практическую демонстрацию. Перехватим и разберём **TLS handshake** в Wireshark, проанализируем сертификаты, проверим конфигурацию реальных серверов на уязвимости и воспроизведём последствия использования устаревших версий протокола.
 
-* * *
+
 
 ## Теоретическая база
 
@@ -50,7 +50,7 @@ Forward Secrecy (PFS) - **совершенная прямая секретнос
 
 > TLS 1.3 полностью отказался от устаревших алгоритмов: RSA key exchange, RC4, DES, 3DES, MD5, SHA-1 для подписей. Оставлены только современные: AES-GCM, ChaCha20-Poly1305, ECDHE.
 
-* * *
+
 
 ## Фаза 1. Подготовка среды
 
@@ -60,24 +60,24 @@ Forward Secrecy (PFS) - **совершенная прямая секретнос
 
 ![01_testssl](/handson/images/ssl_tls_sec/01_testssl.png)
 
-![02_openssl](screens/02_openssl.png)
+![02_openssl](/handson/images/ssl_tls_sec/02_openssl.png)
 
 
 ### Шаг 2. Настройка Wireshark для захвата TLS-трафика
 
 По умолчанию Wireshark требует прав root для захвата трафика. Добавим текущего пользователя в группу wireshark, чтобы работать без sudo.
 
-![03_wireshark](screens/03_wireshark.png)
+![03_wireshark](/handson/images/ssl_tls_sec/03_wireshark.png)
 
 В Wireshark выбираем сетевой интерфейс (в моем случае ens33) и в поле фильтра вводим: **TLS**
 
-![04_interface](screens/04_interface.png)
+![04_interface](/handson/images/ssl_tls_sec/04_interface.png)
 
-![05_tls](screens/05_tls.png)
+![05_tls](/handson/images/ssl_tls_sec/05_tls.png)
 
 Этот фильтр отображает только TLS-пакеты, скрывая весь остальной трафик. Для более точного анализа можно использовать: tls.handshake для просмотра только этапа handshake.
 
-* * *
+
 
 ## Фаза 2. Захват и анализ TLS Handshake в Wireshark
 
@@ -85,13 +85,13 @@ Forward Secrecy (PFS) - **совершенная прямая секретнос
 
 Запускаем захват в Wireshark, затем в терминале выполняем HTTPS-запрос к тестовому серверу: подключаемся к badssl.com - сайту для тестирования TLS-конфигураций
 
-![06_badssl](screens/06_badssl.png)
+![06_badssl](/handson/images/ssl_tls_sec/06_badssl.png)
 
 Или можно использовать openssl для более детального вывода: ```openssl s_client -connect badssl.com:443 -tls1_2```
 
 После выполнения команды в Wireshark увидим ряд TLS-пакетов.
 
-![07_wireshark_tls](screens/07_wireshark_tls.png)
+![07_wireshark_tls](/handson/images/ssl_tls_sec/07_wireshark_tls.png)
 
 ### Шаг 4. Анализ ClientHello
 
@@ -103,7 +103,7 @@ Forward Secrecy (PFS) - **совершенная прямая секретнос
 - Cipher Suites - список алгоритмов шифрования, которые поддерживает клиент (обычно 10–30 вариантов).
 - Extensions - дополнительные возможности: SNI (имя сервера), поддержка ALPN (HTTP/2), supported_groups.
 
-![08_clienthello](screens/08_clienthello.png)
+![08_clienthello](/handson/images/ssl_tls_sec/08_clienthello.png)
 
 **SNI (Server Name Indication)** - особо важное расширение. Оно позволяет серверу понять, к какому сайту обращается клиент, и отдать правильный сертификат. Без SNI один IP-адрес мог бы использовать только один сертификат.
 
@@ -119,7 +119,7 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 - AES_256_GCM - симметричный алгоритм шифрования данных (256-битный ключ, режим GCM).
 - SHA384 - алгоритм для HMAC (проверка целостности сообщений).
 
-![09_serverhello](screens/09_serverhello.png)
+![09_serverhello](/handson/images/ssl_tls_sec/09_serverhello.png)
 
 
 ### Шаг 6. Анализ сертификата сервера
@@ -133,7 +133,7 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 - Public Key - публичный ключ сервера (тип и размер: RSA 2048, EC 256 и т.д.).
 - Signature Algorithm - алгоритм подписи CA (должен быть SHA-256 или лучше).
 
-![10_analyze_cert](screens/10_analyze_cert.png)
+![10_analyze_cert](/handson/images/ssl_tls_sec/10_analyze_cert.png)
 
 
 ### Шаг 7. Наблюдение ChangeCipherSpec и завершения Handshake
@@ -146,10 +146,10 @@ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 
 После этого все последующие пакеты имеют тип Application Data - это уже зашифрованный HTTP-трафик, содержимое которого без ключа увидеть невозможно.
 
-![11_changecipher](screens/11_changecipher.png)
+![11_changecipher](/handson/images/ssl_tls_sec/11_changecipher.png)
 
 
-* * *
+
 
 ## Фаза 3. Детальный анализ через OpenSSL
 
@@ -163,11 +163,11 @@ openssl s_client -connect google.com:443 -tls1_3 -showcerts
 - Server certificate - отпечаток и детали сертификата.
 - SSL-Session - итоговые параметры сессии: версия TLS, cipher suite, Session-ID, Master-Key.
 
-![12_openssl](screens/12_openssl.png)
+![12_openssl](/handson/images/ssl_tls_sec/12_openssl.png)
 
-![13_result_google](screens/13_result_google.png)
+![13_result_google](/handson/images/ssl_tls_sec/13_result_google.png)
 
-![14_result_google](screens/14_result_google.png)
+![14_result_google](/handson/images/ssl_tls_sec/14_result_google.png)
 
 
 
@@ -177,15 +177,15 @@ openssl s_client -connect google.com:443 -tls1_3 -showcerts
 
 Попытка подключения по TLS 1.3 и TLS 1.2:
 
-![15_tls1_3_2](screens/15_tls1_3_2.png)
+![15_tls1_3_2](/handson/images/ssl_tls_sec/15_tls1_3_2.png)
 
 Попытка подключения по устаревшему TLS 1.1 (завершилась ошибкой)
 
-![16_tls1_1_error](screens/16_tls1_1_error.png)
+![16_tls1_1_error](/handson/images/ssl_tls_sec/16_tls1_1_error.png)
 
 Попытка подключения по SSL 3.0 (заблокирована)
 
-![17_ssl3](screens/17_ssl3.png)
+![17_ssl3](/handson/images/ssl_tls_sec/17_ssl3.png)
 
 > Современные серверы отклоняют соединения по TLS 1.0 и 1.1 - браузеры перестали поддерживать их с 2021 года. SSL 3.0 отключён повсеместно ещё после публикации атаки POODLE в 2014 году.
 
@@ -194,11 +194,11 @@ openssl s_client -connect google.com:443 -tls1_3 -showcerts
 
 Выгрузим сертификат сервера и детально его изучим:
 
-![18_cert](screens/18_cert.png)
+![18_cert](/handson/images/ssl_tls_sec/18_cert.png)
 
 Сохраняем цепочку сертификатов в файл, смотрим только основные поля, проверяем алгоритм подписи и смотрим Subject Alternative Names (SAN):
 
-![19_analyze](screens/19_analyze.png)
+![19_analyze](/handson/images/ssl_tls_sec/19_analyze.png)
 
 
 ### Шаг 11. Проверка срока действия сертификата
@@ -221,11 +221,11 @@ if [ $DAYS -lt 30 ]; then
 fi
 ```
 
-![20_expire_cert](screens/20_expire_cert.png)
+![20_expire_cert](/handson/images/ssl_tls_sec/20_expire_cert.png)
 
 
 
-* * *
+
 
 ## Фаза 4. Аудит TLS-конфигурации сервера
 
@@ -235,13 +235,13 @@ fi
 
 Полный аудит сервера:
 
-![21_audit](screens/21_audit.png)
+![21_audit](/handson/images/ssl_tls_sec/21_audit.png)
 
-![22_audit2](screens/22_audit2.png)
+![22_audit2](/handson/images/ssl_tls_sec/22_audit2.png)
 
 Проверим только уязвимости:
 
-![23_vulnerabilities](screens/23_vulnerabilities.png)
+![23_vulnerabilities](/handson/images/ssl_tls_sec/23_vulnerabilities.png)
 
 
 В выводе testssl.sh обращаем внимание на разделы:
@@ -257,22 +257,22 @@ Nmap имеет встроенные NSE-скрипты для анализа TL
 
 Определение поддерживаемых cipher suites и версий TLS:
 
-![24_nmap](screens/24_nmap.png)
+![24_nmap](/handson/images/ssl_tls_sec/24_nmap.png)
 
 Получение сертификата:
 
-![25_nmap_cert](screens/25_nmap_cert.png)
+![25_nmap_cert](/handson/images/ssl_tls_sec/25_nmap_cert.png)
 
 Проверка на уязвимость Heartbleed (CVE-2014-0160):
 
-![26_heartbleed](screens/26_heartbleed.png)
+![26_heartbleed](/handson/images/ssl_tls_sec/26_heartbleed.png)
 
 Полный TLS-аудит одной командой:
 
-![27_nmap_all_ssl](screens/27_nmap_all_ssl.png)
+![27_nmap_all_ssl](/handson/images/ssl_tls_sec/27_nmap_all_ssl.png)
 
 
-* * *
+
 
 ## Фаза 5. Создание собственного TLS-сервера
 
@@ -280,11 +280,11 @@ Nmap имеет встроенные NSE-скрипты для анализа TL
 
 Для локальных экспериментов создадим собственный CA и сертификат сервера. Это позволяет полностью контролировать процесс и наблюдать handshake в Wireshark без внешних зависимостей:
 
-![28_own_tls_server](screens/28_own_tls_server.png)
+![28_own_tls_server](/handson/images/ssl_tls_sec/28_own_tls_server.png)
 
 Проверяем результат:
 
-![29_own_cert_demo](screens/29_own_cert_demo.png)
+![29_own_cert_demo](/handson/images/ssl_tls_sec/29_own_cert_demo.png)
 
 
 ### Шаг 15. Запуск тестового TLS-сервера
@@ -293,15 +293,15 @@ OpenSSL предоставляет встроенный инструмент д�
 
 Запускаем TLS-сервер на порту 4443 и в другом терминале подключаемся как клиент и наблюдаем handshake
 
-![30_connect](screens/30_connect.png)
+![30_connect](/handson/images/ssl_tls_sec/30_connect.png)
 
 Подключение только через TLS 1.3:
 
-![31_tls_1_3](screens/31_tls_1_3.png)
+![31_tls_1_3](/handson/images/ssl_tls_sec/31_tls_1_3.png)
 
 Подключение с выводом всех деталей сессии:
 
-![32_all](screens/32_all.png)
+![32_all](/handson/images/ssl_tls_sec/32_all.png)
 
 > Флаг **-state** выводит каждый шаг handshake: SSL_connect:before SSL initialization → SSL_connect:SSLv3/TLS write client hello → SSL_connect:SSLv3/TLS read server hello → и так далее. Это позволяет буквально наблюдать протокол в реальном времени.
 
@@ -312,12 +312,12 @@ OpenSSL предоставляет встроенный инструмент д�
 
 Фильтр в Wireshark ```tcp.port == 4443``` или только TLS handshake ```tcp.port == 4443 && tls.handshake```
 
-![33_wireshark](screens/33_wireshark.png)
+![33_wireshark](/handson/images/ssl_tls_sec/33_wireshark.png)
 
 Теперь каждое подключение клиента будет видно в Wireshark как полная последовательность: TCP SYN → TCP SYN-ACK → TCP ACK → ClientHello → ServerHello → Certificate → ... → Application Data.
 
 
-* * *
+
 
 ## Фаза 6. Демонстрация последствий устаревших версий TLS
 
@@ -329,11 +329,11 @@ OpenSSL предоставляет встроенный инструмент д�
 
 Мы проверяем три случая: сначала сервер с просроченным сертификатом, который вызывает ошибку из-за истечения срока действия; затем сервер с самоподписанным сертификатом, где возникает ошибка доверия к сертификату; и наконец сервер с неправильным именем хоста, который выдаёт ошибку из-за несоответствия имени в сертификате.
 
-![34_test_server](screens/34_test_server.png)
+![34_test_server](/handson/images/ssl_tls_sec/34_test_server.png)
 
 Всё вышеперечисленное можно принудительно обойти:
 
-![35_curl_k](screens/35_curl_k.png)
+![35_curl_k](/handson/images/ssl_tls_sec/35_curl_k.png)
 
 Флаг **curl -k (--insecure)** полностью отключает проверку сертификата. MITM-атака становится тривиальной - сертификат злоумышленника будет принят без предупреждений.
 
@@ -344,11 +344,11 @@ OpenSSL предоставляет встроенный инструмент д�
 
 Сервер с RC4 (сломанный потоковый шифр) и с 512-битными ключами (EXPORT-grade, взламываются за часы)
 
-![36_cipher_suites](screens/36_cipher_suites.png)
+![36_cipher_suites](/handson/images/ssl_tls_sec/36_cipher_suites.png)
 
 Запускаем testssl.sh против плохого сервера и смотрим отчёт:
 
-![37_vuln](screens/37_vuln.png)
+![37_vuln](/handson/images/ssl_tls_sec/37_vuln.png)
 
 
 ### Шаг 19. POODLE - объяснение атаки на SSL 3.0
@@ -357,10 +357,10 @@ POODLE (Padding Oracle On Downgraded Legacy Encryption) - атака 2014 год
 
 Проверяем, поддерживает ли сервер устаревший протокол SSL 3.0 (он должен отклонить соединение с ошибкой рукопожатия), затем дополнительно проверяем его на уязвимость к атаке POODLE с помощью сканирования и убеждаемся, что он неуязвим, а для сравнения выполняем ту же проверку на заведомо уязвимом сервере.
 
-![38_poodle](screens/38_poodle.png)
+![38_poodle](/handson/images/ssl_tls_sec/38_poodle.png)
 
 
-* * *
+
 
 ## Фаза 7. Дешифровка TLS-трафика в Wireshark
 
@@ -370,22 +370,22 @@ POODLE (Padding Oracle On Downgraded Legacy Encryption) - атака 2014 год
 
 Указываем путь к файлу для сохранения TLS-ключей, запускаем браузер с этой настройкой, открываем несколько HTTPS‑сайтов, после чего проверяем, что ключи действительно записались в файл.
 
-![39_export_sslkeylogfile](screens/39_export_sslkeylogfile.png)
+![39_export_sslkeylogfile](/handson/images/ssl_tls_sec/39_export_sslkeylogfile.png)
 
-![40_chromium](screens/40_chromium.png)
+![40_chromium](/handson/images/ssl_tls_sec/40_chromium.png)
 
-![41_check_file](screens/41_check_file.png)
+![41_check_file](/handson/images/ssl_tls_sec/41_check_file.png)
 
 Теперь настраиваем Wireshark для использования этого файла:
 
-![42_wireshark_test](screens/42_wireshark_test.png)
+![42_wireshark_test](/handson/images/ssl_tls_sec/42_wireshark_test.png)
 
-![43_tls](screens/43_tls.png)
+![43_tls](/handson/images/ssl_tls_sec/43_tls.png)
 
-![44_wireshark](screens/44_wireshark.png)
+![44_wireshark](/handson/images/ssl_tls_sec/44_wireshark.png)
 
 
-* * *
+
 
 ## Итоги и выводы
 
@@ -401,3 +401,5 @@ POODLE (Padding Oracle On Downgraded Legacy Encryption) - атака 2014 год
 | Сжатие TLS              | Да (уязвимость CRIME)  | Да (уязвимость CRIME)            | Нет                              |
 | Encrypted SNI           | Нет                    | Нет                              | Поддерживается (ECH)             |
 | Уязвимости              | BEAST, POODLE, RC4     | SWEET32 при слабых наборах       | Не обнаружено                    |
+
+В ходе данной работы был исследован механизм SSL/TLS Handshake - фундаментального процесса, обеспечивающего безопасность современного интернета. Мы рассмотрели эволюцию протокола от уязвимого SSL 2.0 до современного TLS 1.3, захватили и разобрали реальный handshake в Wireshark, провели аудит TLS-конфигурации серверов, создали собственный CA и TLS-сервер, а также продемонстрировали, к каким последствиям приводит использование устаревших версий протокола и слабых cipher suites.
