@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
 
 export async function getStaticPaths() {
   const labsDir = './src/content/tools/en';
@@ -26,7 +28,7 @@ const htmlContent = marked.parse(content);
 <MainLayout title={data.title}>
   <div class="article-container">
     <nav class="breadcrumb">
-      <a href={`/${lang}/tools/1`}>Tools</a> 
+      <a href={`${cleanBase}${lang}/tools/1`}>Tools</a> 
       <span class="sep">/</span> 
       <span class="current">{data.title}</span>
     </nav>
