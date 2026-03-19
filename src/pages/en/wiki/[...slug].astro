@@ -5,10 +5,11 @@ import WikiTree from '../../../components/WikiTree.astro';
 
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
-  // Фильтруем только те, что начинаются с 'en/'
+  // 1. Берем только английские файлы
   const enEntries = wikiEntries.filter(entry => entry.id.startsWith('en/'));
   
   return enEntries.map(entry => ({
+    // Убираем 'en/' из начала slug для URL
     params: { slug: entry.id.replace(/^en\//, '').replace(/\.md$/, '') }, 
     props: { entry },
   }));
@@ -18,14 +19,14 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allEntries = await getCollection('wiki');
 
-// Берем только английские записи для дерева
+// 2. Оставляем только английские записи для дерева в сайдбаре
 const enEntries = allEntries.filter(item => item.id.startsWith('en/'));
 const currentSlug = Astro.params.slug || '';
 
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
-    // Убираем префикс 'en/' для корректного построения дерева
+    // Убираем префикс 'en/', чтобы дерево не начиналось с папки "en"
     const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
@@ -33,7 +34,11 @@ function buildTree(entries) {
     parts.forEach((part, index) => {
       if (!current[part]) {
         if (index === parts.length - 1) {
-          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+          current[part] = { 
+            type: 'file', 
+            title: item.data?.title || part, 
+            slug: cleanId 
+          };
         } else {
           current[part] = { type: 'folder', children: {} };
         }
@@ -50,8 +55,18 @@ const fileTree = buildTree(enEntries);
 ---
 
 <WikiLayout title={entry.data.title}>
-  <div slot="sidebar">
-    <WikiTree tree={fileTree} currentSlug={currentSlug} lang="en" />
-  </div>
+  <WikiTree slot="sidebar" tree={fileTree} currentSlug={currentSlug} lang="en" />
+  
   <Content />
 </WikiLayout>
+
+<style>
+  /* Здесь стили обычно не нужны, так как контент стилизуется в WikiLayout 
+     через класс .markdown-body, а дерево — внутри WikiTree.astro 
+  */
+  .wiki-tree-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+</style>
