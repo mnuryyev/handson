@@ -2,11 +2,9 @@
 import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 
-// Получаем все данные для сайдбара
 const allEntries = await getCollection('wiki');
-const currentSlug = ""; // На главной нет активного файла
 
-// Логика дерева (такая же, как в slug.astro)
+// Логика дерева
 const tree = {};
 allEntries.forEach(item => {
   const cleanId = item.id.replace(/\.md$/, '');
@@ -23,49 +21,48 @@ allEntries.forEach(item => {
 });
 ---
 
-<WikiLayout title="База знаний">
+<WikiLayout title="Wiki" headings={[]}>
   <div slot="sidebar" class="wiki-tree">
     {Object.entries(tree).map(([name, node]) => (
-        <div class="tree-node">
-          {node.type === 'folder' ? (
-            <details>
-              <summary>📂 {name}</summary>
-              <div class="folder-content">
-                {Object.entries(node.children).map(([childName, childNode]) => (
-                  <a href={`/handson/ru/wiki/${childNode.slug}`} class="file-link">
-                    📄 {childNode.item.data.title || childName}
-                  </a>
-                ))}
-              </div>
-            </details>
-          ) : (
-            <a href={`/handson/ru/wiki/${node.slug}`} class="file-link">
-              📄 {node.item.data.title || name}
-            </a>
-          )}
-        </div>
+      <div class="tree-node">
+        {node.type === 'folder' ? (
+          <details>
+            <summary>📂 {name}</summary>
+            <div class="folder-content">
+              {Object.entries(node.children).map(([childName, childNode]) => (
+                <a href={`/handson/ru/wiki/${childNode.slug}`} class="file-link">
+                  📄 {childNode.item.data.title || childName}
+                </a>
+              ))}
+            </div>
+          </details>
+        ) : (
+          <a href={`/handson/ru/wiki/${node.slug}`} class="file-link">
+            📄 {node.item.data.title || name}
+          </a>
+        )}
+      </div>
     ))}
   </div>
 
-  <div class="empty-wiki">
-    <div class="obsidian-welcome">
-      <span>🌑</span>
-      <h2>Выберите заметку</h2>
-      <p>Используйте дерево файлов слева, чтобы начать изучение материалов.</p>
+  <div class="obsidian-style-empty">
+    <div class="welcome-box">
+      <span>🚀</span>
+      <h2>База знаний готова</h2>
+      <p>Выберите нужный раздел в меню слева, чтобы просмотреть материалы.</p>
     </div>
   </div>
 </WikiLayout>
 
 <style>
-  /* Те же стили, что в slug.astro */
-  .empty-wiki {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 60vh;
-    text-align: center;
-    color: #444;
-  }
-  .obsidian-welcome span { font-size: 3rem; display: block; margin-bottom: 20px; opacity: 0.3; }
-  .obsidian-welcome h2 { color: #888; margin-bottom: 10px; }
+  .obsidian-style-empty { height: 100%; display: flex; align-items: center; justify-content: center; }
+  .welcome-box { text-align: center; color: #555; }
+  .welcome-box span { font-size: 3rem; opacity: 0.2; }
+  
+  /* Стили сайдбара такие же как в slug для единства */
+  .wiki-tree { display: flex; flex-direction: column; gap: 2px; }
+  summary { list-style: none; padding: 4px 8px; cursor: pointer; color: #888; font-size: 0.85rem; border-radius: 4px; }
+  .folder-content { margin-left: 12px; border-left: 1px solid #222; }
+  .file-link { display: block; padding: 4px 12px; color: #666; text-decoration: none; font-size: 0.85rem; }
+  .file-link:hover { color: #fff; background: #111; }
 </style>
