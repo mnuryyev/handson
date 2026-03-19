@@ -1,8 +1,9 @@
 ---
 import MainLayout from '../../../layouts/MainLayout.astro';
 
-// В Astro переменная base уже содержит '/handson' (если настроено в конфиге)
-// Мы просто будем использовать пути от корня сайта
+// Получаем /handson/ из конфига
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
 const lang = "ru";
 
 const platforms = [
@@ -32,11 +33,8 @@ const platforms = [
 
     <div class="platform-grid">
       {platforms.map(platform => (
-        /* ВАЖНО: Добавляем '/' в начало. 
-           Это заставит браузер искать от mnuryyev.github.io/
-           Astro сам добавит /handson перед /ru, если это прописано в astro.config.mjs
-        */
-        <a href={`/${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
+        /* Склеиваем /handson/ + ru/writeups/... */
+        <a href={`${cleanBase}${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
           <div class="card-inner">
             <div class="icon-box">
               <img src={platform.icon} alt={platform.title} />
@@ -75,7 +73,6 @@ const platforms = [
   .text-box p { color: #777; line-height: 1.6; }
   .arrow { position: absolute; bottom: 40px; right: 40px; color: #333; font-size: 2rem; }
   .platform-card:hover .arrow { color: #fff; transform: translateX(5px); }
-  
   .thm:hover { border-color: #212c42; }
   .htb:hover { border-color: #9fe52d; }
 </style>
