@@ -49,33 +49,37 @@ function isFolderOpen(node, currentSlug) {
 <style>
   .tree-node {
     user-select: none;
+    margin-bottom: 2px;
   }
 
   summary {
     list-style: none;
     display: flex;
     align-items: center;
-    padding: 3px 8px;
+    /* Увеличенные отступы для удобства клика */
+    padding: 6px 10px; 
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 6px;
     color: #b0b0b0;
-    font-size: 0.85rem;
-    transition: background 0.1s;
+    /* Увеличенный шрифт */
+    font-size: 0.95rem; 
+    transition: all 0.15s ease;
   }
 
   summary:hover, .file-link:hover {
-    background: #2a2a2a;
+    background: #1e1e1e;
     color: #fff;
   }
 
   summary::-webkit-details-marker { display: none; }
 
   .chevron {
-    width: 16px;
-    height: 16px;
+    /* Чуть крупнее иконка стрелочки */
+    width: 18px;
+    height: 18px;
     fill: currentColor;
     transition: transform 0.2s;
-    opacity: 0.5;
+    opacity: 0.4;
   }
 
   details[open] > summary > .chevron {
@@ -83,30 +87,37 @@ function isFolderOpen(node, currentSlug) {
   }
 
   .folder-icon, .file-icon {
-    font-size: 0.9rem;
-    margin: 0 6px;
-    opacity: 0.7;
+    /* Размер эмодзи/иконок */
+    font-size: 1.05rem; 
+    margin: 0 8px;
+    opacity: 0.8;
   }
 
   .folder-content {
-    margin-left: 12px;
-    border-left: 1px solid #2a2a2a;
+    /* Отступ линии вложенности */
+    margin-left: 14px;
+    border-left: 1px solid #222;
     display: flex;
     flex-direction: column;
+    gap: 1px;
+    margin-top: 1px;
   }
 
   .file-link {
     display: flex;
     align-items: center;
-    padding: 3px 8px 3px 22px; /* Смещение чтобы быть под иконкой папки */
+    /* Больше отступ слева, чтобы текст был под текстом папки */
+    padding: 6px 10px 6px 30px; 
     text-decoration: none;
-    color: #909090;
-    font-size: 0.85rem;
-    border-radius: 4px;
+    color: #888;
+    /* Увеличенный шрифт */
+    font-size: 0.95rem; 
+    border-radius: 6px;
+    transition: all 0.1s ease;
   }
 
   .file-link.active {
-    background: rgba(52, 152, 219, 0.15);
+    background: rgba(52, 152, 219, 0.12);
     color: #3498db;
     font-weight: 500;
   }
@@ -115,5 +126,11 @@ function isFolderOpen(node, currentSlug) {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: 0.01em;
+  }
+
+  /* Тонкая настройка: если папка открыта, текст становится чуть ярче */
+  details[open] > summary {
+    color: #eee;
   }
 </style>
