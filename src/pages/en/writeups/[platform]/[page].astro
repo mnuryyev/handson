@@ -7,10 +7,9 @@ import matter from 'gray-matter';
 
 const base = import.meta.env.BASE_URL;
 const cleanBase = base.endsWith('/') ? base : `${base}/`;
-const lang = "en"; // Язык EN
+const lang = "en";
 
 export async function getStaticPaths({ paginate }) {
-  // Ищем файлы в английской папке
   const labsDir = './src/content/writeups/en';
   if (!fs.existsSync(labsDir)) return [];
 
@@ -45,6 +44,21 @@ const { page } = Astro.props;
 const { platform } = Astro.params;
 
 const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
+
+/** * ИСПРАВЛЕНИЕ ПУТЕЙ ПАГИНАЦИИ:
+ * Мы берем номер страницы из URL Astro и склеиваем его с правильным префиксом.
+ */
+const getPageUrl = (url) => {
+  if (!url) return null;
+  // url обычно приходит в виде "/en/writeups/thm/2" или просто "2"
+  // Чтобы не гадать, вытаскиваем только номер страницы в конце
+  const parts = url.split('/');
+  const pageNum = parts[parts.length - 1];
+  return `${cleanBase}${lang}/writeups/${platform}/${pageNum}`;
+};
+
+const prevUrl = getPageUrl(page.url.prev);
+const nextUrl = getPageUrl(page.url.next);
 ---
 
 <MainLayout title={`${platformTitle} Writeups`}>
@@ -61,16 +75,16 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
           title={lab.title} 
           desc={lab.description} 
           date={lab.date} 
-          /* Ссылка теперь ведет в /en/ section */
-          url={`en/writeups/${lab.slug}`} 
+          /* Ссылка на статью */
+          url={`${lang}/writeups/${lab.slug}`} 
           image={lab.image}
         />
       ))}
     </div>
 
     <nav class="pagination">
-      {page.url.prev ? (
-        <a href={page.url.prev} class="p-btn">← Back</a>
+      {prevUrl ? (
+        <a href={prevUrl} class="p-btn">← Back</a>
       ) : (
         <span class="p-btn disabled">← Back</span>
       )}
@@ -79,8 +93,8 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
          {page.currentPage} / {page.lastPage}
       </div>
 
-      {page.url.next ? (
-        <a href={page.url.next} class="p-btn">Next →</a>
+      {nextUrl ? (
+        <a href={nextUrl} class="p-btn">Next →</a>
       ) : (
         <span class="p-btn disabled">Next →</span>
       )}
@@ -89,13 +103,14 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
 </MainLayout>
 
 <style>
-  /* Стили оставляем такими же как в RU версии */
   .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px 25px; }
   .pagination { margin-top: 60px; display: flex; justify-content: center; align-items: center; gap: 20px; }
-  .p-btn { padding: 10px 20px; background: #111; border: 1px solid #333; border-radius: 8px; text-decoration: none; color: #fff; min-width: 100px; text-align: center; }
+  .p-btn { padding: 10px 20px; background: #111; border: 1px solid #333; border-radius: 8px; text-decoration: none; color: #fff; min-width: 100px; text-align: center; transition: 0.2s; }
+  .p-btn:hover:not(.disabled) { border-color: #3498db; background: #1a1a1a; }
   .p-btn.disabled { opacity: 0.2; cursor: not-allowed; }
-  .pages { color: #666; font-family: monospace; min-width: 60px; text-align: center; }
+  .pages { color: #666; font-family: monospace; min-width: 60px; text-align: center; font-weight: bold; }
   .breadcrumb { margin-bottom: 20px; color: #555; font-size: 0.9rem; }
   .breadcrumb a { color: #3498db; text-decoration: none; }
+  h1 { color: #fff; margin-bottom: 40px; font-size: 2.5rem; }
 </style>
