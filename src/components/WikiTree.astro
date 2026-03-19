@@ -49,37 +49,36 @@ function isFolderOpen(node, currentSlug) {
 <style>
   .tree-node {
     user-select: none;
-    margin-bottom: 2px;
   }
 
   summary {
     list-style: none;
     display: flex;
     align-items: center;
-    /* Увеличенные отступы для удобства клика */
-    padding: 6px 10px; 
+    /* Ультра-компактные отступы */
+    padding: 2px 6px; 
     cursor: pointer;
-    border-radius: 6px;
-    color: #b0b0b0;
-    /* Увеличенный шрифт */
-    font-size: 0.95rem; 
-    transition: all 0.15s ease;
+    border-radius: 4px;
+    color: #999;
+    /* Маленький, но читаемый шрифт */
+    font-size: 0.82rem; 
+    transition: 0.1s;
   }
 
   summary:hover, .file-link:hover {
-    background: #1e1e1e;
-    color: #fff;
+    background: #1a1a1a;
+    color: #ccc;
   }
 
   summary::-webkit-details-marker { display: none; }
 
   .chevron {
-    /* Чуть крупнее иконка стрелочки */
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     fill: currentColor;
     transition: transform 0.2s;
     opacity: 0.4;
+    flex-shrink: 0;
   }
 
   details[open] > summary > .chevron {
@@ -87,50 +86,43 @@ function isFolderOpen(node, currentSlug) {
   }
 
   .folder-icon, .file-icon {
-    /* Размер эмодзи/иконок */
-    font-size: 1.05rem; 
-    margin: 0 8px;
-    opacity: 0.8;
+    font-size: 0.85rem;
+    margin: 0 4px;
+    opacity: 0.6;
   }
 
   .folder-content {
-    /* Отступ линии вложенности */
-    margin-left: 14px;
-    border-left: 1px solid #222;
+    /* Тонкая линия вложенности */
+    margin-left: 10px;
+    border-left: 1px solid #1a1a1a;
     display: flex;
     flex-direction: column;
-    gap: 1px;
-    margin-top: 1px;
   }
 
   .file-link {
     display: flex;
     align-items: center;
-    /* Больше отступ слева, чтобы текст был под текстом папки */
-    padding: 6px 10px 6px 30px; 
+    /* Компактный паддинг и точное выравнивание */
+    padding: 2px 6px 2px 22px; 
     text-decoration: none;
-    color: #888;
-    /* Увеличенный шрифт */
-    font-size: 0.95rem; 
-    border-radius: 6px;
-    transition: all 0.1s ease;
+    color: #777;
+    font-size: 0.82rem;
+    border-radius: 4px;
   }
 
   .file-link.active {
-    background: rgba(52, 152, 219, 0.12);
+    background: rgba(52, 152, 219, 0.08);
     color: #3498db;
-    font-weight: 500;
   }
 
   .node-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: 0.01em;
   }
 
-  /* Тонкая настройка: если папка открыта, текст становится чуть ярче */
-  details[open] > summary {
-    color: #eee;
+  /* Убираем лишние зазоры */
+  details {
+    display: block;
   }
 </style>
