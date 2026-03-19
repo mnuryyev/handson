@@ -1,8 +1,6 @@
 ---
 import MainLayout from '../../../layouts/MainLayout.astro';
 
-const base = import.meta.env.BASE_URL;
-const cleanBase = base.endsWith('/') ? base : `${base}/`;
 const lang = "ru";
 
 // Данные для плиток категорий
@@ -10,7 +8,7 @@ const platforms = [
   {
     id: 'thm',
     title: 'TryHackMe',
-    description: 'Разборы комнат, цепочек и тренировочных машин с платформы THM',)
+    description: 'Разборы комнат, цепочек и тренировочных машин с платформы THM', // Скобка удалена
     icon: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/TryHackMe_logo.svg', 
     color: '#212c42'
   },
@@ -33,7 +31,8 @@ const platforms = [
 
     <div class="platform-grid">
       {platforms.map(platform => (
-        <a href={`${cleanBase}${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
+        /* ИСПОЛЬЗУЕМ КОРНЕВОЙ СЛЕШ. Astro сам добавит /handson если он в base */
+        <a href={`/${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
           <div class="card-inner">
             <div class="icon-box">
               <img src={platform.icon} alt={platform.title} />
