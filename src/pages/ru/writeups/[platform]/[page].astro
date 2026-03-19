@@ -160,4 +160,27 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
     min-width: 60px;
     text-align: center;
   }
+
+.breadcrumb { 
+    margin-bottom: 20px; 
+    color: #666; 
+    font-size: 0.9rem;
+  }
+
+  .breadcrumb a { 
+    /* Если --accent не работает, используй конкретный цвет, например #007bff или #444 */
+    color: #999; 
+    text-decoration: none; 
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover { 
+    color: #fff; /* При наведении ссылка станет белой */
+    text-decoration: underline; /* Появится подчеркивание */
+  }
+
+  .breadcrumb .sep {
+    margin: 0 8px;
+    color: #444;
+  }
 </style>
