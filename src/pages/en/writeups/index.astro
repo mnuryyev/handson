@@ -1,4 +1,69 @@
 ---
-// src/pages/ru/labs/index.astro
-return Astro.redirect('/en/writeups/1');
+import MainLayout from '../../../layouts/MainLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
+const lang = "en";
+
+const platforms = [
+  {
+    id: 'thm',
+    title: 'TryHackMe',
+    description: 'Walkthroughs of rooms, learning paths, and practice machines from THM',
+    icon: '/handson/images/neighbour_thm/thm_main.png', 
+    color: '#cc2929'
+  },
+  {
+    id: 'htb',
+    title: 'HackTheBox',
+    description: 'Detailed writeups for machines and challenges from HTB labs',
+    icon: '/handson/images/meow_htb/htb_main.jpg', 
+    color: '#9fe52d'
+  }
+];
 ---
+
+<MainLayout title="Writeups - Select Platform">
+  <div class="container">
+    <header class="page-header">
+      <h1>🎯 Select Platform</h1>
+      <p>All reports are structured by training platforms</p>
+    </header>
+
+    <div class="platform-grid">
+      {platforms.map(platform => (
+        <a href={`${cleanBase}${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
+          <div class="card-inner">
+            <div class="icon-box">
+              <img src={platform.icon} alt={platform.title} />
+            </div>
+            <div class="text-box">
+              <h2>{platform.title}</h2>
+              <p>{platform.description}</p>
+            </div>
+            <div class="arrow">→</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  /* Стили полностью копируют RU версию для сохранения дизайна */
+  .container { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+  .page-header h1 { font-size: 2.5rem; color: #fff; }
+  .page-header p { color: #666; }
+  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 30px; }
+  .platform-card { text-decoration: none; background: #0d0d0d; border: 1px solid #222; border-radius: 20px; padding: 0 0 35px 0; position: relative; transition: 0.3s; overflow: hidden; }
+  .platform-card:hover { background: #111; transform: translateY(-5px); }
+  .icon-box { width: 100%; height: 180px; background: linear-gradient(45deg, #0f0f0f, #1a1a1a); overflow: hidden; border-bottom: 2px solid #333; }
+  .icon-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); transition: 0.4s; }
+  .platform-card:hover .icon-box img { filter: brightness(1.05); transform: scale(1.05); }
+  .text-box { padding: 0 35px; }
+  .text-box h2 { color: #fff; margin-top: 20px; }
+  .text-box p { color: #777; margin-right: 45px; }
+  .arrow { position: absolute; bottom: 35px; right: 35px; color: #444; font-size: 1.8rem; }
+  .thm .icon-box { border-color: #cc2929; }
+  .htb .icon-box { border-color: #9fe52d; }
+</style>
