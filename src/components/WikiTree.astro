@@ -1,0 +1,64 @@
+---
+const { tree, currentSlug } = Astro.props;
+---
+
+{Object.entries(tree).map(([name, node]) => (
+  <div class="tree-node">
+    {node.type === 'folder' ? (
+      <details open={currentSlug.startsWith(name) || Object.values(node.children).some(child => child.slug === currentSlug)}>
+        <summary>
+          <span class="icon">📂</span> {name}
+        </summary>
+        <div class="folder-content">
+          <Astro.self tree={node.children} currentSlug={currentSlug} />
+        </div>
+      </details>
+    ) : (
+      <a href={`/handson/ru/wiki/${node.slug}`} 
+         class={`file-link ${currentSlug === node.slug ? 'active' : ''}`}>
+        <span class="icon">📄</span> {node.title}
+      </a>
+    )}
+  </div>
+))}
+
+<style>
+  .tree-node { display: flex; flex-direction: column; }
+  summary {
+    list-style: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #888;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 4px;
+    transition: 0.2s;
+  }
+  summary:hover { background: #1a1a1a; color: #fff; }
+  summary::-webkit-details-marker { display: none; }
+
+  .folder-content {
+    margin-left: 10px;
+    border-left: 1px solid #222;
+    padding-left: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .file-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 4px;
+  }
+  .file-link:hover { background: #1a1a1a; color: #fff; }
+  .file-link.active { color: #3498db; background: rgba(52, 152, 219, 0.1); font-weight: 500; }
+  .icon { opacity: 0.5; font-size: 0.8rem; }
+</style>
