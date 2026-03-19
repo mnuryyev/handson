@@ -11,10 +11,18 @@ const labs = defineCollection({
   }),
 });
 
-// Пока коллекции статей и проектов пустые, просто объявим их так же
 const articles = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/articles" }),
   schema: z.object({ title: z.string() }),
 });
 
-export const collections = { labs, articles };
+
+const wiki = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/wiki" }),
+  schema: z.object({ 
+    title: z.string(),
+    description: z.string().optional() 
+  }),
+});
+
+export const collections = { labs, articles, wiki };
