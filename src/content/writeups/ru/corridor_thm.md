@@ -3,6 +3,7 @@ title: "Corridor - TryHackMe (Easy)"
 description: "Анализ уязвимости IDOR в веб-приложении Corridor на TryHackMe:демонстрация обхода контроля доступа и доступа к скрытым ресурсам через изменение параметров URL"
 image: "/images/neighbour_thm/thm_main.png"
 date: "19 марта 2026"
+platform: "tryhackme"
 ---
 
 **IDOR (Insecure Direct Object Reference)** относится к категории уязвимостей **Broken Access Control (A01 OWASP Top 10 2021)** и возникает в ситуациях, когда приложение предоставляет прямой доступ к внутренним объектам системы через параметры запроса, не выполняя проверку прав доступа пользователя.
