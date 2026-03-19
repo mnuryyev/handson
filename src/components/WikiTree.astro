@@ -1,13 +1,36 @@
 ---
-const { tree, currentSlug } = Astro.props;
+// src/components/WikiTree.astro
+const { tree, currentSlug = "" } = Astro.props;
+
+// Сортируем: сначала папки, потом файлы (как в Obsidian)
+const sortedNodes = Object.entries(tree).sort(([aName, aNode], [bName, bNode]) => {
+  if (aNode.type !== bNode.type) return aNode.type === 'folder' ? -1 : 1;
+  return aName.localeCompare(bName);
+});
+
+// Функция для проверки, нужно ли раскрыть папку
+function isFolderOpen(node, currentSlug) {
+  if (!currentSlug) return false;
+  
+  const checkOpen = (n) => {
+    if (n.type === 'file' && n.slug === currentSlug) return true;
+    if (n.type === 'folder') {
+      return Object.values(n.children).some(child => checkOpen(child));
+    }
+    return false;
+  };
+  return checkOpen(node);
+}
 ---
 
-{Object.entries(tree).map(([name, node]) => (
+{sortedNodes.map(([name, node]) => (
   <div class="tree-node">
     {node.type === 'folder' ? (
-      <details open={currentSlug.startsWith(name) || Object.values(node.children).some(child => child.slug === currentSlug)}>
+      <details open={isFolderOpen(node, currentSlug)}>
         <summary>
-          <span class="icon">📂</span> {name}
+          <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          <span class="folder-icon">📁</span>
+          <span class="node-name">{name}</span>
         </summary>
         <div class="folder-content">
           <Astro.self tree={node.children} currentSlug={currentSlug} />
@@ -16,49 +39,81 @@ const { tree, currentSlug } = Astro.props;
     ) : (
       <a href={`/handson/ru/wiki/${node.slug}`} 
          class={`file-link ${currentSlug === node.slug ? 'active' : ''}`}>
-        <span class="icon">📄</span> {node.title}
+        <span class="file-icon">📄</span>
+        <span class="node-name">{node.title}</span>
       </a>
     )}
   </div>
 ))}
 
 <style>
-  .tree-node { display: flex; flex-direction: column; }
+  .tree-node {
+    user-select: none;
+  }
+
   summary {
     list-style: none;
-    padding: 4px 8px;
-    cursor: pointer;
-    color: #888;
-    font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 6px;
+    padding: 3px 8px;
+    cursor: pointer;
     border-radius: 4px;
-    transition: 0.2s;
+    color: #b0b0b0;
+    font-size: 0.85rem;
+    transition: background 0.1s;
   }
-  summary:hover { background: #1a1a1a; color: #fff; }
+
+  summary:hover, .file-link:hover {
+    background: #2a2a2a;
+    color: #fff;
+  }
+
   summary::-webkit-details-marker { display: none; }
 
+  .chevron {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    transition: transform 0.2s;
+    opacity: 0.5;
+  }
+
+  details[open] > summary > .chevron {
+    transform: rotate(90deg);
+  }
+
+  .folder-icon, .file-icon {
+    font-size: 0.9rem;
+    margin: 0 6px;
+    opacity: 0.7;
+  }
+
   .folder-content {
-    margin-left: 10px;
-    border-left: 1px solid #222;
-    padding-left: 4px;
+    margin-left: 12px;
+    border-left: 1px solid #2a2a2a;
     display: flex;
     flex-direction: column;
-    gap: 1px;
   }
 
   .file-link {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    color: #666;
+    padding: 3px 8px 3px 22px; /* Смещение чтобы быть под иконкой папки */
     text-decoration: none;
+    color: #909090;
     font-size: 0.85rem;
     border-radius: 4px;
   }
-  .file-link:hover { background: #1a1a1a; color: #fff; }
-  .file-link.active { color: #3498db; background: rgba(52, 152, 219, 0.1); font-weight: 500; }
-  .icon { opacity: 0.5; font-size: 0.8rem; }
+
+  .file-link.active {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+    font-weight: 500;
+  }
+
+  .node-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
