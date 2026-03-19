@@ -1,0 +1,46 @@
+---
+import MainLayout from '../../../../layouts/MainLayout.astro';
+import LabCard from '../../../../components/LabCard.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+
+export async function getStaticPaths() {
+  const platforms = ['tryhackme', 'hackthebox', 'offsec']; // Список твоих платформ
+  
+  return platforms.map(platform => ({
+    params: { platform },
+    props: { platformName: platform.toUpperCase() }
+  }));
+}
+
+const { platform } = Astro.params;
+const { platformName } = Astro.props;
+const lang = "ru";
+
+// Логика получения файлов (такая же, как в твоем [page].astro, но с фильтром)
+const labsDir = './src/content/writeups/ru';
+const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
+
+const filteredLabs = files.map(file => {
+  const fileContent = fs.readFileSync(path.join(labsDir, file), 'utf-8');
+  const { data } = matter(fileContent);
+  return { slug: file.replace('.md', ''), ...data };
+}).filter(lab => lab.platform === platform); // ВОТ ТУТ ФИЛЬТРАЦИЯ
+---
+
+<MainLayout title={`Writeups: ${platformName}`}>
+  <div class="container">
+    <h1>🎯 Разборы: {platformName}</h1>
+    <div class="grid">
+      {filteredLabs.map(lab => (
+        <LabCard 
+          title={lab.title} 
+          desc={lab.description} 
+          url={`/handson/${lang}/writeups/${lab.slug}`} 
+          image={lab.image}
+        />
+      ))}
+    </div>
+  </div>
+</MainLayout>
