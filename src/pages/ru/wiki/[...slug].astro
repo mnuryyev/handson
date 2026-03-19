@@ -11,15 +11,18 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
-const allEntries = await getCollection('wiki');
+// Если мы на главной wiki, entry может быть undefined
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
 
-// --- ЛОГИКА ПОСТРОЕНИЯ ДЕРЕВА ---
+const allEntries = await getCollection('wiki');
+const currentSlug = Astro.params.slug || '';
+
+// Построение дерева
 const tree = {};
 allEntries.forEach(item => {
   const cleanId = item.id.replace(/\.md$/, '');
-  const parts = cleanId.split('/'); // Разрезаем путь: ['networking', 'nmap']
-  
+  const parts = cleanId.split('/');
   let current = tree;
   parts.forEach((part, index) => {
     if (!current[part]) {
@@ -27,89 +30,81 @@ allEntries.forEach(item => {
         ? { type: 'file', item, slug: cleanId } 
         : { type: 'folder', children: {} };
     }
-    if (current[part].type === 'folder') {
-      current = current[part].children;
-    }
+    if (current[part].type === 'folder') current = current[part].children;
   });
 });
 ---
 
-<WikiLayout title={entry.data.title} headings={headings}>
-<div slot="sidebar" class="wiki-tree">
-  {Object.entries(tree).map(([name, node]) => (
-    <div class="tree-node">
-      {node.type === 'folder' ? (
-        <details open>
-          <summary><span>📁</span> {name}</summary>
-          <div class="folder-content">
-            {Object.entries(node.children).map(([childName, childNode]) => (
-              <a href={`/handson/ru/wiki/${childNode.slug}`} 
-                 class={`file-link ${childNode.slug === Astro.params.slug ? 'active' : ''}`}>
-                <span>📄</span> {childNode.item.data.title || childName}
-              </a>
-            ))}
-          </div>
-        </details>
-      ) : (
-        <a href={`/handson/ru/wiki/${node.slug}`} 
-           class={`file-link ${node.slug === Astro.params.slug ? 'active' : ''}`}>
-          <span>📄</span> {node.item.data.title || name}
-        </a>
-      )}
-    </div>
-  ))}
-</div>
+<WikiLayout title={entry?.data.title || "Wiki"}>
+  <div slot="sidebar" class="wiki-tree">
+    {Object.entries(tree).map(([name, node]) => (
+      <div class="tree-node">
+        {node.type === 'folder' ? (
+          <details open={currentSlug.startsWith(name)}>
+            <summary>📂 {name}</summary>
+            <div class="folder-content">
+              {Object.entries(node.children).map(([childName, childNode]) => (
+                <a href={`/handson/ru/wiki/${childNode.slug}`} 
+                   class={`file-link ${currentSlug === childNode.slug ? 'active' : ''}`}>
+                  📄 {childNode.item.data.title || childName}
+                </a>
+              ))}
+            </div>
+          </details>
+        ) : (
+          <a href={`/handson/ru/wiki/${node.slug}`} 
+             class={`file-link ${currentSlug === node.slug ? 'active' : ''}`}>
+            📄 {node.item.data.title || name}
+          </a>
+        )}
+      </div>
+    ))}
+  </div>
 
-  <Content />
+  {Content ? <Content /> : <div class="empty-state">Выберите заметку в меню слева</div>}
 </WikiLayout>
 
 <style>
-  .wiki-tree { display: flex; flex-direction: column; gap: 4px; font-family: 'Inter', sans-serif; }
+  /* Сокращаем отступы в Sidebar */
+  .wiki-tree { display: flex; flex-direction: column; gap: 2px; }
   
-  /* Папки */
   summary {
     list-style: none;
-    padding: 6px 10px;
+    padding: 4px 8px; /* Уменьшили */
     cursor: pointer;
-    color: #ccc;
-    font-size: 0.9rem;
-    font-weight: 600;
+    color: #999;
+    font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     border-radius: 4px;
   }
   summary:hover { background: #1a1a1a; color: #fff; }
-  summary::-webkit-details-marker { display: none; }
 
   .folder-content {
-    margin-left: 18px;
+    margin-left: 12px; /* Уменьшили отступ */
     border-left: 1px solid #222;
-    padding-left: 4px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
   }
 
-  /* Файлы */
   .file-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    color: #888;
+    display: block;
+    padding: 4px 12px; /* Уменьшили */
+    color: #777;
     text-decoration: none;
     font-size: 0.85rem;
     border-radius: 4px;
-    transition: 0.2s;
   }
-  .file-link span { opacity: 0.5; font-size: 0.8rem; }
   .file-link:hover { background: #1a1a1a; color: #fff; }
-  .file-link.active {
-    background: rgba(52, 152, 219, 0.1);
-    color: #3498db;
-    font-weight: 500;
-  }
+  .file-link.active { color: #3498db; background: rgba(52, 152, 219, 0.1); }
 
-  .tree-node details[open] summary { color: #fff; }
+  .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #444;
+    font-size: 1.2rem;
+  }
 </style>
