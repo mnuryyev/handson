@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
+import WikiTree from '../../../components/WikiTree.astro'; // Импорт
 
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
@@ -15,20 +16,25 @@ const { Content, headings } = await render(entry);
 const allEntries = await getCollection('wiki');
 const currentSlug = Astro.params.slug || '';
 
-// 1. Построение дерева (Чистый JS, без HTML)
+// 1. Построение дерева любой вложенности
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
     const cleanId = item.id.replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
+
     parts.forEach((part, index) => {
       if (!current[part]) {
-        current[part] = (index === parts.length - 1) 
-          ? { type: 'file', title: item.data?.title || part, slug: cleanId } 
-          : { type: 'folder', name: part, children: {} };
+        if (index === parts.length - 1) {
+          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+        } else {
+          current[part] = { type: 'folder', children: {} };
+        }
       }
-      if (current[part].type === 'folder') current = current[part].children;
+      if (current[part].type === 'folder') {
+        current = current[part].children;
+      }
     });
   });
   return tree;
@@ -39,6 +45,7 @@ const fileTree = buildTree(allEntries);
 
 <WikiLayout title={entry.data.title} headings={headings}>
   <div slot="sidebar" class="wiki-tree">
+  <WikiTree tree={fileTree} currentSlug={currentSlug} />
     {/* Рендерим первый уровень */}
     {Object.entries(fileTree).map(([name, node]) => (
       <div class="tree-node">
