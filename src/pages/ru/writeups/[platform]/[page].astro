@@ -163,24 +163,32 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
 
 .breadcrumb { 
     margin-bottom: 20px; 
-    color: #666; 
+    color: #555; /* Цвет разделителей и текста */
     font-size: 0.9rem;
+    font-weight: 500;
   }
 
   .breadcrumb a { 
-    /* Если --accent не работает, используй конкретный цвет, например #007bff или #444 */
-    color: #999; 
+    color: #bbb; /* Светло-серый, чтобы выделялся на фоне #555 */
     text-decoration: none; 
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent; /* Заготовка под линию */
   }
 
   .breadcrumb a:hover { 
-    color: #fff; /* При наведении ссылка станет белой */
-    text-decoration: underline; /* Появится подчеркивание */
+    color: #fff; /* При наведении становится чисто белым */
+    border-bottom: 1px solid #fff; /* Появляется тонкая линия снизу */
   }
 
+  /* Цвет для текущей (активной) страницы, она не ссылка */
+  .breadcrumb .current {
+    color: #666;
+    margin-left: 8px;
+  }
+
+  /* Разделитель / */
   .breadcrumb .sep {
     margin: 0 8px;
-    color: #444;
+    opacity: 0.4;
   }
 </style>
