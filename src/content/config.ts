@@ -16,7 +16,6 @@ const articles = defineCollection({
   schema: z.object({ title: z.string() }),
 });
 
-
 const wiki = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/wiki" }),
   schema: z.object({ 
