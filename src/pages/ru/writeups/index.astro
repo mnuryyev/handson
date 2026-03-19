@@ -52,104 +52,86 @@ const platforms = [
 </MainLayout>
 
 <style>
-  .container { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
-  .page-header { margin-bottom: 60px; text-align: left; }
-  .page-header h1 { font-size: 3rem; color: #fff; margin-bottom: 10px; }
-  .page-header p { color: #888; font-size: 1.2rem; }
+  .container { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+  .page-header { margin-bottom: 50px; }
+  .page-header h1 { font-size: 2.5rem; color: #fff; margin-bottom: 10px; }
+  .page-header p { color: #666; font-size: 1.1rem; }
   
   .platform-grid { 
     display: grid; 
-    /* Немного уменьшим minmax, чтобы на мобильных было лучше */
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); 
-    gap: 30px; 
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+    gap: 25px; 
   }
   
   .platform-card {
     text-decoration: none;
     background: #0d0d0d;
     border: 1px solid #222;
-    border-radius: 24px;
-    /* --- ВАЖНО: УБРАЛИ PADDING ОТСЮДА --- */
-    padding: 0; 
+    border-radius: 20px;
+    padding: 35px; /* Вернули общий отступ */
     position: relative;
-    overflow: hidden; /* Чтобы картинка не вылезала за скругленные края */
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    height: 100%;
   }
   
   .platform-card:hover { 
-    transform: translateY(-8px); 
-    border-color: #444; 
+    transform: translateY(-5px); 
+    border-color: #333; 
     background: #111; 
   }
 
-  /* --- НОВЫЙ БЛОК ИКОНКИ (БАННЕР) --- */
   .icon-box { 
     width: 100%; 
-    height: 160px; /* Увеличили высоту для эффекта баннера */
+    height: 80px; /* Оптимальная высота для логотипа */
     display: flex; 
     align-items: center; 
-    justify-content: center;
-    /* У каждой платформы будет свой фон (см. ниже .thm / .htb) */
-    position: relative;
-    overflow: hidden;
+    margin-bottom: 25px;
   }
 
   .icon-box img { 
-    /* Картинка занимает 100% места в .icon-box */
-    width: 100%; 
     height: 100%; 
-    
-    /* object-fit: cover — СЕКРЕТНЫЙ ИНГРЕДИЕНТ для заполнения.
-       Он масштабирует картинку, чтобы она полностью заполнила блок, 
-       обрезая лишнее. Логотип будет большим и во всю ширину.
-    */
-    object-fit: cover; 
-    
+    width: auto; 
+    max-width: 180px; /* Ограничили ширину, чтобы не гигантское было */
+    object-fit: contain; 
     display: block;
-    /* Немного затемним картинку, чтобы текст под ней читался лучше */
-    filter: brightness(0.8) contrast(1.1); 
-    transition: filter 0.3s ease;
-  }
-  
-  .platform-card:hover .icon-box img {
-    filter: brightness(1) contrast(1.1); /* При наведении делаем ярче */
   }
 
-  /* --- НОВЫЙ БЛОК ТЕКСТА --- */
-  .text-box { 
-    padding: 30px 40px 40px; /* Добавили отступы тексту */
-    flex-grow: 1; /* Чтобы текст занимал всё оставшееся место */
-    display: flex;
-    flex-direction: column;
+  .text-box h2 { 
+    color: #fff; 
+    font-size: 1.6rem; /* Уменьшили шрифт заголовка */
+    margin-bottom: 10px; 
   }
 
-  .text-box h2 { color: #fff; font-size: 2rem; margin-bottom: 12px; }
-  .text-box p { color: #777; line-height: 1.6; margin-bottom: 20px; font-size: 1.05rem; }
+  .text-box p { 
+    color: #777; 
+    line-height: 1.5; 
+    font-size: 1rem; 
+    margin-right: 40px; /* Отступ справа, чтобы текст не налезал на стрелку */
+  }
   
-  /* Стрелка теперь внутри .text-box, чтобы не прыгала */
+  /* Стрелка строго в углу */
   .arrow { 
-    align-self: flex-start; /* Прижимаем влево */
-    color: #333; 
-    font-size: 2rem; 
-    transition: 0.3s; 
-    margin-top: auto; /* Толкаем стрелку вниз */
+    position: absolute;
+    bottom: 35px; 
+    right: 35px;
+    color: #444; 
+    font-size: 1.8rem; 
+    transition: all 0.3s ease; 
   }
-  .platform-card:hover .arrow { color: #fff; transform: translateX(5px); }
   
-  /* Уникальные стили для каждой платформы */
-  .thm .icon-box { background: rgba(33, 44, 66, 0.2); } /* Фон баннера THM */
-  .htb .icon-box { background: rgba(159, 229, 45, 0.1); } /* Фон баннера HTB */
+  .platform-card:hover .arrow { 
+    color: #fff; 
+    transform: translateX(5px); 
+  }
   
-  .thm:hover { border-color: #212c42; box-shadow: 0 10px 40px -10px rgba(33, 44, 66, 0.4); }
-  .htb:hover { border-color: #9fe52d; box-shadow: 0 10px 40px -10px rgba(159, 229, 45, 0.2); }
+  /* Акценты при наведении */
+  .thm:hover { border-color: #сс2929; }
+  .htb:hover { border-color: #9fe52d; }
 
-  @media (max-width: 768px) {
-    .platform-grid { grid-template-columns: 1fr; }
-    .page-header h1 { font-size: 2.2rem; }
-    .icon-box { height: 120px; } /* Чуть меньше на мобильных */
-    .text-box { padding: 25px 30px 30px; }
+  @media (max-width: 480px) {
+    .platform-card { padding: 25px; }
+    .text-box h2 { font-size: 1.4rem; }
+    .arrow { bottom: 25px; right: 25px; }
   }
 </style>
