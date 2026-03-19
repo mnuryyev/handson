@@ -5,21 +5,29 @@ import WikiTree from '../../../components/WikiTree.astro';
 
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
-  return wikiEntries.map(entry => ({
-    params: { slug: entry.id.replace(/\.md$/, '') }, 
+  // Фильтруем только те файлы, которые лежат в папке ru/
+  const ruEntries = wikiEntries.filter(entry => entry.id.startsWith('ru/'));
+  
+  return ruEntries.map(entry => ({
+    // Для параметров slug убираем префикс ru/ и расширение .md
+    params: { slug: entry.id.replace(/^ru\//, '').replace(/\.md$/, '') }, 
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
+const { Content } = await render(entry);
 const allEntries = await getCollection('wiki');
+
+// 1. Оставляем только РУССКИЕ записи для сайдбара
+const ruEntries = allEntries.filter(item => item.id.startsWith('ru/'));
 const currentSlug = Astro.params.slug || '';
 
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
-    const cleanId = item.id.replace(/\.md$/, '');
+    // 2. ВАЖНО: Отрезаем 'ru/' в начале ID, чтобы дерево не создавало лишнюю папку "ru"
+    const cleanId = item.id.replace(/^ru\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
 
@@ -39,11 +47,11 @@ function buildTree(entries) {
   return tree;
 }
 
-const fileTree = buildTree(allEntries);
+const fileTree = buildTree(ruEntries);
 ---
 
-<WikiLayout title={entry.data.title} headings={headings}>
-  <WikiTree slot="sidebar" tree={fileTree} currentSlug={currentSlug} />
+<WikiLayout title={entry.data.title}>
+  <WikiTree slot="sidebar" tree={fileTree} currentSlug={currentSlug} lang="ru" />
   <Content />
 </WikiLayout>
 
