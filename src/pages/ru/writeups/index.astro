@@ -29,10 +29,10 @@ const platforms = [
       <p>Все отчеты структурированы по тренировочным площадкам</p>
     </header>
 
-    <div class="platform-grid">
-      {platforms.map(platform => (
-        /* ИСПОЛЬЗУЕМ КОРНЕВОЙ СЛЕШ. Astro сам добавит /handson если он в base */
-        <a href={`/${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
+   <div class="platform-grid">
+  {platforms.map(platform => (
+    /* УБРАЛИ начальный слэш перед ${lang} */
+    <a href={`${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
           <div class="card-inner">
             <div class="icon-box">
               <img src={platform.icon} alt={platform.title} />
