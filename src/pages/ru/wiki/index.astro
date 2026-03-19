@@ -3,37 +3,55 @@ import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 import WikiTree from '../../../components/WikiTree.astro';
 
+// 1. Получаем все записи
 const allEntries = await getCollection('wiki');
 
-// Используем ту же логику buildTree, что и в [...slug]
+// 2. Оставляем ТОЛЬКО русские записи (те, что начинаются с ru/)
+const ruEntries = allEntries.filter(item => item.id.startsWith('ru/'));
+
+// 3. Умное построение дерева (без папки "ru" в корне)
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
-    const cleanId = item.id.replace(/\.md$/, '');
+    // Отрезаем префикс "ru/" и расширение ".md"
+    const cleanId = item.id.replace(/^ru\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
+
     parts.forEach((part, index) => {
       if (!current[part]) {
         if (index === parts.length - 1) {
-          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+          current[part] = { 
+            type: 'file', 
+            title: item.data?.title || part, 
+            slug: cleanId 
+          };
         } else {
           current[part] = { type: 'folder', children: {} };
         }
       }
-      if (current[part].type === 'folder') current = current[part].children;
+      if (current[part].type === 'folder') {
+        current = current[part].children;
+      }
     });
   });
   return tree;
 }
 
-const fileTree = buildTree(allEntries);
+const fileTree = buildTree(ruEntries);
 ---
 
-<WikiLayout title="Wiki" headings={[]}>
-  <WikiTree slot="sidebar" tree={fileTree} currentSlug="" />
-  
+<WikiLayout title="База знаний">
+  <div slot="sidebar">
+    <WikiTree tree={fileTree} currentSlug="" lang="ru" />
+  </div>
+
   <div class="obsidian-style-empty">
-    
+    <div class="welcome-box">
+      <div class="icon">🚀</div>
+      <h2>Добро пожаловать в Wiki</h2>
+      <p>Выберите нужный раздел в меню слева, чтобы начать чтение.</p>
+    </div>
   </div>
 </WikiLayout>
 
@@ -43,15 +61,35 @@ const fileTree = buildTree(allEntries);
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 400px;
   }
+  
   .welcome-box {
     text-align: center;
-    background: #141414;
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid #222;
+    background: #111;
+    padding: 50px 80px;
+    border-radius: 16px;
+    border: 1px solid #1a1a1a;
+    max-width: 500px;
   }
-  .welcome-box .icon { font-size: 3rem; margin-bottom: 20px; }
-  .welcome-box h2 { color: #fff; margin-bottom: 10px; }
-  .welcome-box p { color: #666; }
+  
+  .welcome-box .icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    display: block;
+    opacity: 0.8;
+  }
+  
+  .welcome-box h2 {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  
+  .welcome-box p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
 </style>
