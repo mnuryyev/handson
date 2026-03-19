@@ -11,100 +11,109 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-// Если мы на главной wiki, entry может быть undefined
-const rendered = entry ? await render(entry) : null;
-const Content = rendered?.Content;
-
+const { Content, headings } = await render(entry);
 const allEntries = await getCollection('wiki');
 const currentSlug = Astro.params.slug || '';
 
-// Построение дерева
+// 1. Построение дерева (Безопасное)
 const tree = {};
 allEntries.forEach(item => {
   const cleanId = item.id.replace(/\.md$/, '');
   const parts = cleanId.split('/');
   let current = tree;
+
   parts.forEach((part, index) => {
     if (!current[part]) {
-      current[part] = index === parts.length - 1 
-        ? { type: 'file', item, slug: cleanId } 
-        : { type: 'folder', children: {} };
+      if (index === parts.length - 1) {
+        current[part] = { type: 'file', item: item, slug: cleanId };
+      } else {
+        current[part] = { type: 'folder', children: {} };
+      }
     }
-    if (current[part].type === 'folder') current = current[part].children;
+    if (current[part].type === 'folder') {
+      current = current[part].children;
+    }
   });
 });
+
+// 2. Рекурсивная функция для отрисовки веток (БЕЗ ОШИБОК)
+const renderNodes = (nodes, currentPath = '') => {
+  return Object.entries(nodes).map(([name, node]) => {
+    if (node.type === 'file') {
+      const isActive = node.slug === currentSlug;
+      return (
+        <a href={`/handson/ru/wiki/${node.slug}`} 
+           class={`file-link ${isActive ? 'active' : ''}`}>
+          <span>📄</span> {node.item.data?.title || name}
+        </a>
+      );
+    } else {
+      // Это папка — рекурсивно рендерим её детей
+      const isOpen = currentSlug.startsWith(name);
+      return (
+        <details class="tree-folder" open={isOpen}>
+          <summary><span>📂</span> {name}</summary>
+          <div class="folder-content">
+            {renderNodes(node.children, name)}
+          </div>
+        </details>
+      );
+    }
+  });
+};
 ---
 
-<WikiLayout title={entry?.data.title || "Wiki"}>
+<WikiLayout title={entry.data.title} headings={headings}>
   <div slot="sidebar" class="wiki-tree">
-    {Object.entries(tree).map(([name, node]) => (
-      <div class="tree-node">
-        {node.type === 'folder' ? (
-          <details open={currentSlug.startsWith(name)}>
-            <summary>📂 {name}</summary>
-            <div class="folder-content">
-              {Object.entries(node.children).map(([childName, childNode]) => (
-                <a href={`/handson/ru/wiki/${childNode.slug}`} 
-                   class={`file-link ${currentSlug === childNode.slug ? 'active' : ''}`}>
-                  📄 {childNode.item.data.title || childName}
-                </a>
-              ))}
-            </div>
-          </details>
-        ) : (
-          <a href={`/handson/ru/wiki/${node.slug}`} 
-             class={`file-link ${currentSlug === node.slug ? 'active' : ''}`}>
-            📄 {node.item.data.title || name}
-          </a>
-        )}
-      </div>
-    ))}
+    {renderNodes(tree)}
   </div>
 
-  {Content ? <Content /> : <div class="empty-state">Выберите заметку в меню слева</div>}
+  <Content />
 </WikiLayout>
 
 <style>
-  /* Сокращаем отступы в Sidebar */
   .wiki-tree { display: flex; flex-direction: column; gap: 2px; }
   
   summary {
     list-style: none;
-    padding: 4px 8px; /* Уменьшили */
+    padding: 6px 10px;
     cursor: pointer;
-    color: #999;
+    color: #888;
     font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     border-radius: 4px;
+    transition: 0.2s;
   }
-  summary:hover { background: #1a1a1a; color: #fff; }
+  summary:hover { background: #1a1a1a; color: #eee; }
+  summary::-webkit-details-marker { display: none; }
 
   .folder-content {
-    margin-left: 12px; /* Уменьшили отступ */
+    margin-left: 14px;
     border-left: 1px solid #222;
+    padding-left: 4px;
     display: flex;
     flex-direction: column;
+    gap: 1px;
   }
 
   .file-link {
-    display: block;
-    padding: 4px 12px; /* Уменьшили */
-    color: #777;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    color: #666;
     text-decoration: none;
     font-size: 0.85rem;
     border-radius: 4px;
+    transition: 0.2s;
   }
+  .file-link span { opacity: 0.5; font-size: 0.8rem; }
   .file-link:hover { background: #1a1a1a; color: #fff; }
-  .file-link.active { color: #3498db; background: rgba(52, 152, 219, 0.1); }
-
-  .empty-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #444;
-    font-size: 1.2rem;
+  .file-link.active {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    font-weight: 500;
   }
 </style>
