@@ -21,12 +21,17 @@ const allEntries = await getCollection('wiki');
 ---
 
 <WikiLayout title={entry.data.title} headings={headings}>
-  <div slot="sidebar" class="file-tree">
+<div slot="sidebar" class="file-tree">
     {allEntries.map(item => {
       const cleanSlug = item.id.replace(/\.md$/, '');
+      const parts = cleanSlug.split('/');
+      const isNested = parts.length > 1;
+      
       return (
-        <a href={`/handson/ru/wiki/${cleanSlug}`} class="file-link">
-          📄 {item.data.title || cleanSlug}
+        <a href={`/handson/ru/wiki/${cleanSlug}`} 
+           class="file-link" 
+           style={`padding-left: ${isNested ? parts.length * 12 : 12}px`}>
+          {isNested ? '└ ' : '📁 '} {item.data.title || parts.at(-1)}
         </a>
       )
     })}
