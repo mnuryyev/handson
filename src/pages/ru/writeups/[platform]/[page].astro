@@ -5,10 +5,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
+const lang = "ru";
+
 export async function getStaticPaths({ paginate }) {
   const labsDir = './src/content/writeups/ru';
-  
-  // Если папки нет, не генерируем ничего
   if (!fs.existsSync(labsDir)) return [];
 
   const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
@@ -22,7 +24,6 @@ export async function getStaticPaths({ paginate }) {
     };
   });
 
-  // Генерируем страницы ТОЛЬКО для этих двух платформ
   const platforms = ['thm', 'htb']; 
 
   return platforms.flatMap(platform => {
@@ -30,8 +31,6 @@ export async function getStaticPaths({ paginate }) {
       .filter(lab => lab.platform === platform)
       .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 
-    // Если для платформы нет статей, Astro может ругаться, 
-    // поэтому проверяем длину массива
     if (filteredLabs.length === 0) return [];
 
     return paginate(filteredLabs, {
@@ -50,23 +49,23 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
 <MainLayout title={platformTitle}>
   <div class="container">
     <nav class="breadcrumb">
-       <a href="/ru/writeups">Writeups</a> / <span>{platformTitle}</span>
+       <a href={`${cleanBase}${lang}/writeups`}>Writeups</a> / <span>{platformTitle}</span>
     </nav>
 
     <h1>{platformTitle} Разборы</h1>
 
-<div class="grid">
-  {page.data.map(lab => (
-    <LabCard 
-      title={lab.title} 
-      desc={lab.description} 
-      date={lab.date} 
-      /* УБРАЛИ начальный слэш. Теперь будет один /handson/ */
-      url={`${lang}/writeups/${lab.slug}`} 
-      image={lab.image}
-    />
-  ))}
-</div>
+    <div class="grid">
+      {page.data.map(lab => (
+        <LabCard 
+          title={lab.title} 
+          desc={lab.description} 
+          date={lab.date} 
+          /* ИСПРАВЛЕНО: Теперь путь абсолютный /handson/ru/writeups/slug */
+          url={`${cleanBase}${lang}/writeups/${lab.slug}`} 
+          image={lab.image}
+        />
+      ))}
+    </div>
 
     <nav class="pagination">
       {page.url.prev && <a href={page.url.prev} class="p-btn">← Назад</a>}
