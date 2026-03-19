@@ -2,43 +2,67 @@
 import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 
+// 1. Получаем коллекцию
 const allEntries = await getCollection('wiki');
 
-// Логика дерева
+// 2. Умное построение дерева (поддерживает любую вложенность)
 const tree = {};
 allEntries.forEach(item => {
   const cleanId = item.id.replace(/\.md$/, '');
   const parts = cleanId.split('/');
   let current = tree;
+
   parts.forEach((part, index) => {
     if (!current[part]) {
-      current[part] = index === parts.length - 1 
-        ? { type: 'file', item, slug: cleanId } 
-        : { type: 'folder', children: {} };
+      if (index === parts.length - 1) {
+        current[part] = { type: 'file', item: item, slug: cleanId };
+      } else {
+        current[part] = { type: 'folder', children: {} };
+      }
     }
-    if (current[part].type === 'folder') current = current[part].children;
+    if (current[part].type === 'folder') {
+      current = current[part].children;
+    }
   });
 });
+
+// 3. Функция для рендеринга веток (чтобы не было ошибок вложенности)
+const renderNode = (name, node) => {
+  if (node.type === 'file') {
+    return {
+      type: 'file',
+      name: node.item.data?.title || name,
+      href: `/handson/ru/wiki/${node.slug}`
+    };
+  }
+  return {
+    type: 'folder',
+    name: name,
+    children: Object.entries(node.children).map(([childName, childNode]) => renderNode(childName, childNode))
+  };
+};
+
+const displayTree = Object.entries(tree).map(([name, node]) => renderNode(name, node));
 ---
 
 <WikiLayout title="Wiki" headings={[]}>
   <div slot="sidebar" class="wiki-tree">
-    {Object.entries(tree).map(([name, node]) => (
+    {displayTree.map(node => (
       <div class="tree-node">
         {node.type === 'folder' ? (
           <details>
-            <summary>📂 {name}</summary>
+            <summary>📂 {node.name}</summary>
             <div class="folder-content">
-              {Object.entries(node.children).map(([childName, childNode]) => (
-                <a href={`/handson/ru/wiki/${childNode.slug}`} class="file-link">
-                  📄 {childNode.item.data.title || childName}
+              {node.children.map(child => (
+                <a href={child.href} class="file-link">
+                  📄 {child.name}
                 </a>
               ))}
             </div>
           </details>
         ) : (
-          <a href={`/handson/ru/wiki/${node.slug}`} class="file-link">
-            📄 {node.item.data.title || name}
+          <a href={node.href} class="file-link">
+            📄 {node.name}
           </a>
         )}
       </div>
@@ -49,20 +73,22 @@ allEntries.forEach(item => {
     <div class="welcome-box">
       <span>🚀</span>
       <h2>База знаний готова</h2>
-      <p>Выберите нужный раздел в меню слева, чтобы просмотреть материалы.</p>
+      <p>Выберите нужный раздел в меню слева.</p>
     </div>
   </div>
 </WikiLayout>
 
 <style>
-  .obsidian-style-empty { height: 100%; display: flex; align-items: center; justify-content: center; }
-  .welcome-box { text-align: center; color: #555; }
-  .welcome-box span { font-size: 3rem; opacity: 0.2; }
-  
-  /* Стили сайдбара такие же как в slug для единства */
   .wiki-tree { display: flex; flex-direction: column; gap: 2px; }
-  summary { list-style: none; padding: 4px 8px; cursor: pointer; color: #888; font-size: 0.85rem; border-radius: 4px; }
-  .folder-content { margin-left: 12px; border-left: 1px solid #222; }
-  .file-link { display: block; padding: 4px 12px; color: #666; text-decoration: none; font-size: 0.85rem; }
-  .file-link:hover { color: #fff; background: #111; }
+  summary { list-style: none; padding: 6px 8px; cursor: pointer; color: #888; font-size: 0.85rem; border-radius: 4px; transition: 0.2s; }
+  summary:hover { background: #1a1a1a; color: #fff; }
+  summary::-webkit-details-marker { display: none; }
+  
+  .folder-content { margin-left: 14px; border-left: 1px solid #222; padding-left: 4px; }
+  .file-link { display: block; padding: 6px 12px; color: #666; text-decoration: none; font-size: 0.85rem; border-radius: 4px; }
+  .file-link:hover { color: #fff; background: #1a1a1a; }
+  
+  .obsidian-style-empty { height: 100%; display: flex; align-items: center; justify-content: center; min-height: 400px; }
+  .welcome-box { text-align: center; color: #444; }
+  .welcome-box span { font-size: 3rem; opacity: 0.2; display: block; margin-bottom: 10px; }
 </style>
