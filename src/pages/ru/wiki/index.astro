@@ -1,94 +1,61 @@
 ---
 import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
+import WikiTree from '../../../components/WikiTree.astro';
 
-// 1. Получаем коллекцию
 const allEntries = await getCollection('wiki');
 
-// 2. Умное построение дерева (поддерживает любую вложенность)
-const tree = {};
-allEntries.forEach(item => {
-  const cleanId = item.id.replace(/\.md$/, '');
-  const parts = cleanId.split('/');
-  let current = tree;
-
-  parts.forEach((part, index) => {
-    if (!current[part]) {
-      if (index === parts.length - 1) {
-        current[part] = { type: 'file', item: item, slug: cleanId };
-      } else {
-        current[part] = { type: 'folder', children: {} };
+// Используем ту же логику buildTree, что и в [...slug]
+function buildTree(entries) {
+  const tree = {};
+  entries.forEach(item => {
+    const cleanId = item.id.replace(/\.md$/, '');
+    const parts = cleanId.split('/');
+    let current = tree;
+    parts.forEach((part, index) => {
+      if (!current[part]) {
+        if (index === parts.length - 1) {
+          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+        } else {
+          current[part] = { type: 'folder', children: {} };
+        }
       }
-    }
-    if (current[part].type === 'folder') {
-      current = current[part].children;
-    }
+      if (current[part].type === 'folder') current = current[part].children;
+    });
   });
-});
+  return tree;
+}
 
-// 3. Функция для рендеринга веток (чтобы не было ошибок вложенности)
-const renderNode = (name, node) => {
-  if (node.type === 'file') {
-    return {
-      type: 'file',
-      name: node.item.data?.title || name,
-      href: `/handson/ru/wiki/${node.slug}`
-    };
-  }
-  return {
-    type: 'folder',
-    name: name,
-    children: Object.entries(node.children).map(([childName, childNode]) => renderNode(childName, childNode))
-  };
-};
-
-const displayTree = Object.entries(tree).map(([name, node]) => renderNode(name, node));
+const fileTree = buildTree(allEntries);
 ---
 
 <WikiLayout title="Wiki" headings={[]}>
-  <div slot="sidebar" class="wiki-tree">
-    {displayTree.map(node => (
-      <div class="tree-node">
-        {node.type === 'folder' ? (
-          <details>
-            <summary>📂 {node.name}</summary>
-            <div class="folder-content">
-              {node.children.map(child => (
-                <a href={child.href} class="file-link">
-                  📄 {child.name}
-                </a>
-              ))}
-            </div>
-          </details>
-        ) : (
-          <a href={node.href} class="file-link">
-            📄 {node.name}
-          </a>
-        )}
-      </div>
-    ))}
-  </div>
-
+  <WikiTree slot="sidebar" tree={fileTree} currentSlug="" />
+  
   <div class="obsidian-style-empty">
     <div class="welcome-box">
-      <span>🚀</span>
-      <h2>База знаний готова</h2>
-      <p>Выберите нужный раздел в меню слева.</p>
+      <div class="icon">📂</div>
+      <h2>Выберите заметку</h2>
+      <p>Используйте дерево файлов слева для навигации по знаниям.</p>
     </div>
   </div>
 </WikiLayout>
 
 <style>
-  .wiki-tree { display: flex; flex-direction: column; gap: 2px; }
-  summary { list-style: none; padding: 6px 8px; cursor: pointer; color: #888; font-size: 0.85rem; border-radius: 4px; transition: 0.2s; }
-  summary:hover { background: #1a1a1a; color: #fff; }
-  summary::-webkit-details-marker { display: none; }
-  
-  .folder-content { margin-left: 14px; border-left: 1px solid #222; padding-left: 4px; }
-  .file-link { display: block; padding: 6px 12px; color: #666; text-decoration: none; font-size: 0.85rem; border-radius: 4px; }
-  .file-link:hover { color: #fff; background: #1a1a1a; }
-  
-  .obsidian-style-empty { height: 100%; display: flex; align-items: center; justify-content: center; min-height: 400px; }
-  .welcome-box { text-align: center; color: #444; }
-  .welcome-box span { font-size: 3rem; opacity: 0.2; display: block; margin-bottom: 10px; }
+  .obsidian-style-empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .welcome-box {
+    text-align: center;
+    background: #141414;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #222;
+  }
+  .welcome-box .icon { font-size: 3rem; margin-bottom: 20px; }
+  .welcome-box h2 { color: #fff; margin-bottom: 10px; }
+  .welcome-box p { color: #666; }
 </style>
