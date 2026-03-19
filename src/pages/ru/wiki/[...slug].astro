@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
-import WikiTree from '../../../components/WikiTree.astro'; // Импорт
+import WikiTree from '../../../components/WikiTree.astro';
 
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
@@ -16,7 +16,6 @@ const { Content, headings } = await render(entry);
 const allEntries = await getCollection('wiki');
 const currentSlug = Astro.params.slug || '';
 
-// 1. Построение дерева любой вложенности
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
@@ -44,13 +43,7 @@ const fileTree = buildTree(allEntries);
 ---
 
 <WikiLayout title={entry.data.title} headings={headings}>
-  <div slot="sidebar" class="wiki-tree">
-    <WikiTree tree={fileTree} currentSlug={currentSlug} />
-  </div>
-
-  <Content />
-</WikiLayout>
-
+  <WikiTree slot="sidebar" tree={fileTree} currentSlug={currentSlug} />
   <Content />
 </WikiLayout>
 
