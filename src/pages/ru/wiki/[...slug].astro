@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import WikiLayout from '../../../layouts/WikiLayout.astro';
+
+// 1. Получаем все статьи из коллекции wiki
+export async function getStaticPaths() {
+  const wikiEntries = await getCollection('wiki');
+  return wikiEntries.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render();
+
+// 2. Получаем список всех файлов для сайдбара
+const allEntries = await getCollection('wiki');
+
+// Функция для построения дерева (упрощенно)
+const tree = {};
+allEntries.forEach(item => {
+    const parts = item.slug.split('/');
+    let current = tree;
+    parts.forEach((part, index) => {
+        if (!current[part]) current[part] = index === parts.length - 1 ? item : {};
+        current = current[part];
+    });
+});
+---
+
+<WikiLayout title={entry.data.title} headings={headings}>
+  <div slot="sidebar" class="file-tree">
+    {allEntries.map(item => (
+      <a href={`/handson/ru/wiki/${item.slug}`} class="file-link">
+        📄 {item.data.title || item.slug}
+      </a>
+    ))}
+  </div>
+
+  <Content />
+</WikiLayout>
+
+<style>
+  .file-tree { display: flex; flex-direction: column; gap: 5px; }
+  .file-link {
+    color: #aaa;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: 0.2s;
+  }
+  .file-link:hover { background: #1a1a1a; color: #fff; }
+</style>
