@@ -1,40 +1,35 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 
-// 1. Получаем все статьи из коллекции wiki
+// 1. Используем id вместо slug для Astro 5 glob loader
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
   return wikiEntries.map(entry => ({
-    params: { slug: entry.slug }, props: { entry },
+    // Убираем расширение .md из id для красивого URL
+    params: { slug: entry.id.replace(/\.md$/, '') }, 
+    props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await entry.render();
+// В Astro 5 используется render(entry)
+const { Content, headings } = await render(entry);
 
-// 2. Получаем список всех файлов для сайдбара
+// 2. Получаем все файлы для сайдбара
 const allEntries = await getCollection('wiki');
-
-// Функция для построения дерева (упрощенно)
-const tree = {};
-allEntries.forEach(item => {
-    const parts = item.slug.split('/');
-    let current = tree;
-    parts.forEach((part, index) => {
-        if (!current[part]) current[part] = index === parts.length - 1 ? item : {};
-        current = current[part];
-    });
-});
 ---
 
 <WikiLayout title={entry.data.title} headings={headings}>
   <div slot="sidebar" class="file-tree">
-    {allEntries.map(item => (
-      <a href={`/handson/ru/wiki/${item.slug}`} class="file-link">
-        📄 {item.data.title || item.slug}
-      </a>
-    ))}
+    {allEntries.map(item => {
+      const cleanSlug = item.id.replace(/\.md$/, '');
+      return (
+        <a href={`/handson/ru/wiki/${cleanSlug}`} class="file-link">
+          📄 {item.data.title || cleanSlug}
+        </a>
+      )
+    })}
   </div>
 
   <Content />
