@@ -12,7 +12,7 @@ const platforms = [
     title: 'TryHackMe',
     description: 'Разборы комнат, цепочек и тренировочных машин с платформы THM',
     icon: '/handson/images/neighbour_thm/thm_main.png', 
-    color: '#CC2929'
+    color: '#сс2929'
   },
   {
     id: 'htb',
@@ -54,51 +54,102 @@ const platforms = [
 <style>
   .container { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
   .page-header { margin-bottom: 60px; text-align: left; }
-  .page-header h1 { font-size: 3rem; color: #fff; }
+  .page-header h1 { font-size: 3rem; color: #fff; margin-bottom: 10px; }
   .page-header p { color: #888; font-size: 1.2rem; }
   
-  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
+  .platform-grid { 
+    display: grid; 
+    /* Немного уменьшим minmax, чтобы на мобильных было лучше */
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); 
+    gap: 30px; 
+  }
   
   .platform-card {
     text-decoration: none;
     background: #0d0d0d;
     border: 1px solid #222;
     border-radius: 24px;
-    padding: 40px;
+    /* --- ВАЖНО: УБРАЛИ PADDING ОТСЮДА --- */
+    padding: 0; 
     position: relative;
+    overflow: hidden; /* Чтобы картинка не вылезала за скругленные края */
     transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
-  .platform-card:hover { transform: translateY(-8px); border-color: #444; background: #111; }
+  
+  .platform-card:hover { 
+    transform: translateY(-8px); 
+    border-color: #444; 
+    background: #111; 
+  }
 
-  /* Увеличили блок иконки */
+  /* --- НОВЫЙ БЛОК ИКОНКИ (БАННЕР) --- */
   .icon-box { 
-    margin-bottom: 30px; 
-    height: 100px; 
     width: 100%; 
+    height: 160px; /* Увеличили высоту для эффекта баннера */
     display: flex; 
     align-items: center; 
+    justify-content: center;
+    /* У каждой платформы будет свой фон (см. ниже .thm / .htb) */
+    position: relative;
+    overflow: hidden;
   }
 
-  /* Картинка теперь занимает 100% высоты блока и масштабируется */
   .icon-box img { 
+    /* Картинка занимает 100% места в .icon-box */
+    width: 100%; 
     height: 100%; 
-    width: auto; 
-    max-width: 100%; 
-    object-fit: contain; 
+    
+    /* object-fit: cover — СЕКРЕТНЫЙ ИНГРЕДИЕНТ для заполнения.
+       Он масштабирует картинку, чтобы она полностью заполнила блок, 
+       обрезая лишнее. Логотип будет большим и во всю ширину.
+    */
+    object-fit: cover; 
+    
     display: block;
+    /* Немного затемним картинку, чтобы текст под ней читался лучше */
+    filter: brightness(0.8) contrast(1.1); 
+    transition: filter 0.3s ease;
+  }
+  
+  .platform-card:hover .icon-box img {
+    filter: brightness(1) contrast(1.1); /* При наведении делаем ярче */
+  }
+
+  /* --- НОВЫЙ БЛОК ТЕКСТА --- */
+  .text-box { 
+    padding: 30px 40px 40px; /* Добавили отступы тексту */
+    flex-grow: 1; /* Чтобы текст занимал всё оставшееся место */
+    display: flex;
+    flex-direction: column;
   }
 
   .text-box h2 { color: #fff; font-size: 2rem; margin-bottom: 12px; }
-  .text-box p { color: #777; line-height: 1.6; }
+  .text-box p { color: #777; line-height: 1.6; margin-bottom: 20px; font-size: 1.05rem; }
   
-  .arrow { position: absolute; bottom: 40px; right: 40px; color: #333; font-size: 2rem; transition: 0.3s; }
+  /* Стрелка теперь внутри .text-box, чтобы не прыгала */
+  .arrow { 
+    align-self: flex-start; /* Прижимаем влево */
+    color: #333; 
+    font-size: 2rem; 
+    transition: 0.3s; 
+    margin-top: auto; /* Толкаем стрелку вниз */
+  }
   .platform-card:hover .arrow { color: #fff; transform: translateX(5px); }
   
-  .thm:hover { border-color: #212c42; box-shadow: 0 10px 30px -10px rgba(33, 44, 66, 0.5); }
-  .htb:hover { border-color: #9fe52d; box-shadow: 0 10px 30px -10px rgba(159, 229, 45, 0.3); }
+  /* Уникальные стили для каждой платформы */
+  .thm .icon-box { background: rgba(33, 44, 66, 0.2); } /* Фон баннера THM */
+  .htb .icon-box { background: rgba(159, 229, 45, 0.1); } /* Фон баннера HTB */
+  
+  .thm:hover { border-color: #212c42; box-shadow: 0 10px 40px -10px rgba(33, 44, 66, 0.4); }
+  .htb:hover { border-color: #9fe52d; box-shadow: 0 10px 40px -10px rgba(159, 229, 45, 0.2); }
 
   @media (max-width: 768px) {
     .platform-grid { grid-template-columns: 1fr; }
     .page-header h1 { font-size: 2.2rem; }
+    .icon-box { height: 120px; } /* Чуть меньше на мобильных */
+    .text-box { padding: 25px 30px 30px; }
   }
 </style>
