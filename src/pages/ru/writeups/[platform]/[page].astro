@@ -70,14 +70,14 @@ const platformTitle = platformNames[platform] || platform.toUpperCase();
       <p>Список всех пройденных машин и челленджей на платформе {platformTitle}</p>
     </header>
 
-    <div class="grid">
+<div class="grid">
   {page.data.map(lab => (
     <LabCard 
       title={lab.title} 
       desc={lab.description} 
       date={lab.date} 
-      /* УБИРАЕМ cleanBase, оставляем только путь от корня */
-      url={`/ru/writeups/${lab.slug}`} 
+      /* ИСПРАВЛЕНО: Убираем первый слэш. Astro сам приклеит base */
+      url={`${lang}/writeups/${lab.slug}`} 
       image={lab.image}
     />
   ))}
