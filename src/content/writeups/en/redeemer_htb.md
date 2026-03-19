@@ -3,6 +3,7 @@ title: "Redeemer - HackTheBox (Easy)"
 description: "Walkthrough of the Redeemer machine on HackTheBox: scanning open ports, connecting to Redis without password, exploring database keys, and obtaining the flag directly from the service"
 image: "/images/meow_htb/htb_main.jpg"
 date: "February 23, 2026"
+platform: "htb"
 ---
 **Redeemer** is a simple machine on the HTB platform in the *Starting Point* section.
 
