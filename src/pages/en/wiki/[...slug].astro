@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content';
+import WikiLayout from '../../../layouts/WikiLayout.astro';
+import WikiTree from '../../../components/WikiTree.astro';
+
+export async function getStaticPaths() {
+  const wikiEntries = await getCollection('wiki');
+  // Фильтруем только те, что начинаются с 'en/'
+  const enEntries = wikiEntries.filter(entry => entry.id.startsWith('en/'));
+  
+  return enEntries.map(entry => ({
+    params: { slug: entry.id.replace(/^en\//, '').replace(/\.md$/, '') }, 
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const allEntries = await getCollection('wiki');
+
+// Берем только английские записи для дерева
+const enEntries = allEntries.filter(item => item.id.startsWith('en/'));
+const currentSlug = Astro.params.slug || '';
+
+function buildTree(entries) {
+  const tree = {};
+  entries.forEach(item => {
+    // Убираем префикс 'en/' для корректного построения дерева
+    const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
+    const parts = cleanId.split('/');
+    let current = tree;
+
+    parts.forEach((part, index) => {
+      if (!current[part]) {
+        if (index === parts.length - 1) {
+          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+        } else {
+          current[part] = { type: 'folder', children: {} };
+        }
+      }
+      if (current[part].type === 'folder') {
+        current = current[part].children;
+      }
+    });
+  });
+  return tree;
+}
+
+const fileTree = buildTree(enEntries);
+---
+
+<WikiLayout title={entry.data.title}>
+  <div slot="sidebar">
+    <WikiTree tree={fileTree} currentSlug={currentSlug} lang="en" />
+  </div>
+  <Content />
+</WikiLayout>
