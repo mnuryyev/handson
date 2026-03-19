@@ -45,31 +45,11 @@ const fileTree = buildTree(allEntries);
 
 <WikiLayout title={entry.data.title} headings={headings}>
   <div slot="sidebar" class="wiki-tree">
-  <WikiTree tree={fileTree} currentSlug={currentSlug} />
-    {/* Рендерим первый уровень */}
-    {Object.entries(fileTree).map(([name, node]) => (
-      <div class="tree-node">
-        {node.type === 'folder' ? (
-          <details open={currentSlug.startsWith(name)}>
-            <summary>📂 {name}</summary>
-            <div class="folder-content">
-              {Object.entries(node.children).map(([childName, childNode]) => (
-                <a href={`/handson/ru/wiki/${childNode.slug}`} 
-                   class={`file-link ${currentSlug === childNode.slug ? 'active' : ''}`}>
-                  📄 {childNode.title || childName}
-                </a>
-              ))}
-            </div>
-          </details>
-        ) : (
-          <a href={`/handson/ru/wiki/${node.slug}`} 
-             class={`file-link ${currentSlug === node.slug ? 'active' : ''}`}>
-            📄 {node.title || name}
-          </a>
-        )}
-      </div>
-    ))}
+    <WikiTree tree={fileTree} currentSlug={currentSlug} />
   </div>
+
+  <Content />
+</WikiLayout>
 
   <Content />
 </WikiLayout>
