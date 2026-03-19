@@ -1,5 +1,4 @@
 ---
-Title: "Iptables"
+title: "iptables"
 ---
-
-Iptables
+iptables
