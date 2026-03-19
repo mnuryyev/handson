@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import WikiLayout from '../../../layouts/WikiLayout.astro';
+import WikiTree from '../../../components/WikiTree.astro';
+
+const allEntries = await getCollection('wiki');
+const enEntries = allEntries.filter(item => item.id.startsWith('en/'));
+
+function buildTree(entries) {
+  const tree = {};
+  entries.forEach(item => {
+    const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
+    const parts = cleanId.split('/');
+    let current = tree;
+    parts.forEach((part, index) => {
+      if (!current[part]) {
+        if (index === parts.length - 1) {
+          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+        } else {
+          current[part] = { type: 'folder', children: {} };
+        }
+      }
+      if (current[part].type === 'folder') current = current[part].children;
+    });
+  });
+  return tree;
+}
+
+const fileTree = buildTree(enEntries);
+---
+
+<WikiLayout title="Wiki Knowledge Base">
+  <div slot="sidebar">
+    <WikiTree tree={fileTree} currentSlug="" lang="en" />
+  </div>
+  
+  <div class="obsidian-style-empty">
+    <div class="welcome-box">
+      <div class="icon">📂</div>
+      <h2>Select a note</h2>
+      <p>Use the file tree on the left to navigate the knowledge base.</p>
+    </div>
+  </div>
+</WikiLayout>
+
+<style>
+  .obsidian-style-empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .welcome-box {
+    text-align: center;
+    background: #141414;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #222;
+  }
+  .welcome-box .icon { font-size: 3rem; margin-bottom: 20px; opacity: 0.3; }
+  .welcome-box h2 { color: #fff; margin-bottom: 10px; font-weight: 500; }
+  .welcome-box p { color: #666; }
+</style>
