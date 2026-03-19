@@ -1,79 +1,76 @@
 ---
 import MainLayout from './MainLayout.astro';
-const { title, headings } = Astro.props;
+const { title, headings = [] } = Astro.props; // headings по умолчанию пустой массив
 ---
 <MainLayout title={title}>
   <div class="wiki-container">
     <aside class="wiki-sidebar">
-      <div class="sidebar-header">📦 Моя База Знаний</div>
-      <slot name="sidebar" /> </aside>
+      <div class="sidebar-header">Wiki</div>
+      <slot name="sidebar" />
+    </aside>
 
     <article class="wiki-main">
       <header class="content-header">
         <h1>{title}</h1>
       </header>
       <section class="markdown-body">
-        <slot /> </section>
+        <slot />
+      </section>
     </article>
 
-    <aside class="wiki-toc">
-      <div class="toc-title">На этой странице</div>
-      <nav>
-        {headings && headings.map(h => (
-          <a href={`#${h.slug}`} class={`toc-link depth-${h.depth}`}>{h.text}</a>
-        ))}
-      </nav>
-    </aside>
+    {headings && headings.length > 0 && (
+      <aside class="wiki-toc">
+        <div class="toc-title">На этой странице</div>
+        <nav>
+          {headings.map(h => (
+            <a href={`#${h.slug}`} class={`toc-link depth-${h.depth}`}>{h.text}</a>
+          ))}
+        </nav>
+      </aside>
+    )}
   </div>
 </MainLayout>
 
 <style>
   .wiki-container {
     display: grid;
-    grid-template-columns: 250px 1fr; /* Убрали правую колонку (240px) */
+    /* Если есть оглавление - 3 колонки, если нет - 2 */
+    grid-template-columns: 260px 1fr 240px; 
     height: calc(100vh - 80px);
     background: #0d0d0d;
   }
 
-  /* Sidebar в стиле Obsidian */
+  /* Если TOC нет, растягиваем контент */
+  .wiki-container:not(:has(.wiki-toc)) {
+    grid-template-columns: 260px 1fr;
+  }
+
   .wiki-sidebar {
     background: #050505;
     border-right: 1px solid #1a1a1a;
     padding: 20px 10px;
     overflow-y: auto;
   }
-  .sidebar-header {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    color: #555;
-    margin-bottom: 20px;
-    padding-left: 10px;
-    letter-spacing: 1px;
-  }
 
-  /* Контентная область */
   .wiki-main {
     padding: 40px 60px;
     overflow-y: auto;
     background: #0d0d0d;
-    line-height: 1.6;
   }
-  .markdown-body :global(h1) { color: #fff; border-bottom: 1px solid #222; padding-bottom: 10px; }
-  .markdown-body :global(code) { background: #1a1a1a; padding: 3px 6px; border-radius: 4px; color: #3498db; }
 
-  /* Правое оглавление */
   .wiki-toc {
     padding: 40px 20px;
     border-left: 1px solid #1a1a1a;
-    font-size: 0.85rem;
+    background: #050505;
   }
-  .toc-title { color: #555; margin-bottom: 15px; font-weight: bold; }
-  .toc-link { display: block; color: #888; text-decoration: none; margin-bottom: 8px; }
-  .toc-link:hover { color: #3498db; }
-  .depth-3 { padding-left: 15px; font-size: 0.8rem; }
 
-  @media (max-width: 1000px) {
-    .wiki-container { grid-template-columns: 250px 1fr; }
+  .sidebar-header { font-size: 0.75rem; color: #444; margin-bottom: 15px; padding-left: 10px; }
+  .toc-title { color: #555; font-size: 0.8rem; margin-bottom: 15px; font-weight: bold; }
+  .toc-link { display: block; color: #666; text-decoration: none; font-size: 0.85rem; margin-bottom: 8px; }
+  .toc-link:hover { color: #3498db; }
+  
+  @media (max-width: 1100px) {
     .wiki-toc { display: none; }
+    .wiki-container { grid-template-columns: 250px 1fr !important; }
   }
 </style>
