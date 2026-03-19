@@ -59,8 +59,8 @@ const platforms = [
   
   .platform-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-    gap: 25px; 
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); 
+    gap: 30px; 
   }
   
   .platform-card {
@@ -68,11 +68,13 @@ const platforms = [
     background: #0d0d0d;
     border: 1px solid #222;
     border-radius: 20px;
-    padding: 35px; /* Вернули общий отступ */
+    /* --- ВАЖНО: Убрали верхний и боковые padding --- */
+    padding: 0 0 35px 0; 
     position: relative;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Скрываем лишнее, если картинка больше */
   }
   
   .platform-card:hover { 
@@ -81,26 +83,49 @@ const platforms = [
     background: #111; 
   }
 
+  /* --- НОВЫЙ БЛОК ИКОНКИ (БАННЕР НА ВСЮ ШИРИНУ) --- */
   .icon-box { 
     width: 100%; 
-    height: 80px; /* Оптимальная высота для логотипа */
+    height: 100px; /* Фиксированная высота баннера */
     display: flex; 
     align-items: center; 
-    margin-bottom: 25px;
+    justify-content: center;
+    margin-bottom: 25px; /* Отступ от баннера до текста */
+    position: relative;
+    overflow: hidden;
   }
 
   .icon-box img { 
+    /* Картинка растягивается на всю ширину .icon-box */
+    width: 100%; 
     height: 100%; 
-    width: auto; 
-    max-width: 180px; /* Ограничили ширину, чтобы не гигантское было */
-    object-fit: contain; 
+    
+    /* object-fit: cover — СЕКРЕТНЫЙ ИНГРЕДИЕНТ для заполнения.
+       Он масштабирует картинку, чтобы она полностью заполнила блок, 
+       обрезая лишнее. Логотип будет большим и во всю ширину.
+    */
+    object-fit: cover; 
+    
     display: block;
+    /* Немного затемним картинку, чтобы она не была слишком яркой */
+    filter: brightness(0.9); 
+    transition: filter 0.3s ease;
+  }
+  
+  .platform-card:hover .icon-box img {
+    filter: brightness(1); /* При наведении делаем ярче */
+  }
+
+  /* --- НОВЫЙ БЛОК ТЕКСТА С ОТСТУПАМИ --- */
+  .text-box { 
+    padding: 0 35px; /* Добавили боковые отступы тексту */
+    flex-grow: 1; /* Чтобы текст занимал всё оставшееся место */
   }
 
   .text-box h2 { 
     color: #fff; 
-    font-size: 1.6rem; /* Уменьшили шрифт заголовка */
-    margin-bottom: 10px; 
+    font-size: 1.7rem; /* Чуть увеличили шрифт заголовка */
+    margin-bottom: 12px; 
   }
 
   .text-box p { 
@@ -108,30 +133,37 @@ const platforms = [
     line-height: 1.5; 
     font-size: 1rem; 
     margin-right: 40px; /* Отступ справа, чтобы текст не налезал на стрелку */
+    margin-bottom: 15px; /* Отступ снизу */
   }
   
-  /* Стрелка строго в углу */
+  /* Стрелка в углу */
   .arrow { 
     position: absolute;
     bottom: 35px; 
     right: 35px;
-    color: #444; 
+    color: #333; /* По умолчанию стрелка темная */
     font-size: 1.8rem; 
     transition: all 0.3s ease; 
   }
   
   .platform-card:hover .arrow { 
-    color: #fff; 
+    color: #fff; /* При наведении становится белой */
     transform: translateX(5px); 
   }
   
+  /* Уникальные фоны для каждой платформы */
+  .thm .icon-box { background: rgba(33, 44, 66, 0.4); } /* Фон баннера THM */
+  .htb .icon-box { background: rgba(159, 229, 45, 0.2); } /* Фон баннера HTB */
+  
   /* Акценты при наведении */
-  .thm:hover { border-color: #сс2929; }
-  .htb:hover { border-color: #9fe52d; }
+  .thm:hover { border-color: #cc2929; box-shadow: 0 10px 30px -10px rgba(33, 44, 66, 0.3); }
+  .htb:hover { border-color: #9fe52d; box-shadow: 0 10px 30px -10px rgba(159, 229, 45, 0.1); }
 
   @media (max-width: 480px) {
-    .platform-card { padding: 25px; }
-    .text-box h2 { font-size: 1.4rem; }
+    .platform-card { padding: 0 0 25px 0; }
+    .text-box { padding: 0 25px; }
+    .text-box h2 { font-size: 1.5rem; }
     .arrow { bottom: 25px; right: 25px; }
+    .icon-box { height: 80px; } /* Чуть меньше на мобильных */
   }
 </style>
