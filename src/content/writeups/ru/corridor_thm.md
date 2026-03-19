@@ -1,4 +1,9 @@
-# Corridor - TryHackMe (easy)
+---
+title: "Corridor - TryHackMe (Easy)"
+description: "Анализ уязвимости IDOR в веб-приложении Corridor на TryHackMe:демонстрация обхода контроля доступа и доступа к скрытым ресурсам через изменение параметров URL"
+image: "/images/neighbour_thm/thm_main.png"
+date: "19 марта 2026"
+---
 
 **IDOR (Insecure Direct Object Reference)** относится к категории уязвимостей **Broken Access Control (A01 OWASP Top 10 2021)** и возникает в ситуациях, когда приложение предоставляет прямой доступ к внутренним объектам системы через параметры запроса, не выполняя проверку прав доступа пользователя.
 
@@ -6,9 +11,9 @@
 
 В данной комнате рассматривается веб-приложение Corridor с платформы TryHackMe, в котором реализована уязвимость IDOR через использование предсказуемых идентификаторов объектов.
 
-![01_intro](screens/01_intro.png)
+![01_intro](/handson/images/corridor_thm/01_intro.png)
 
-![02_ip_machine](screens/02_ip_machine.png)
+![02_ip_machine](/handson/images/corridor_thm/02_ip_machine.png)
 
 
 ---
@@ -17,17 +22,17 @@
 
 После запуска виртуальной машины открывается веб-страница с изображением коридора, содержащего 13 дверей. Каждая дверь является интерактивным элементом и ведёт на отдельный ресурс.
 
-![03_web](screens/03_web.png)
+![03_web](/handson/images/corridor_thm/03_web.png)
 
 ### Шаг 1. Изучение структуры страницы
 
 Первая комната:
 
-![04_first_room](screens/04_first_room.png)
+![04_first_room](/handson/images/corridor_thm/04_first_room.png)
 
 При анализе исходного кода страницы (Ctrl+U) обнаруживается HTML-карта изображения (image map), в которой каждая дверь представлена ссылкой формата
 
-![05_html_code](screens/05_html_code.png)
+![05_html_code](/handson/images/corridor_thm/05_html_code.png)
 
 Все значения представляют собой 32-символьные строки, характерные для MD5-хэшей, что указывает на использование хэшированных идентификаторов вместо обычных числовых ID.
 
@@ -35,7 +40,7 @@
 
 В ходе анализа видим, что каждый идентификатор соответствует результату MD5-хэширования чисел.
 
-![06_convert_md5](screens/06_convert_md5.png)
+![06_convert_md5](/handson/images/corridor_thm/06_convert_md5.png)
 
 Приложение использует детерминированные хэши как идентификаторы объектов, что делает их предсказуемыми.
 
@@ -63,9 +68,9 @@ Backend использует полный диапазон значений, в�
 
 Пробуем 0: cfcd208495d565ef66e7dff9f98764da
 
-![07_flag](screens/07_flag.png)
+![07_flag](/handson/images/corridor_thm/07_flag.png)
 
-![08_result](screens/08_result.png)
+![08_result](/handson/images/corridor_thm/08_result.png)
 
 ---
 
