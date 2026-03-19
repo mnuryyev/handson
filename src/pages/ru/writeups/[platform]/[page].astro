@@ -55,18 +55,18 @@ const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
 
     <h1>{platformTitle} Разборы</h1>
 
-    <div class="grid">
-      {page.data.map(lab => (
-        <LabCard 
-          title={lab.title} 
-          desc={lab.description} 
-          date={lab.date} 
-          /* Astro сам подставит /handson/ если видит /ru/... */
-          url={`/ru/writeups/${lab.slug}`} 
-          image={lab.image}
-        />
-      ))}
-    </div>
+<div class="grid">
+  {page.data.map(lab => (
+    <LabCard 
+      title={lab.title} 
+      desc={lab.description} 
+      date={lab.date} 
+      /* УБРАЛИ начальный слэш. Теперь будет один /handson/ */
+      url={`${lang}/writeups/${lab.slug}`} 
+      image={lab.image}
+    />
+  ))}
+</div>
 
     <nav class="pagination">
       {page.url.prev && <a href={page.url.prev} class="p-btn">← Назад</a>}
