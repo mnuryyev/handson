@@ -18,6 +18,7 @@ const nav = {
     projects: 'Проекты',
     writeups: 'Writeups',
     tools: 'Tools',
+    wiki: 'Wiki',
   },
   en: {
     articles: 'Networks & Administration',
@@ -25,6 +26,7 @@ const nav = {
     projects: 'Projects',
     writeups: 'Writeups',
     tools: 'Tools',
+    wiki: 'Wiki',
   }
 };
 
@@ -50,6 +52,8 @@ const t = nav[lang];
           <li><a href={`${base}${lang}/writeups`}>{t.writeups}</a></li>
           <li><a href={`${base}${lang}/tools/1`}>{t.tools}</a></li>
           <li><a href={`${base}${lang}/projects`}>{t.projects}</a></li>
+          <li><a href={`${base}${lang}/wiki/test`}>{t.wiki}</a></li>
+          
           
           <li class="nav-actions">
             <LangSwitcher />
