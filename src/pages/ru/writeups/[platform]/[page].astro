@@ -71,17 +71,17 @@ const platformTitle = platformNames[platform] || platform.toUpperCase();
     </header>
 
     <div class="grid">
-      {page.data.map(lab => (
-        <LabCard 
-          title={lab.title} 
-          desc={lab.description} 
-          date={lab.date} 
-          /* Ссылка на саму статью (slug) */
-          url={`${cleanBase}${lang}/writeups/${lab.slug}`} 
-          image={lab.image}
-        />
-      ))}
-    </div>
+  {page.data.map(lab => (
+    <LabCard 
+      title={lab.title} 
+      desc={lab.description} 
+      date={lab.date} 
+      /* УБИРАЕМ cleanBase, оставляем только путь от корня */
+      url={`/ru/writeups/${lab.slug}`} 
+      image={lab.image}
+    />
+  ))}
+</div>
 
     <nav class="pagination">
       {page.url.prev ? (
