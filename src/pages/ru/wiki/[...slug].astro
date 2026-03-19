@@ -2,53 +2,114 @@
 import { getCollection, render } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 
-// 1. Используем id вместо slug для Astro 5 glob loader
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
   return wikiEntries.map(entry => ({
-    // Убираем расширение .md из id для красивого URL
     params: { slug: entry.id.replace(/\.md$/, '') }, 
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-// В Astro 5 используется render(entry)
 const { Content, headings } = await render(entry);
-
-// 2. Получаем все файлы для сайдбара
 const allEntries = await getCollection('wiki');
+
+// --- ЛОГИКА ПОСТРОЕНИЯ ДЕРЕВА ---
+const tree = {};
+allEntries.forEach(item => {
+  const cleanId = item.id.replace(/\.md$/, '');
+  const parts = cleanId.split('/'); // Разрезаем путь: ['networking', 'nmap']
+  
+  let current = tree;
+  parts.forEach((part, index) => {
+    if (!current[part]) {
+      current[part] = index === parts.length - 1 
+        ? { type: 'file', item, slug: cleanId } 
+        : { type: 'folder', children: {} };
+    }
+    if (current[part].type === 'folder') {
+      current = current[part].children;
+    }
+  });
+});
 ---
 
 <WikiLayout title={entry.data.title} headings={headings}>
-<div slot="sidebar" class="file-tree">
-    {allEntries.map(item => {
-      const cleanSlug = item.id.replace(/\.md$/, '');
-      const parts = cleanSlug.split('/');
-      const isNested = parts.length > 1;
-      
-      return (
-        <a href={`/handson/ru/wiki/${cleanSlug}`} 
-           class="file-link" 
-           style={`padding-left: ${isNested ? parts.length * 12 : 12}px`}>
-          {isNested ? '└ ' : '📁 '} {item.data.title || parts.at(-1)}
+<div slot="sidebar" class="wiki-tree">
+  {Object.entries(tree).map(([name, node]) => (
+    <div class="tree-node">
+      {node.type === 'folder' ? (
+        <details open>
+          <summary><span>📁</span> {name}</summary>
+          <div class="folder-content">
+            {Object.entries(node.children).map(([childName, childNode]) => (
+              <a href={`/handson/ru/wiki/${childNode.slug}`} 
+                 class={`file-link ${childNode.slug === Astro.params.slug ? 'active' : ''}`}>
+                <span>📄</span> {childNode.item.data.title || childName}
+              </a>
+            ))}
+          </div>
+        </details>
+      ) : (
+        <a href={`/handson/ru/wiki/${node.slug}`} 
+           class={`file-link ${node.slug === Astro.params.slug ? 'active' : ''}`}>
+          <span>📄</span> {node.item.data.title || name}
         </a>
-      )
-    })}
-  </div>
+      )}
+    </div>
+  ))}
+</div>
 
   <Content />
 </WikiLayout>
 
 <style>
-  .file-tree { display: flex; flex-direction: column; gap: 5px; }
-  .file-link {
-    color: #aaa;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+  .wiki-tree { display: flex; flex-direction: column; gap: 4px; font-family: 'Inter', sans-serif; }
+  
+  /* Папки */
+  summary {
+    list-style: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: #ccc;
     font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+  }
+  summary:hover { background: #1a1a1a; color: #fff; }
+  summary::-webkit-details-marker { display: none; }
+
+  .folder-content {
+    margin-left: 18px;
+    border-left: 1px solid #222;
+    padding-left: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* Файлы */
+  .file-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 4px;
     transition: 0.2s;
   }
+  .file-link span { opacity: 0.5; font-size: 0.8rem; }
   .file-link:hover { background: #1a1a1a; color: #fff; }
+  .file-link.active {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+    font-weight: 500;
+  }
+
+  .tree-node details[open] summary { color: #fff; }
 </style>
