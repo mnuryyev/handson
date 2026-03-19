@@ -3,6 +3,7 @@ title: "Neighbour - TryHackMe (Easy)"
 description: "Walkthrough of the Neighbour web machine on TryHackMe: exploiting IDOR vulnerability, bypassing access control, and obtaining another user's data"
 image: "/images/neighbour_thm/thm_main.png"
 date: "February 17, 2026"
+platform: "thm"
 ---
 
 **Insecure Direct Object Reference (IDOR)** is a classic vulnerability in the **Broken Access Control category (A01 in OWASP Top 10 2021)**, where an application allows a user to directly access internal system objects (profiles, files, database records) by modifying request parameters, while the server doesn't perform access rights verification.
