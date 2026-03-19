@@ -1,12 +1,10 @@
 ---
 import MainLayout from '../../../layouts/MainLayout.astro';
 
-// Получаем префикс /handson/ из конфига Astro автоматически
-const base = import.meta.env.BASE_URL;
-const cleanBase = base.endsWith('/') ? base : `${base}/`;
+// В Astro переменная base уже содержит '/handson' (если настроено в конфиге)
+// Мы просто будем использовать пути от корня сайта
 const lang = "ru";
 
-// Данные для плиток категорий
 const platforms = [
   {
     id: 'thm',
@@ -34,8 +32,11 @@ const platforms = [
 
     <div class="platform-grid">
       {platforms.map(platform => (
-        /* Ссылка строится как: /handson/ + ru/writeups/thm/1 */
-        <a href={`${cleanBase}${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
+        /* ВАЖНО: Добавляем '/' в начало. 
+           Это заставит браузер искать от mnuryyev.github.io/
+           Astro сам добавит /handson перед /ru, если это прописано в astro.config.mjs
+        */
+        <a href={`/${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
           <div class="card-inner">
             <div class="icon-box">
               <img src={platform.icon} alt={platform.title} />
@@ -53,35 +54,11 @@ const platforms = [
 </MainLayout>
 
 <style>
-  .container {
-    max-width: 1100px;
-    margin: 80px auto;
-    padding: 0 20px;
-  }
-
-  .page-header {
-    margin-bottom: 60px;
-    text-align: left;
-  }
-
-  .page-header h1 {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    letter-spacing: -1px;
-    color: #fff;
-  }
-
-  .page-header p {
-    color: #888;
-    font-size: 1.2rem;
-  }
-
-  .platform-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 30px;
-  }
-
+  .container { max-width: 1100px; margin: 80px auto; padding: 0 20px; }
+  .page-header { margin-bottom: 60px; text-align: left; }
+  .page-header h1 { font-size: 3rem; color: #fff; }
+  .page-header p { color: #888; font-size: 1.2rem; }
+  .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
   .platform-card {
     text-decoration: none;
     background: #0d0d0d;
@@ -89,65 +66,16 @@ const platforms = [
     border-radius: 24px;
     padding: 40px;
     position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.4s ease;
   }
-
-  .platform-card:hover {
-    transform: translateY(-8px);
-    border-color: #444;
-    background: #111;
-  }
-
-  .platform-card.thm:hover { border-color: #212c42; box-shadow: 0 10px 30px -10px rgba(33, 44, 66, 0.5); }
-  .platform-card.htb:hover { border-color: #9fe52d; box-shadow: 0 10px 30px -10px rgba(159, 229, 45, 0.3); }
-
-  .card-inner {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .icon-box {
-    margin-bottom: 30px;
-  }
-
-  .icon-box img {
-    height: 60px;
-    width: auto;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
-  }
-
-  .text-box h2 {
-    color: #fff;
-    font-size: 2rem;
-    margin-bottom: 12px;
-  }
-
-  .text-box p {
-    color: #777;
-    line-height: 1.6;
-    font-size: 1rem;
-    margin: 0;
-  }
-
-  .arrow {
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
-    color: #333;
-    font-size: 2rem;
-    transition: 0.3s;
-  }
-
-  .platform-card:hover .arrow {
-    color: #fff;
-    transform: translateX(5px);
-  }
-
-  @media (max-width: 768px) {
-    .platform-grid { grid-template-columns: 1fr; }
-    .page-header h1 { font-size: 2.2rem; }
-    .platform-card { padding: 30px; }
-  }
+  .platform-card:hover { transform: translateY(-8px); border-color: #444; background: #111; }
+  .icon-box { margin-bottom: 30px; }
+  .icon-box img { height: 60px; width: auto; }
+  .text-box h2 { color: #fff; font-size: 2rem; margin-bottom: 12px; }
+  .text-box p { color: #777; line-height: 1.6; }
+  .arrow { position: absolute; bottom: 40px; right: 40px; color: #333; font-size: 2rem; }
+  .platform-card:hover .arrow { color: #fff; transform: translateX(5px); }
+  
+  .thm:hover { border-color: #212c42; }
+  .htb:hover { border-color: #9fe52d; }
 </style>
