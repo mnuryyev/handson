@@ -5,11 +5,11 @@ import WikiTree from '../../../components/WikiTree.astro';
 
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
-  // Фильтруем только те файлы, которые лежат в папке ru/
+  // 1. ОСТАВЛЯЕМ ТОЛЬКО РУССКИЕ ФАЙЛЫ ДЛЯ РОУТИНГА
   const ruEntries = wikiEntries.filter(entry => entry.id.startsWith('ru/'));
   
   return ruEntries.map(entry => ({
-    // Для параметров slug убираем префикс ru/ и расширение .md
+    // Убираем 'ru/' из начала, чтобы URL был /ru/wiki/linux/...
     params: { slug: entry.id.replace(/^ru\//, '').replace(/\.md$/, '') }, 
     props: { entry },
   }));
@@ -19,14 +19,14 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allEntries = await getCollection('wiki');
 
-// 1. Оставляем только РУССКИЕ записи для сайдбара
-const ruEntries = allEntries.filter(item => item.id.startsWith('ru/'));
+// 2. ФИЛЬТРУЕМ ДЛЯ САЙДБАРА (чтобы не было папки 'en')
+const ruEntriesForSidebar = allEntries.filter(item => item.id.startsWith('ru/'));
 const currentSlug = Astro.params.slug || '';
 
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
-    // 2. ВАЖНО: Отрезаем 'ru/' в начале ID, чтобы дерево не создавало лишнюю папку "ru"
+    // 3. УДАЛЯЕМ ПРЕФИКС 'ru/', чтобы дерево не рисовало лишнюю папку
     const cleanId = item.id.replace(/^ru\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
@@ -34,7 +34,11 @@ function buildTree(entries) {
     parts.forEach((part, index) => {
       if (!current[part]) {
         if (index === parts.length - 1) {
-          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
+          current[part] = { 
+            type: 'file', 
+            title: item.data?.title || part, 
+            slug: cleanId 
+          };
         } else {
           current[part] = { type: 'folder', children: {} };
         }
@@ -47,7 +51,7 @@ function buildTree(entries) {
   return tree;
 }
 
-const fileTree = buildTree(ruEntries);
+const fileTree = buildTree(ruEntriesForSidebar);
 ---
 
 <WikiLayout title={entry.data.title}>
