@@ -55,19 +55,20 @@ function isFolderOpen(node, currentSlug) {
     list-style: none;
     display: flex;
     align-items: center;
-    /* Ультра-компактные отступы */
-    padding: 2px 6px; 
+    /* Компактные отступы: 3px сверху/снизу, 6px сбоку */
+    padding: 3px 6px; 
     cursor: pointer;
     border-radius: 4px;
     color: #999;
-    /* Маленький, но читаемый шрифт */
-    font-size: 0.82rem; 
-    transition: 0.1s;
+    /* Ровно 13.5px при базе 16px */
+    font-size: 0.84375rem; 
+    line-height: 1.4;
+    transition: 0.1s ease;
   }
 
   summary:hover, .file-link:hover {
     background: #1a1a1a;
-    color: #ccc;
+    color: #eee;
   }
 
   summary::-webkit-details-marker { display: none; }
@@ -86,33 +87,36 @@ function isFolderOpen(node, currentSlug) {
   }
 
   .folder-icon, .file-icon {
-    font-size: 0.85rem;
-    margin: 0 4px;
+    font-size: 0.9rem;
+    margin: 0 5px;
     opacity: 0.6;
   }
 
   .folder-content {
-    /* Тонкая линия вложенности */
     margin-left: 10px;
     border-left: 1px solid #1a1a1a;
     display: flex;
     flex-direction: column;
+    margin-top: 1px;
   }
 
   .file-link {
     display: flex;
     align-items: center;
-    /* Компактный паддинг и точное выравнивание */
-    padding: 2px 6px 2px 22px; 
+    /* Смещение 23px идеально ставит иконку файла под текст папки */
+    padding: 3px 6px 3px 23px; 
     text-decoration: none;
     color: #777;
-    font-size: 0.9rem;
+    font-size: 0.84375rem; 
+    line-height: 1.4;
     border-radius: 4px;
+    transition: 0.1s ease;
   }
 
   .file-link.active {
-    background: rgba(52, 152, 219, 0.08);
+    background: rgba(52, 152, 219, 0.1);
     color: #3498db;
+    font-weight: 500;
   }
 
   .node-name {
@@ -121,7 +125,6 @@ function isFolderOpen(node, currentSlug) {
     text-overflow: ellipsis;
   }
 
-  /* Убираем лишние зазоры */
   details {
     display: block;
   }
