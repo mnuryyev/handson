@@ -1,8 +1,8 @@
 ---
 // src/components/WikiTree.astro
-const { tree, currentSlug = "" } = Astro.props;
+const { tree, currentSlug = "", lang = "ru" } = Astro.props; // Добавили lang (по умолчанию ru)
 
-// Сортируем: сначала папки, потом файлы (как в Obsidian)
+// Сортируем: сначала папки, потом файлы
 const sortedNodes = Object.entries(tree).sort(([aName, aNode], [bName, bNode]) => {
   if (aNode.type !== bNode.type) return aNode.type === 'folder' ? -1 : 1;
   return aName.localeCompare(bName);
@@ -28,16 +28,20 @@ function isFolderOpen(node, currentSlug) {
     {node.type === 'folder' ? (
       <details open={isFolderOpen(node, currentSlug)}>
         <summary>
-          <svg class="chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+          </svg>
           <span class="folder-icon">📁</span>
           <span class="node-name">{name}</span>
         </summary>
         <div class="folder-content">
-          <Astro.self tree={node.children} currentSlug={currentSlug} />
+          {/* Передаем lang дальше в рекурсию */}
+          <Astro.self tree={node.children} currentSlug={currentSlug} lang={lang} />
         </div>
       </details>
     ) : (
-      <a href={`/handson/ru/wiki/${node.slug}`} 
+      /* Теперь ссылка зависит от выбранного языка */
+      <a href={`/handson/${lang}/wiki/${node.slug}`} 
          class={`file-link ${currentSlug === node.slug ? 'active' : ''}`}>
         <span class="file-icon">📄</span>
         <span class="node-name">{node.title}</span>
@@ -55,12 +59,11 @@ function isFolderOpen(node, currentSlug) {
     list-style: none;
     display: flex;
     align-items: center;
-    /* Компактные отступы: 3px сверху/снизу, 6px сбоку */
     padding: 3px 6px; 
     cursor: pointer;
     border-radius: 4px;
     color: #999;
-    /* Ровно 13.5px при базе 16px */
+    /* Ровно 13.5px */
     font-size: 0.84375rem; 
     line-height: 1.4;
     transition: 0.1s ease;
@@ -103,7 +106,6 @@ function isFolderOpen(node, currentSlug) {
   .file-link {
     display: flex;
     align-items: center;
-    /* Смещение 23px идеально ставит иконку файла под текст папки */
     padding: 3px 6px 3px 23px; 
     text-decoration: none;
     color: #777;
