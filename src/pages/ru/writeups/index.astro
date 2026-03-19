@@ -1,6 +1,9 @@
 ---
 import MainLayout from '../../../layouts/MainLayout.astro';
 
+// Получаем префикс /handson/ из конфига Astro автоматически
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
 const lang = "ru";
 
 // Данные для плиток категорий
@@ -8,7 +11,7 @@ const platforms = [
   {
     id: 'thm',
     title: 'TryHackMe',
-    description: 'Разборы комнат, цепочек и тренировочных машин с платформы THM', // Скобка удалена
+    description: 'Разборы комнат, цепочек и тренировочных машин с платформы THM',
     icon: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/TryHackMe_logo.svg', 
     color: '#212c42'
   },
@@ -29,10 +32,10 @@ const platforms = [
       <p>Все отчеты структурированы по тренировочным площадкам</p>
     </header>
 
-   <div class="platform-grid">
-  {platforms.map(platform => (
-    /* УБРАЛИ начальный слэш перед ${lang} */
-    <a href={`${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
+    <div class="platform-grid">
+      {platforms.map(platform => (
+        /* Ссылка строится как: /handson/ + ru/writeups/thm/1 */
+        <a href={`${cleanBase}${lang}/writeups/${platform.id}/1`} class={`platform-card ${platform.id}`}>
           <div class="card-inner">
             <div class="icon-box">
               <img src={platform.icon} alt={platform.title} />
@@ -96,7 +99,6 @@ const platforms = [
     background: #111;
   }
 
-  /* Акценты для каждой платформы при наведении */
   .platform-card.thm:hover { border-color: #212c42; box-shadow: 0 10px 30px -10px rgba(33, 44, 66, 0.5); }
   .platform-card.htb:hover { border-color: #9fe52d; box-shadow: 0 10px 30px -10px rgba(159, 229, 45, 0.3); }
 
