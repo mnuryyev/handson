@@ -1,0 +1,101 @@
+---
+import MainLayout from '../../../../layouts/MainLayout.astro';
+import LabCard from '../../../../components/LabCard.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.endsWith('/') ? base : `${base}/`;
+const lang = "en"; // Язык EN
+
+export async function getStaticPaths({ paginate }) {
+  // Ищем файлы в английской папке
+  const labsDir = './src/content/writeups/en';
+  if (!fs.existsSync(labsDir)) return [];
+
+  const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
+
+  const allLabs = files.map(file => {
+    const fileContent = fs.readFileSync(path.join(labsDir, file), 'utf-8');
+    const { data } = matter(fileContent);
+    return {
+      slug: file.replace('.md', ''),
+      ...data 
+    };
+  });
+
+  const platforms = ['thm', 'htb']; 
+
+  return platforms.flatMap(platform => {
+    const filteredLabs = allLabs
+      .filter(lab => lab.platform === platform)
+      .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
+
+    if (filteredLabs.length === 0) return [];
+
+    return paginate(filteredLabs, {
+      params: { platform }, 
+      pageSize: 12
+    });
+  });
+}
+
+const { page } = Astro.props;
+const { platform } = Astro.params;
+
+const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
+---
+
+<MainLayout title={`${platformTitle} Writeups`}>
+  <div class="container">
+    <nav class="breadcrumb">
+       <a href={`${cleanBase}${lang}/writeups`}>Writeups</a> / <span>{platformTitle}</span>
+    </nav>
+
+    <h1>{platformTitle} Solutions</h1>
+
+    <div class="grid">
+      {page.data.map(lab => (
+        <LabCard 
+          title={lab.title} 
+          desc={lab.description} 
+          date={lab.date} 
+          /* Ссылка теперь ведет в /en/ section */
+          url={`en/writeups/${lab.slug}`} 
+          image={lab.image}
+        />
+      ))}
+    </div>
+
+    <nav class="pagination">
+      {page.url.prev ? (
+        <a href={page.url.prev} class="p-btn">← Back</a>
+      ) : (
+        <span class="p-btn disabled">← Back</span>
+      )}
+
+      <div class="pages">
+         {page.currentPage} / {page.lastPage}
+      </div>
+
+      {page.url.next ? (
+        <a href={page.url.next} class="p-btn">Next →</a>
+      ) : (
+        <span class="p-btn disabled">Next →</span>
+      )}
+    </nav>
+  </div>
+</MainLayout>
+
+<style>
+  /* Стили оставляем такими же как в RU версии */
+  .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px 25px; }
+  .pagination { margin-top: 60px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+  .p-btn { padding: 10px 20px; background: #111; border: 1px solid #333; border-radius: 8px; text-decoration: none; color: #fff; min-width: 100px; text-align: center; }
+  .p-btn.disabled { opacity: 0.2; cursor: not-allowed; }
+  .pages { color: #666; font-family: monospace; min-width: 60px; text-align: center; }
+  .breadcrumb { margin-bottom: 20px; color: #555; font-size: 0.9rem; }
+  .breadcrumb a { color: #3498db; text-decoration: none; }
+</style>
