@@ -3,6 +3,7 @@ title: "Corridor - TryHackMe (Easy)"
 description: "Analysis of IDOR vulnerability in the Corridor web application on TryHackMe: demonstrating access control bypass and accessing hidden resources through URL parameter manipulation"
 image: "/images/neighbour_thm/thm_main.png"
 date: "March 19, 2026"
+platform: "thm"
 ---
 
 **IDOR (Insecure Direct Object Reference)** belongs to the **Broken Access Control (A01 OWASP Top 10 2021)** vulnerability category and occurs in situations where an application provides direct access to internal system objects through request parameters without performing user access rights verification.
