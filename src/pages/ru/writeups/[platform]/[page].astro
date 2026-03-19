@@ -7,6 +7,8 @@ import matter from 'gray-matter';
 
 export async function getStaticPaths({ paginate }) {
   const labsDir = './src/content/writeups/ru';
+  
+  // Если папки нет, не генерируем ничего
   if (!fs.existsSync(labsDir)) return [];
 
   const files = fs.readdirSync(labsDir).filter(f => f.endsWith('.md'));
@@ -20,15 +22,17 @@ export async function getStaticPaths({ paginate }) {
     };
   });
 
+  // Генерируем страницы ТОЛЬКО для этих двух платформ
   const platforms = ['thm', 'htb']; 
 
   return platforms.flatMap(platform => {
-    const filteredLabs = allLabs.filter(lab => lab.platform === platform)
-      .sort((a, b) => {
-        const dateA = new Date(a.date || 0).getTime();
-        const dateB = new Date(b.date || 0).getTime();
-        return dateB - dateA;
-      });
+    const filteredLabs = allLabs
+      .filter(lab => lab.platform === platform)
+      .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
+
+    // Если для платформы нет статей, Astro может ругаться, 
+    // поэтому проверяем длину массива
+    if (filteredLabs.length === 0) return [];
 
     return paginate(filteredLabs, {
       params: { platform }, 
@@ -39,27 +43,17 @@ export async function getStaticPaths({ paginate }) {
 
 const { page } = Astro.props;
 const { platform } = Astro.params;
-const lang = "ru";
 
-const platformNames = {
-  thm: 'TryHackMe',
-  htb: 'HackTheBox'
-};
-const platformTitle = platformNames[platform] || platform.toUpperCase();
+const platformTitle = platform === 'thm' ? 'TryHackMe' : 'HackTheBox';
 ---
 
-<MainLayout title={`${platformTitle} - Страница ${page.currentPage}`}>
+<MainLayout title={platformTitle}>
   <div class="container">
     <nav class="breadcrumb">
-       <a href={`/${lang}/writeups`}>Writeups</a> 
-       <span class="sep">/</span> 
-       <span class="current">{platformTitle}</span>
+       <a href="/ru/writeups">Writeups</a> / <span>{platformTitle}</span>
     </nav>
 
-    <header class="page-header">
-      <h1>🎯 {platformTitle} Разборы</h1>
-      <p>Список всех пройденных машин и челленджей на платформе {platformTitle}</p>
-    </header>
+    <h1>{platformTitle} Разборы</h1>
 
     <div class="grid">
       {page.data.map(lab => (
@@ -67,43 +61,27 @@ const platformTitle = platformNames[platform] || platform.toUpperCase();
           title={lab.title} 
           desc={lab.description} 
           date={lab.date} 
-          /* ВАЖНО: Просто путь от корня. Astro подхватит base */
-          url={`/${lang}/writeups/${lab.slug}`} 
+          /* Astro сам подставит /handson/ если видит /ru/... */
+          url={`/ru/writeups/${lab.slug}`} 
           image={lab.image}
         />
       ))}
     </div>
 
     <nav class="pagination">
-      {page.url.prev ? (
-        <a href={page.url.prev} class="p-btn">← Назад</a>
-      ) : (
-        <span class="p-btn disabled">← Назад</span>
-      )}
-
-      <div class="pages">
-         {page.currentPage} / {page.lastPage}
-      </div>
-
-      {page.url.next ? (
-        <a href={page.url.next} class="p-btn">Вперед →</a>
-      ) : (
-        <span class="p-btn disabled">Вперед →</span>
-      )}
+      {page.url.prev && <a href={page.url.prev} class="p-btn">← Назад</a>}
+      <div class="pages">{page.currentPage} / {page.lastPage}</div>
+      {page.url.next && <a href={page.url.next} class="p-btn">Вперед →</a>}
     </nav>
   </div>
 </MainLayout>
 
 <style>
   .container { max-width: 1200px; margin: 60px auto; padding: 0 20px; }
-  .page-header { margin-bottom: 50px; border-bottom: 1px solid #222; padding-bottom: 30px; }
-  .page-header h1 { font-size: 2.5rem; color: #fff; }
-  .breadcrumb { margin-bottom: 20px; color: #666; font-size: 0.9rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+  .breadcrumb { margin-bottom: 20px; color: #666; }
   .breadcrumb a { color: var(--accent); text-decoration: none; }
-  .breadcrumb .sep { margin: 0 10px; opacity: 0.5; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px 25px; }
-  .pagination { margin-top: 60px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+  h1 { margin-bottom: 40px; color: #fff; }
+  .pagination { display: flex; gap: 20px; align-items: center; margin-top: 40px; }
   .p-btn { padding: 10px 20px; background: #111; border: 1px solid #333; border-radius: 8px; text-decoration: none; color: #fff; }
-  .p-btn.disabled { opacity: 0.2; cursor: not-allowed; }
-  .pages { color: #666; font-family: monospace; }
 </style>
