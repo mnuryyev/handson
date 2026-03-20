@@ -2,7 +2,7 @@
 title: "Inter-Network SSH Access in Cisco and MikroTik Networks"
 description: "This work examines the process of configuring inter-network SSH access in a multi-segment Cisco and MikroTik network, including routing, access rules, and connection verification"
 image: "/images/ssh_net/ssh.jpg"
-date: "February 8, 2026"
+date: "2026-02-08"
 ---
 In any network, sooner or later there comes a need to manage equipment remotely. Running to each router with a console cable is not a great idea, especially if the devices are located in different offices or network segments. That's exactly why **SSH** is typically used for administration - a protocol that allows you to connect to devices over the network and do it securely.
 
