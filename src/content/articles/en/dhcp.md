@@ -2,7 +2,7 @@
 title: "DHCP: Server Configuration, Relay and Traffic Analysis in Wireshark"
 description: "In this work, we'll thoroughly examine how DHCP works, from the DORA message exchange process (Discover, Offer, Request, Acknowledge), through network traffic analysis in Wireshark"
 image: "/images/dhcp_net/dhcp_main.jpg"
-date: "February 6, 2026"
+date: "2026-02-12"
 ---
 
 In any network, devices need to obtain IP addresses, gateways, and DNS servers to correctly exchange data and have internet access. Of course, everything can be configured manually, but in real life this is inconvenient and often leads to errors. This is where the **DHCP (Dynamic Host Configuration Protocol)** comes in. Its task is simple - to automatically distribute all necessary network parameters to clients, including IP, subnet mask, gateway, and DNS.
