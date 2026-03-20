@@ -9,7 +9,6 @@ export async function getStaticPaths() {
   const enEntries = wikiEntries.filter(entry => entry.id.startsWith('en/'));
   
   return enEntries.map(entry => ({
-    // Убираем 'en/' из начала slug для URL
     params: { slug: entry.id.replace(/^en\//, '').replace(/\.md$/, '') }, 
     props: { entry },
   }));
@@ -19,14 +18,20 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allEntries = await getCollection('wiki');
 
-// 2. Оставляем только английские записи для дерева в сайдбаре
-const enEntries = allEntries.filter(item => item.id.startsWith('en/'));
+// 2. Оставляем только английские записи для дерева и поиска
+const enEntriesForSidebar = allEntries.filter(item => item.id.startsWith('en/'));
 const currentSlug = Astro.params.slug || '';
+
+// --- ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА (EN) ---
+const searchData = enEntriesForSidebar.map(page => ({
+  title: page.data.title || page.id.split('/').pop().replace('.md', ''),
+  content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
+  slug: `en/wiki/${page.id.replace(/^en\//, '').replace(/\.md$/, '')}`
+}));
 
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
-    // Убираем префикс 'en/', чтобы дерево не начиналось с папки "en"
     const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
@@ -51,19 +56,18 @@ function buildTree(entries) {
   return tree;
 }
 
-const fileTree = buildTree(enEntries);
+const fileTree = buildTree(enEntriesForSidebar);
 ---
 
-<WikiLayout title={entry.data.title}>
-  <WikiTree slot="sidebar" tree={fileTree} currentSlug={currentSlug} lang="en" />
+<WikiLayout title={entry.data.title} lang="en" searchData={searchData}>
+  <div slot="sidebar">
+    <WikiTree tree={fileTree} currentSlug={currentSlug} lang="en" />
+  </div>
   
   <Content />
 </WikiLayout>
 
 <style>
-  /* Здесь стили обычно не нужны, так как контент стилизуется в WikiLayout 
-     через класс .markdown-body, а дерево — внутри WikiTree.astro 
-  */
   .wiki-tree-container {
     display: flex;
     flex-direction: column;
