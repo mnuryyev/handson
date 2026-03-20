@@ -1,11 +1,17 @@
 ---
 import MainLayout from './MainLayout.astro';
-const { title } = Astro.props; // Убрали headings, так как TOC больше нет
+import WikiSearch from '../components/WikiSearch.astro'; // Импортируем поиск здесь
+
+const { title, lang = "ru", searchData = [] } = Astro.props; 
 ---
+
 <MainLayout title={title}>
   <div class="wiki-container">
     <aside class="wiki-sidebar">
       <div class="sidebar-header">Wiki</div>
+      
+      {searchData.length > 0 && <WikiSearch lang={lang} searchData={searchData} />}
+      
       <slot name="sidebar" />
     </aside>
 
@@ -35,40 +41,23 @@ const { title } = Astro.props; // Убрали headings, так как TOC бо�
   }
 
   handleExternalLinks();
-  // Если используешь View Transitions:
   document.addEventListener('astro:after-swap', handleExternalLinks);
 </script>
 
 <style is:global>
-  /* СТИЛИЗАЦИЯ СКРОЛЛБАРА (Dark Mode) */
-  /* Для Chrome, Safari и Edge */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0d0d0d; 
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #222; 
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #333; 
-  }
+  /* СТИЛИЗАЦИЯ СКРОЛЛБАРА */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0d0d0d; }
+  ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #333; }
 
-  /* Для Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #222 #0d0d0d;
-  }
+  * { scrollbar-width: thin; scrollbar-color: #222 #0d0d0d; }
 
-  /* Контент Markdown */
   .markdown-body {
     color: #ccc;
     line-height: 1.6;
     font-size: 1.05rem;
-    max-width: 900px; /* Ограничиваем ширину текста для удобства чтения, но центрируем */
+    max-width: 900px;
     margin: 0 auto;
   }
 
@@ -86,35 +75,13 @@ const { title } = Astro.props; // Убрали headings, так как TOC бо�
     margin: 24px 0;
   }
 
-  .video-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    background: #000;
-    border-radius: 12px;
-    margin: 24px 0;
-  }
-
-  .video-container iframe {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%; border: 0;
-  }
-
-  .markdown-body a {
-    color: #3498db;
-    text-decoration: none;
-  }
-  
-  .markdown-body a:hover {
-    text-decoration: underline;
-  }
+  .markdown-body a { color: #3498db; text-decoration: none; }
+  .markdown-body a:hover { text-decoration: underline; }
 </style>
 
 <style>
   .wiki-container {
     display: grid;
-    /* Оставляем только 2 колонки: Сайдбар и Контент */
     grid-template-columns: 260px 1fr; 
     height: calc(100vh - 80px);
     background: #0d0d0d;
@@ -126,10 +93,12 @@ const { title } = Astro.props; // Убрали headings, так как TOC бо�
     border-right: 1px solid #1a1a1a;
     padding: 20px 10px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
 
   .wiki-main {
-    padding: 40px 80px; /* Увеличили боковые отступы для солидности */
+    padding: 40px 80px;
     overflow-y: auto;
     background: #0d0d0d;
     scroll-behavior: smooth;
@@ -156,9 +125,7 @@ const { title } = Astro.props; // Убрали headings, так как TOC бо�
   }
 
   @media (max-width: 768px) {
-    .wiki-container {
-      grid-template-columns: 1fr; /* На мобилках сайдбар можно скрыть или перестроить */
-    }
+    .wiki-container { grid-template-columns: 1fr; }
     .wiki-sidebar { display: none; }
     .wiki-main { padding: 20px; }
   }
