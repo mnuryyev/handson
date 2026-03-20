@@ -93,18 +93,23 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     padding: 20px 10px;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Сайдбар сам не скроллится, скроллится дерево */
+    overflow: hidden;
+    /* Убираем лишние отступы, которые могут толкать контент */
   }
 
   .search-section {
     flex-shrink: 0;
-    margin-bottom: 10px;
+    height: 50px; /* ЖЕСТКАЯ ВЫСОТА: теперь поиск не прыгнет */
+    margin-bottom: 20px; /* Фиксированный отступ до дерева */
+    display: flex;
+    align-items: center;
   }
 
   .tree-section {
     flex-grow: 1;
-    overflow-y: auto; /* Скроллим только список файлов */
+    overflow-y: auto;
     padding-right: 5px;
+    /* Чтобы дерево начиналось всегда с одной точки */
   }
 
   .wiki-main {
