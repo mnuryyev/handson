@@ -2,7 +2,7 @@
 title: "Redeemer - HackTheBox (Easy)"
 description: "Разбор машины Redeemer на HackTheBox: сканирование открытых портов, подключение к Redis без пароля, исследование ключей базы данных и получение флага напрямую из сервиса"
 image: "/images/meow_htb/htb_main.jpg"
-date: "23 февраля 2026"
+date: "2026-02-23"
 platform: "htb"
 ---
 **Redeemer** - это простая машина на платформе HTB в разделе *Starting Point*.
