@@ -2,7 +2,7 @@
 title: "Neighbour - TryHackMe (Easy)"
 description: "Walkthrough of the Neighbour web machine on TryHackMe: exploiting IDOR vulnerability, bypassing access control, and obtaining another user's data"
 image: "/images/neighbour_thm/thm_main.png"
-date: "February 17, 2026"
+date: "2026-02-17"
 platform: "thm"
 ---
 
