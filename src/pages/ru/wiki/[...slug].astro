@@ -19,9 +19,17 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allEntries = await getCollection('wiki');
 
-// 2. ФИЛЬТРУЕМ ДЛЯ САЙДБАРА (чтобы не было папки 'en')
+// 2. ФИЛЬТРУЕМ ДЛЯ САЙДБАРА И ПОИСКА (только ru)
 const ruEntriesForSidebar = allEntries.filter(item => item.id.startsWith('ru/'));
 const currentSlug = Astro.params.slug || '';
+
+// --- ПОДГОТОВКА ДАННЫХ ДЛЯ УМНОГО ПОИСКА ---
+const searchData = ruEntriesForSidebar.map(page => ({
+  title: page.data.title || page.id.split('/').pop().replace('.md', ''),
+  // Берем текст статьи, очищаем от Markdown символов и берем первые 500 символов для индекса
+  content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
+  slug: `ru/wiki/${page.id.replace(/^ru\//, '').replace(/\.md$/, '')}`
+}));
 
 function buildTree(entries) {
   const tree = {};
@@ -54,12 +62,16 @@ function buildTree(entries) {
 const fileTree = buildTree(ruEntriesForSidebar);
 ---
 
-<WikiLayout title={entry.data.title}>
-  <WikiTree slot="sidebar" tree={fileTree} currentSlug={currentSlug} lang="ru" />
+<WikiLayout title={entry.data.title} lang="ru" searchData={searchData}>
+  <div slot="sidebar">
+    <WikiTree tree={fileTree} currentSlug={currentSlug} lang="ru" />
+  </div>
+  
   <Content />
 </WikiLayout>
 
 <style>
+  /* Стили для дерева (оставляем как в оригинале) */
   .wiki-tree { display: flex; flex-direction: column; gap: 2px; }
   summary {
     list-style: none;
