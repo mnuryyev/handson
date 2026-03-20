@@ -2,7 +2,7 @@
 title: "Meow - HackTheBox (Easy)"
 description: "Разбор машины Meow на HackTheBox: использование Telnet с пустым паролем для получения доступа, исследование сервисов и получение флага на целевой машине"
 image: "/images/meow_htb/htb_main.jpg"
-date: "22 февраля 2026"
+date: "2026-02-22"
 platform: "htb"
 ---
 **Meow** - это одна из простых машин на платформе HTB, которая находится в разделе *Starting Point*. 
