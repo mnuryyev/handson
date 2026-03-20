@@ -1,0 +1,87 @@
+---
+const { lang = "ru", searchData } = Astro.props;
+---
+
+<div class="search-wrapper">
+  <button id="search-btn" class="search-trigger">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <span>{lang === 'ru' ? 'Поиск...' : 'Search...'}</span>
+    <kbd>⌘K</kbd>
+  </button>
+</div>
+
+<div id="search-modal" class="modal">
+  <div class="modal-content">
+    <input type="text" id="search-input" placeholder={lang === 'ru' ? 'Введите название статьи...' : 'Type to search...'} autocomplete="off" />
+    <div id="search-results" class="results"></div>
+  </div>
+</div>
+
+<style>
+  .search-trigger {
+    width: 100%;
+    background: #111;
+    border: 1px solid #222;
+    color: #666;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+    transition: 0.2s;
+  }
+  .search-trigger:hover { border-color: #444; color: #aaa; }
+  .search-trigger kbd { margin-left: auto; font-size: 0.7rem; background: #222; padding: 2px 5px; border-radius: 3px; }
+
+  /* Модальное окно */
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; padding: 100px 20px; backdrop-filter: blur(4px); }
+  .modal.open { display: block; }
+  .modal-content { max-width: 600px; margin: 0 auto; background: #0d0d0d; border: 1px solid #333; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  
+  #search-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid #222; padding: 20px; color: #fff; font-size: 1.1rem; outline: none; }
+  .results { max-height: 400px; overflow-y: auto; padding: 10px; }
+  
+  :global(.result-item) { display: block; padding: 12px; color: #ccc; text-decoration: none; border-radius: 8px; transition: 0.2s; }
+  :global(.result-item:hover) { background: #1a1a1a; color: #3498db; }
+  :global(.result-item b) { display: block; color: #fff; font-size: 1rem; }
+</style>
+
+<script is:inline define:vars={{ searchData, lang }}>
+  const btn = document.getElementById('search-btn');
+  const modal = document.getElementById('search-modal');
+  const input = document.getElementById('search-input');
+  const resultsDiv = document.getElementById('search-results');
+
+  // Открыть/закрыть
+  const toggleModal = () => modal.classList.toggle('open') && input.focus();
+  btn.onclick = toggleModal;
+  window.onclick = (e) => e.target === modal && toggleModal();
+  window.onkeydown = (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleModal(); }
+    if (e.key === 'Escape') modal.classList.remove('open');
+  };
+
+  // Логика поиска
+  input.oninput = (e) => {
+    const query = e.target.value.toLowerCase();
+    resultsDiv.innerHTML = '';
+    if (query.length < 2) return;
+
+    const filtered = searchData
+      .filter(item => item.title.toLowerCase().includes(query))
+      .slice(0, 10);
+
+    filtered.forEach(item => {
+      const a = document.createElement('a');
+      a.className = 'result-item';
+      // Формируем правильную ссылку: /handson/ru/wiki/linux/terminal
+      const finalUrl = `/handson/${item.slug}`;
+      a.href = finalUrl;
+      a.innerHTML = `<b>${item.title}</b><small>${item.slug}</small>`;
+      resultsDiv.appendChild(a);
+    });
+  };
+</script>
