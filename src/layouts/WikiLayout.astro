@@ -11,7 +11,9 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
       <div class="sidebar-header">Wiki</div>
       
       <div class="search-section">
-        {searchData.length > 0 && <WikiSearch lang={lang} searchData={searchData} />}
+        {searchData && searchData.length > 0 && (
+          <WikiSearch lang={lang} searchData={searchData} />
+        )}
       </div>
       
       <div class="tree-section">
@@ -49,20 +51,20 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 </script>
 
 <style is:global>
-  /* Фикс для модалки, чтобы она не перекрывала экран, когда закрыта */
+  /* Фикс для модалки поиска */
   #search-modal {
-    pointer-events: none; /* Игнорируем клики, когда закрыто */
+    pointer-events: none;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s, visibility 0.2s;
   }
   #search-modal.open {
-    pointer-events: auto; /* Включаем клики, когда открыто */
+    pointer-events: auto;
     opacity: 1;
     visibility: visible;
   }
 
-  /* СТИЛИЗАЦИЯ СКРОЛЛБАРА */
+  /* Скроллбар */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: #0d0d0d; }
   ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
@@ -90,26 +92,34 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
   .wiki-sidebar {
     background: #050505;
     border-right: 1px solid #1a1a1a;
-    padding: 20px 10px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Убираем лишние отступы, которые могут толкать контент */
+    padding: 0 10px; /* Боковые отступы */
+  }
+
+  .sidebar-header { 
+    font-size: 0.7rem; 
+    color: #444; 
+    padding: 20px 10px 10px 10px; /* Отступ сверху */
+    text-transform: uppercase; 
+    letter-spacing: 1.5px;
+    flex-shrink: 0;
   }
 
   .search-section {
     flex-shrink: 0;
-    height: 50px; /* ЖЕСТКАЯ ВЫСОТА: теперь поиск не прыгнет */
-    margin-bottom: 20px; /* Фиксированный отступ до дерева */
+    padding: 0 5px;
+    height: 50px; /* Фиксируем зону поиска, чтобы не дергалось */
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
   }
 
   .tree-section {
     flex-grow: 1;
     overflow-y: auto;
-    padding-right: 5px;
-    /* Чтобы дерево начиналось всегда с одной точки */
+    padding: 0 5px 20px 5px;
   }
 
   .wiki-main {
@@ -120,7 +130,6 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
   }
 
   .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; }
-  .sidebar-header { font-size: 0.7rem; color: #444; margin-bottom: 15px; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; }
 
   @media (max-width: 768px) {
     .wiki-container { grid-template-columns: 1fr; }
