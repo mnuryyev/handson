@@ -3,13 +3,13 @@ import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 import WikiTree from '../../../components/WikiTree.astro';
 
-// 1. Получаем все записи
+
 const allEntries = await getCollection('wiki');
 
-// 2. Оставляем ТОЛЬКО русские записи
+
 const ruEntries = allEntries.filter(item => item.id.startsWith('ru/'));
 
-// 3. ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА (включая контент для полнотекстового поиска)
+
 const searchData = ruEntries.map(page => ({
   title: page.data.title || page.id.split('/').pop().replace('.md', ''),
   content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
@@ -53,8 +53,6 @@ const fileTree = buildTree(ruEntries);
   <div class="obsidian-style-empty">
     <div class="welcome-box">
       <div class="icon">🚀</div>
-      <h2>Добро пожаловать в Wiki</h2>
-      <p>Выберите нужный раздел в меню слева или используйте поиск (⌘K).</p>
     </div>
   </div>
 </WikiLayout>
