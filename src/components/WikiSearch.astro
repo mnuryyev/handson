@@ -4,7 +4,10 @@ const { lang = "ru", searchData = [] } = Astro.props;
 
 <div class="search-wrapper">
   <button id="search-btn" class="search-trigger" type="button">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
     <span>{lang === 'ru' ? 'Поиск по базе...' : 'Search wiki...'}</span>
     <kbd>⌘K</kbd>
   </button>
@@ -20,23 +23,25 @@ const { lang = "ru", searchData = [] } = Astro.props;
 <style>
   .search-wrapper {
     width: 100%;
-    padding: 0 10px;
-    margin-bottom: 0; /* ОТСТУП ОТ ДЕРЕВА ПАПОК */
+    /* Убираем падинги и маржины здесь, так как они заданы в WikiLayout */
+    padding: 0;
+    margin: 0;
   }
 
   .search-trigger {
     width: 100%;
+    height: 40px; /* Фиксированная высота кнопки для стабильности */
     background: #111;
     border: 1px solid #222;
     color: #555;
-    padding: 10px 14px;
+    padding: 0 14px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     gap: 12px;
     cursor: pointer;
     font-size: 0.8rem;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
   }
 
   .search-trigger:hover {
@@ -55,6 +60,7 @@ const { lang = "ru", searchData = [] } = Astro.props;
     border: 1px solid #252525;
   }
 
+  /* Модальное окно */
   .modal {
     position: fixed;
     inset: 0;
@@ -70,7 +76,11 @@ const { lang = "ru", searchData = [] } = Astro.props;
     backdrop-filter: blur(8px);
   }
 
-  .modal.open { opacity: 1; visibility: visible; pointer-events: auto; }
+  .modal.open { 
+    opacity: 1; 
+    visibility: visible; 
+    pointer-events: auto; 
+  }
 
   .modal-content {
     width: 100%;
@@ -82,10 +92,12 @@ const { lang = "ru", searchData = [] } = Astro.props;
     overflow: hidden;
     box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     transform: translateY(-10px);
-    transition: transform 0.2s;
+    transition: transform 0.2s ease;
   }
 
-  .modal.open .modal-content { transform: translateY(0); }
+  .modal.open .modal-content { 
+    transform: translateY(0); 
+  }
 
   #search-input {
     width: 100%;
@@ -98,8 +110,13 @@ const { lang = "ru", searchData = [] } = Astro.props;
     outline: none;
   }
 
-  .results { max-height: 450px; overflow-y: auto; padding: 12px; }
+  .results { 
+    max-height: 450px; 
+    overflow-y: auto; 
+    padding: 12px; 
+  }
 
+  /* Глобальные стили для результатов */
   :global(.result-item) {
     display: block;
     padding: 14px 18px;
@@ -108,11 +125,30 @@ const { lang = "ru", searchData = [] } = Astro.props;
     border-radius: 10px;
     margin-bottom: 4px;
     transition: 0.2s;
+    border: 1px solid transparent;
   }
 
-  :global(.result-item:hover) { background: #111; border: 1px solid #222; }
-  :global(.result-item b) { display: block; color: #3498db; font-size: 1rem; margin-bottom: 4px; }
-  :global(.result-item p) { margin: 0; font-size: 0.85rem; color: #555; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  :global(.result-item:hover) { 
+    background: #111; 
+    border-color: #222;
+    color: #3498db; 
+  }
+
+  :global(.result-item b) { 
+    display: block; 
+    color: #fff; 
+    font-size: 1rem; 
+    margin-bottom: 4px; 
+  }
+
+  :global(.result-item p) { 
+    margin: 0; 
+    font-size: 0.85rem; 
+    color: #555; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+  }
 </style>
 
 <script is:inline define:vars={{ searchData, lang }}>
@@ -121,14 +157,31 @@ const { lang = "ru", searchData = [] } = Astro.props;
   const input = document.getElementById('search-input');
   const resultsDiv = document.getElementById('search-results');
 
-  const openModal = () => { modal.classList.add('open'); setTimeout(() => input.focus(), 50); };
-  const closeModal = () => { modal.classList.remove('open'); input.value = ''; resultsDiv.innerHTML = ''; };
+  const openModal = () => { 
+    modal.classList.add('open'); 
+    setTimeout(() => input.focus(), 50); 
+  };
+  
+  const closeModal = () => { 
+    modal.classList.remove('open'); 
+    input.value = ''; 
+    resultsDiv.innerHTML = ''; 
+  };
 
-  btn.onclick = (e) => { e.stopPropagation(); openModal(); };
-  modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+  btn.onclick = (e) => { 
+    e.stopPropagation(); 
+    openModal(); 
+  };
+  
+  modal.onclick = (e) => { 
+    if (e.target === modal) closeModal(); 
+  };
 
   window.onkeydown = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); modal.classList.contains('open') ? closeModal() : openModal(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { 
+      e.preventDefault(); 
+      modal.classList.contains('open') ? closeModal() : openModal(); 
+    }
     if (e.key === 'Escape') closeModal();
   };
 
@@ -140,22 +193,22 @@ const { lang = "ru", searchData = [] } = Astro.props;
     const filtered = searchData
       .filter(item => 
         item.title.toLowerCase().includes(query) || 
-        (item.content && item.content.includes(query)) // УМНЫЙ ПОИСК ПО ТЕКСТУ
+        (item.content && item.content.toLowerCase().includes(query))
       )
       .slice(0, 15);
 
     if (filtered.length === 0) {
-      resultsDiv.innerHTML = `<div style="padding: 30px; color: #333; text-align: center;">Ничего не найдено</div>`;
+      resultsDiv.innerHTML = `<div style="padding: 30px; color: #333; text-align: center;">${lang === 'ru' ? 'Ничего не найдено' : 'No results found'}</div>`;
       return;
     }
 
     filtered.forEach(item => {
       const a = document.createElement('a');
       a.className = 'result-item';
-      const finalUrl = `/handson/${item.slug}`;
+      // Проверяем наличие префикса в slug
+      const finalUrl = item.slug.startsWith('handson') ? `/${item.slug}` : `/handson/${item.slug}`;
       a.href = finalUrl;
       
-      // Подсвечиваем превью, если нашли слово в тексте
       let snippet = item.content ? item.content.substring(0, 80) + '...' : '';
       
       a.innerHTML = `
