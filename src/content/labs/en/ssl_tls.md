@@ -2,7 +2,7 @@
 title: "SSL/TLS. Analysis of Secure Connection Establishment Process"
 description: "In this work, we'll examine the SSL/TLS protocol, check real server configurations for vulnerabilities, and reproduce the consequences of using outdated protocol versions"
 image: "/images/ssl_tls_sec/main.jpg"
-date: "March 18, 2026"
+date: "2026-03-18"
 ---
 
 ## Introduction
