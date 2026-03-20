@@ -2,7 +2,7 @@
 title: "Year of the Rabbit - TryHackMe (Easy)"
 description: "Analysis of attack on TryHackMe machine: reconnaissance, searching for hidden resources, extracting credentials, password cracking, obtaining SSH access, and privilege escalation to root"
 image: "/images/neighbour_thm/thm_main.png"
-date: "March 20, 2026"
+date: "2026-03-20"
 platform: "thm"
 ---
 
