@@ -2,26 +2,24 @@
 import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 import WikiTree from '../../../components/WikiTree.astro';
-import WikiSearch from '../../../components/WikiSearch.astro'; // Импортируем поиск
 
 // 1. Получаем все записи
 const allEntries = await getCollection('wiki');
 
-// 2. Оставляем ТОЛЬКО русские записи (те, что начинаются с ru/)
+// 2. Оставляем ТОЛЬКО русские записи
 const ruEntries = allEntries.filter(item => item.id.startsWith('ru/'));
 
-// --- НОВОЕ: ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА ---
+// 3. ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА (включая контент для полнотекстового поиска)
 const searchData = ruEntries.map(page => ({
-  title: page.data.title || page.id.split('/').pop(),
-  // Формируем чистый путь для ссылок (без расширения)
+  title: page.data.title || page.id.split('/').pop().replace('.md', ''),
+  content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
   slug: `ru/wiki/${page.id.replace(/^ru\//, '').replace(/\.md$/, '')}`
 }));
 
-// 3. Умное построение дерева (без папки "ru" в корне)
+// 4. Построение дерева
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
-    // Отрезаем префикс "ru/" и расширение ".md"
     const cleanId = item.id.replace(/^ru\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
@@ -49,12 +47,8 @@ function buildTree(entries) {
 const fileTree = buildTree(ruEntries);
 ---
 
-<WikiLayout title="База знаний">
-  <div slot="sidebar">
-    <WikiSearch lang="ru" searchData={searchData} />
-    
-    <WikiTree tree={fileTree} currentSlug="" lang="ru" />
-  </div>
+<WikiLayout title="База знаний" lang="ru" searchData={searchData}>
+  <WikiTree slot="sidebar" tree={fileTree} currentSlug="" lang="ru" />
 
   <div class="obsidian-style-empty">
     <div class="welcome-box">
