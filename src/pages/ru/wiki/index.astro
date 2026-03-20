@@ -2,12 +2,20 @@
 import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 import WikiTree from '../../../components/WikiTree.astro';
+import WikiSearch from '../../../components/WikiSearch.astro'; // Импортируем поиск
 
 // 1. Получаем все записи
 const allEntries = await getCollection('wiki');
 
 // 2. Оставляем ТОЛЬКО русские записи (те, что начинаются с ru/)
 const ruEntries = allEntries.filter(item => item.id.startsWith('ru/'));
+
+// --- НОВОЕ: ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА ---
+const searchData = ruEntries.map(page => ({
+  title: page.data.title || page.id.split('/').pop(),
+  // Формируем чистый путь для ссылок (без расширения)
+  slug: `ru/wiki/${page.id.replace(/^ru\//, '').replace(/\.md$/, '')}`
+}));
 
 // 3. Умное построение дерева (без папки "ru" в корне)
 function buildTree(entries) {
@@ -43,12 +51,16 @@ const fileTree = buildTree(ruEntries);
 
 <WikiLayout title="База знаний">
   <div slot="sidebar">
+    <WikiSearch lang="ru" searchData={searchData} />
+    
     <WikiTree tree={fileTree} currentSlug="" lang="ru" />
   </div>
 
   <div class="obsidian-style-empty">
     <div class="welcome-box">
       <div class="icon">🚀</div>
+      <h2>Добро пожаловать в Wiki</h2>
+      <p>Выберите нужный раздел в меню слева или используйте поиск (⌘K).</p>
     </div>
   </div>
 </WikiLayout>
