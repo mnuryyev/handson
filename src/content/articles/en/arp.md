@@ -2,7 +2,7 @@
 title: "ARP Protocol and Data Exchange in Local Networks"
 description: "In this work, we'll take a detailed look at how ARP works, from the principles of ARP request and response exchange, through network traffic analysis using Wireshark"
 image: "/images/arp_net/arp.jpg"
-date: "February 9, 2026"
+date: "2026-02-09"
 ---
 **ARP (Address Resolution Protocol)** is a protocol that helps devices in a local network find each other.
 
