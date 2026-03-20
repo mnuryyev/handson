@@ -2,7 +2,7 @@
 title: "ARP Protocol Vulnerability and MITM Attack Implementation"
 description: "In this work, we'll examine how ARP works: from request exchange and traffic analysis in Wireshark to practical implementation of a MITM attack with data interception"
 image: "/images/arp_spoofing_sec/main.jpg"
-date: "February 12, 2026"
+date: "2026-02-12"
 ---
 **ARP Spoofing** is a **Man-in-the-Middle** type attack based on the peculiarities of the ARP protocol, which lacks authentication mechanisms. The essence of the attack is that an attacker broadcasts fake ARP responses and thereby substitutes the correspondence between IP and MAC addresses in the local network. As a result, the target device starts to consider the attacking machine, for example, as its default gateway, causing all network traffic to go through the attacker's computer. This makes it possible to intercept, analyze, and if necessary, modify transmitted data.
 
