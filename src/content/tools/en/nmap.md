@@ -2,7 +2,7 @@
 title: "Nmap: reconnaissance and scanning"
 description: "In this work, we'll examine how Nmap works, from discovering active hosts and analyzing traffic in Wireshark to practical port and service scanning"
 image: "/images/nmap_tools/nmap.png"
-date: "February 21, 2026"
+date: "2026-02-21"
 ---
 **Nmap** is a freely distributed open-source tool designed for analyzing network infrastructure and assessing its security. The utility is used both when working with individual nodes and when researching large network segments.
 
