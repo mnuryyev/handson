@@ -3,20 +3,20 @@ import { getCollection } from 'astro:content';
 import WikiLayout from '../../../layouts/WikiLayout.astro';
 import WikiTree from '../../../components/WikiTree.astro';
 
-// 1. Get all entries
+
 const allEntries = await getCollection('wiki');
 
-// 2. Filter for English entries only
+
 const enEntries = allEntries.filter(item => item.id.startsWith('en/'));
 
-// 3. SEARCH DATA PREPARATION (Full-text enabled)
+
 const searchData = enEntries.map(page => ({
   title: page.data.title || page.id.split('/').pop().replace('.md', ''),
   content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
   slug: `en/wiki/${page.id.replace(/^en\//, '').replace(/\.md$/, '')}`
 }));
 
-// 4. Tree builder logic
+
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
@@ -50,8 +50,6 @@ const fileTree = buildTree(enEntries);
   <div class="obsidian-style-empty">
     <div class="welcome-box">
       <div class="icon">🚀</div>
-      <h2>Welcome to Wiki</h2>
-      <p>Select a topic from the sidebar or use search (⌘K).</p>
     </div>
   </div>
 </WikiLayout>
