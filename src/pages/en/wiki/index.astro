@@ -6,6 +6,13 @@ import WikiTree from '../../../components/WikiTree.astro';
 const allEntries = await getCollection('wiki');
 const enEntries = allEntries.filter(item => item.id.startsWith('en/'));
 
+// --- ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА (EN INDEX) ---
+const searchData = enEntries.map(page => ({
+  title: page.data.title || page.id.split('/').pop().replace('.md', ''),
+  content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
+  slug: `en/wiki/${page.id.replace(/^en\//, '').replace(/\.md$/, '')}`
+}));
+
 function buildTree(entries) {
   const tree = {};
   entries.forEach(item => {
@@ -29,7 +36,7 @@ function buildTree(entries) {
 const fileTree = buildTree(enEntries);
 ---
 
-<WikiLayout title="Wiki Knowledge Base">
+<WikiLayout title="Wiki Knowledge Base" lang="en" searchData={searchData}>
   <div slot="sidebar">
     <WikiTree tree={fileTree} currentSlug="" lang="en" />
   </div>
@@ -37,6 +44,8 @@ const fileTree = buildTree(enEntries);
   <div class="obsidian-style-empty">
     <div class="welcome-box">
       <div class="icon">🚀</div>
+      <h2>Welcome to Wiki</h2>
+      <p>Select a topic from the sidebar or use search (⌘K).</p>
     </div>
   </div>
 </WikiLayout>
