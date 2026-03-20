@@ -2,7 +2,7 @@
 title: "Corridor - TryHackMe (Easy)"
 description: "Analysis of IDOR vulnerability in the Corridor web application on TryHackMe: demonstrating access control bypass and accessing hidden resources through URL parameter manipulation"
 image: "/images/neighbour_thm/thm_main.png"
-date: "March 19, 2026"
+date: "2026-03-19"
 platform: "thm"
 ---
 
