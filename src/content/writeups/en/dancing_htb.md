@@ -2,7 +2,7 @@
 title: "Dancing - HackTheBox (Easy)"
 description: "Walkthrough of the Dancing machine on HackTheBox: working with SMB protocol, analyzing available shares, using anonymous access, and obtaining the flag through SMB shell."
 image: "/images/meow_htb/htb_main.jpg"
-date: "February 23, 2026"
+date: "2026-02-23"
 platform: "htb"
 ---
 **Dancing** is a simple machine on the HTB platform that provides an opportunity to practice with **SMB (Server Message Block)** vulnerabilities and network service exploitation. In this task, we'll work with the **SMB** protocol, search for available shares, and use various tools to obtain the flag.
