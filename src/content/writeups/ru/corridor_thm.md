@@ -2,7 +2,7 @@
 title: "Corridor - TryHackMe (Easy)"
 description: "Анализ уязвимости IDOR в веб-приложении Corridor на TryHackMe:демонстрация обхода контроля доступа и доступа к скрытым ресурсам через изменение параметров URL"
 image: "/images/neighbour_thm/thm_main.png"
-date: "19 марта 2026"
+date: "2026-03-19"
 platform: "thm"
 ---
 
