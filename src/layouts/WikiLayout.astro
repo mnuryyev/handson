@@ -1,6 +1,6 @@
 ---
 import MainLayout from './MainLayout.astro';
-import WikiSearch from '../components/WikiSearch.astro'; // Импортируем поиск здесь
+import WikiSearch from '../components/WikiSearch.astro';
 
 const { title, lang = "ru", searchData = [] } = Astro.props; 
 ---
@@ -10,9 +10,13 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     <aside class="wiki-sidebar">
       <div class="sidebar-header">Wiki</div>
       
-      {searchData.length > 0 && <WikiSearch lang={lang} searchData={searchData} />}
+      <div class="search-section">
+        {searchData.length > 0 && <WikiSearch lang={lang} searchData={searchData} />}
+      </div>
       
-      <slot name="sidebar" />
+      <div class="tree-section">
+        <slot name="sidebar" />
+      </div>
     </aside>
 
     <article class="wiki-main">
@@ -45,13 +49,24 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 </script>
 
 <style is:global>
+  /* Фикс для модалки, чтобы она не перекрывала экран, когда закрыта */
+  #search-modal {
+    pointer-events: none; /* Игнорируем клики, когда закрыто */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+  #search-modal.open {
+    pointer-events: auto; /* Включаем клики, когда открыто */
+    opacity: 1;
+    visibility: visible;
+  }
+
   /* СТИЛИЗАЦИЯ СКРОЛЛБАРА */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: #0d0d0d; }
   ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: #333; }
-
-  * { scrollbar-width: thin; scrollbar-color: #222 #0d0d0d; }
 
   .markdown-body {
     color: #ccc;
@@ -60,23 +75,6 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     max-width: 900px;
     margin: 0 auto;
   }
-
-  .markdown-body h1, .markdown-body h2, .markdown-body h3 {
-    color: #fff;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-  }
-
-  .markdown-body img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    border: 1px solid #1a1a1a;
-    margin: 24px 0;
-  }
-
-  .markdown-body a { color: #3498db; text-decoration: none; }
-  .markdown-body a:hover { text-decoration: underline; }
 </style>
 
 <style>
@@ -86,15 +84,27 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     height: calc(100vh - 80px);
     background: #0d0d0d;
     overflow: hidden;
+    position: relative;
   }
 
   .wiki-sidebar {
     background: #050505;
     border-right: 1px solid #1a1a1a;
     padding: 20px 10px;
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Сайдбар сам не скроллится, скроллится дерево */
+  }
+
+  .search-section {
+    flex-shrink: 0;
+    margin-bottom: 10px;
+  }
+
+  .tree-section {
+    flex-grow: 1;
+    overflow-y: auto; /* Скроллим только список файлов */
+    padding-right: 5px;
   }
 
   .wiki-main {
@@ -104,29 +114,11 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     scroll-behavior: smooth;
   }
 
-  .content-header {
-    max-width: 900px;
-    margin: 0 auto 40px auto;
-  }
-
-  .content-header h1 {
-    font-size: 2.5rem;
-    color: #fff;
-    margin: 0;
-  }
-
-  .sidebar-header { 
-    font-size: 0.7rem; 
-    color: #444; 
-    margin-bottom: 15px; 
-    padding-left: 10px; 
-    text-transform: uppercase; 
-    letter-spacing: 1.5px; 
-  }
+  .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; }
+  .sidebar-header { font-size: 0.7rem; color: #444; margin-bottom: 15px; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; }
 
   @media (max-width: 768px) {
     .wiki-container { grid-template-columns: 1fr; }
     .wiki-sidebar { display: none; }
-    .wiki-main { padding: 20px; }
   }
 </style>
