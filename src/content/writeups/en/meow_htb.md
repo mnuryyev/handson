@@ -2,7 +2,7 @@
 title: "Meow - HackTheBox (Easy)"
 description: "Walkthrough of the Meow machine on HackTheBox: using Telnet with an empty password to gain access, exploring services, and obtaining the flag on the target machine"
 image: "/images/meow_htb/htb_main.jpg"
-date: "February 22, 2026"
+date: "2026-02-22"
 platform: "htb"
 ---
 **Meow** is one of the simple machines on the HTB platform, which is located in the *Starting Point* section.
