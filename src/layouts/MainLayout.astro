@@ -7,13 +7,11 @@ const base = import.meta.env.BASE_URL;
 const { title } = Astro.props;
 const { pathname } = Astro.url;
 
-// Определяем текущий язык для меню (ru по умолчанию)
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
-// Переводы для навигации
 const nav = {
   ru: {
-    articles: 'Сети и администрирование',
+    articles: 'Сети',
     labs: 'Безопасность',
     projects: 'Проекты',
     writeups: 'Writeups',
@@ -21,7 +19,7 @@ const nav = {
     wiki: 'Wiki',
   },
   en: {
-    articles: 'Networks & Administration',
+    articles: 'Networks',
     labs: 'Security',
     projects: 'Projects',
     writeups: 'Writeups',
@@ -40,20 +38,25 @@ const t = nav[lang];
     <title>{title}</title>
   </head>
   <body>
-   <nav class="navbar">
+    <nav class="navbar">
       <div class="container nav-wrapper">
         <div class="nav-logo">
           <a href={`${base}${lang}/`}>HANDS<span>.ON</span></a>
         </div>
 
-        <ul class="nav-links">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <ul class="nav-links" id="nav-menu">
           <li><a href={`${base}${lang}/articles/1`}>{t.articles}</a></li>
           <li><a href={`${base}${lang}/labs/1`}>{t.labs}</a></li>
           <li><a href={`${base}${lang}/writeups`}>{t.writeups}</a></li>
           <li><a href={`${base}${lang}/tools/1`}>{t.tools}</a></li>
           <li><a href={`${base}${lang}/projects`}>{t.projects}</a></li>
           <li><a href={`${base}${lang}/wiki`}>{t.wiki}</a></li>
-          
           
           <li class="nav-actions">
             <LangSwitcher />
@@ -70,6 +73,19 @@ const t = nav[lang];
     </main>
 
     <Footer lang={lang} />
+
+    <script is:inline>
+      const menuToggle = document.getElementById('menu-toggle');
+      const navMenu = document.getElementById('nav-menu');
+
+      if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => {
+          menuToggle.classList.toggle('is-active');
+          navMenu.classList.toggle('is-open');
+          document.body.classList.toggle('menu-open'); // Запрет скролла при открытом меню
+        });
+      }
+    </script>
   </body>
 </html>
 
@@ -83,6 +99,10 @@ const t = nav[lang];
     color: #fff;
     font-family: system-ui, -apple-system, sans-serif;
   }
+
+  body.menu-open {
+    overflow: hidden;
+  }
   
   .main-content {
     flex: 1;
@@ -93,11 +113,11 @@ const t = nav[lang];
 
   .navbar {
     border-bottom: 1px solid #1a1a1a;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
   }
 
   .container {
@@ -146,7 +166,7 @@ const t = nav[lang];
   }
 
   .nav-actions {
-    padding: 0 10px;
+    padding: 0 15px;
     border-left: 1px solid #222;
     border-right: 1px solid #222;
   }
@@ -159,48 +179,64 @@ const t = nav[lang];
     font-size: 0.9rem;
   }
 
-  .btn-projects:hover {
-    background: var(--accent) !important;
-    color: #fff !important;
+  /* --- СТИЛИ БУРГЕРА --- */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
   }
 
-  /* --- АДАПТИВНАЯ ВЕРСТКА ДЛЯ МОБИЛЬНЫХ --- */
+  .menu-toggle .bar {
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+  }
 
-  @media (max-width: 768px) {
-    .nav-wrapper {
-      flex-direction: column; /* Элементы один под другим */
-      height: auto;
-      padding: 20px 0;
-      gap: 15px;
-    }
+  /* Анимация крестика */
+  .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
+  .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+  /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+  @media (max-width: 992px) {
+    .menu-toggle { display: flex; }
 
     .nav-links {
-      flex-wrap: wrap; /* Разрешаем перенос ссылок на новую строку */
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      height: 100vh;
+      background: #000;
+      flex-direction: column;
       justify-content: center;
-      gap: 15px;
+      gap: 30px;
+      transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1050;
+    }
+
+    .nav-links.is-open {
+      right: 0;
+    }
+
+    .nav-links a {
+      font-size: 1.4rem;
     }
 
     .nav-actions {
-      border: none; /* Убираем линии по бокам на мобилках */
-      padding: 0;
+      border: none;
+      padding: 20px 0;
     }
 
-    .main-content {
-      padding-top: 20px;
-    }
-
-    /* Делаем все сетки (grid) на сайте в одну колонку */
-    .grid {
-      grid-template-columns: 1fr !important;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .nav-links a {
-      font-size: 0.85rem; /* Еще чуть меньше шрифт для совсем маленьких экранов */
-    }
-    .nav-logo a {
-      font-size: 1.2rem;
-    }
+    .main-content { padding-top: 20px; }
   }
 </style>
