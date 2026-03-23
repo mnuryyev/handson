@@ -62,7 +62,12 @@ function buildTree(entries) {
 const fileTree = buildTree(ruEntriesForSidebar);
 ---
 
-<WikiLayout title={entry.data.title} lang="ru" searchData={searchData}>
+<WikiLayout 
+  title={entry.data.title} 
+  date={entry.data.date} 
+  lang="ru" 
+  searchData={searchData}
+>
   <div slot="sidebar">
     <WikiTree tree={fileTree} currentSlug={currentSlug} lang="ru" />
   </div>
