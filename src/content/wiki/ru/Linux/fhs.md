@@ -1,8 +1,14 @@
+---
+title: "Файловая система Linux (FHS)"
+description: "Тестовая страница для проверки медиа-контента на русском"
+date: "19 марта 2026"
+---
+
 # Файловая система Linux (FHS)
 
-**Filesystem Hierarchy Standard** — стандарт, описывающий структуру директорий и их содержимое в Linux-системах. Определяет, где хранятся бинарные файлы, конфиги, логи, временные данные и многое другое.
+**Filesystem Hierarchy Standard** - стандарт, описывающий структуру директорий и их содержимое в Linux-системах. Определяет, где хранятся бинарные файлы, конфиги, логи, временные данные и многое другое.
 
-> 📌 Текущая версия стандарта: **FHS 3.0** (2015). Поддерживается Linux Foundation.
+> Текущая версия стандарта: **FHS 3.0** (2015). Поддерживается Linux Foundation.
 
 ---
 
@@ -61,7 +67,7 @@ ls /boot
 | `grub/` | Конфиги загрузчика GRUB |
 | `System.map-*` | Таблица символов ядра |
 
-> ⚠️ Никогда не удаляй файлы из `/boot` без необходимости — система не загрузится.
+> Никогда не удалять файлы из `/boot` без необходимости — система не загрузится.
 
 ---
 
@@ -268,7 +274,7 @@ ls -la /tmp
 # drwxrwxrwt  — sticky bit (t) — только владелец может удалить свой файл
 ```
 
-> ⚠️ Не храни чувствительные данные в `/tmp` — он доступен всем пользователям системы.
+> Не хранить чувствительные данные в `/tmp` — он доступен всем пользователям системы.
 
 ---
 
@@ -518,6 +524,6 @@ tmpfs         /tmp      tmpfs   defaults      0       0
 
 ## Ссылки
 
-- [FHS 3.0 Specification](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) — официальный стандарт
-- [man hier](https://man7.org/linux/man-pages/man7/hier.7.html) — `man 7 hier` в терминале
-- [Linux Foundation](https://www.linuxfoundation.org/) — организация, поддерживающая стандарт
+- [FHS 3.0 Specification](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) - официальный стандарт
+- [man hier](https://man7.org/linux/man-pages/man7/hier.7.html) - `man 7 hier` в терминале
+- [Linux Foundation](https://www.linuxfoundation.org/) - организация, поддерживающая стандарт
