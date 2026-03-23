@@ -20,7 +20,8 @@ const wiki = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/wiki" }),
   schema: z.object({ 
     title: z.string(),
-    description: z.string().optional() 
+    description: z.string().optional(),
+    date: z.string().optional(), // <--- ДОБАВЬ ЭТУ СТРОКУ
   }),
 });
 
