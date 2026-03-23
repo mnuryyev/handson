@@ -87,9 +87,30 @@ const { title, lang = "ru", searchData = [], date } = Astro.props;
 </script>
 
 <style is:global>
-  /* --- ИДЕАЛЬНЫЙ MARKDOWN СТИЛЬ --- */
-  
-  /* Цитаты (Blockquotes) */
+  /* --- ТЕМНЫЙ СКРОЛЛБАР (Chrome, Safari, Edge) --- */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a; /* Почти черный фон дорожки */
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #252525; /* Темно-серый ползунок */
+    border-radius: 10px;
+    border: 2px solid #0a0a0a; /* Отступ вокруг ползунка */
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #333; /* Чуть светлее при наведении */
+  }
+
+  /* Для Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #252525 #0a0a0a;
+  }
+
+  /* --- СТИЛИ MARKDOWN --- */
   .markdown-body blockquote {
     margin: 24px 0;
     padding: 16px 24px;
@@ -100,45 +121,31 @@ const { title, lang = "ru", searchData = [], date } = Astro.props;
     border-radius: 0 8px 8px 0;
   }
 
-  /* Таблицы */
   .markdown-body table {
     width: 100%;
     border-collapse: collapse;
     margin: 25px 0;
-    font-size: 0.95rem;
-    overflow: hidden;
     border-radius: 8px;
     border: 1px solid #222;
+    overflow: hidden;
   }
-  .markdown-body th {
-    background: #111;
-    color: #fff;
-    text-align: left;
-    padding: 12px 15px;
-    border-bottom: 2px solid #222;
-  }
-  .markdown-body td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #1a1a1a;
-    color: #ccc;
-  }
-  .markdown-body tr:hover { background: rgba(255,255,255,0.02); }
+  .markdown-body th { background: #111; color: #fff; text-align: left; padding: 12px 15px; border-bottom: 2px solid #222; }
+  .markdown-body td { padding: 12px 15px; border-bottom: 1px solid #1a1a1a; color: #ccc; }
 
-  /* Ссылки и видео */
-  .markdown-body a { color: #3498db; text-decoration: none; transition: 0.2s; }
-  .markdown-body a:hover { text-decoration: underline; color: #5dade2; }
+  .markdown-body a { color: #3498db; text-decoration: none; }
+  .markdown-body a:hover { text-decoration: underline; }
+
   .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #222; }
 
-  /* Код (Inline) */
   .markdown-body :not(pre) > code {
-    background: #222;
+    background: #1a1a1a;
     color: #e68a00;
     padding: 2px 6px;
     border-radius: 4px;
     font-family: monospace;
+    border: 1px solid #333;
   }
 
-  /* Поиск модалка */
   #search-modal { z-index: 2000; pointer-events: none; opacity: 0; visibility: hidden; transition: 0.2s; }
   #search-modal.open { pointer-events: auto; opacity: 1; visibility: visible; }
 </style>
@@ -152,7 +159,6 @@ const { title, lang = "ru", searchData = [], date } = Astro.props;
     position: relative;
   }
 
-  /* Шапка для мобильного меню */
   .mobile-wiki-header {
     display: none;
     background: #050505;
@@ -187,7 +193,6 @@ const { title, lang = "ru", searchData = [], date } = Astro.props;
   }
 
   .header-divider { border: 0; border-top: 1px solid #222; margin: 20px 0 40px 0; }
-
   .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; letter-spacing: -1px; }
 
   .mobile-toggle-btn {
@@ -217,6 +222,5 @@ const { title, lang = "ru", searchData = [], date } = Astro.props;
     .wiki-sidebar.active { left: 0; }
     .sidebar-overlay.active { display: block; opacity: 1; }
     .wiki-main { padding: 30px 20px; }
-    .content-header h1 { font-size: 1.8rem; }
   }
 </style>
