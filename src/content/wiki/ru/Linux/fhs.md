@@ -1,6 +1,5 @@
 ---
 title: "Файловая система Linux (FHS)"
-description: "Тестовая страница для проверки медиа-контента на русском"
 date: "2026-03-23"
 ---
 
@@ -134,7 +133,7 @@ root:x:0:0:root:/root:/bin/bash
 www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
 ```
 
-> 🔐 `/etc/shadow` читается только root — там хранятся хэши паролей.
+> `/etc/shadow` читается только root — там хранятся хэши паролей.
 
 ---
 
