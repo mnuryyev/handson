@@ -96,7 +96,7 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s, visibility 0.2s;
-    z-index: 2000; /* Выше мобильного меню */
+    z-index: 2000;
   }
   #search-modal.open {
     pointer-events: auto;
@@ -116,6 +116,27 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     font-size: 1.05rem;
     max-width: 900px;
     margin: 0 auto;
+  }
+
+  /* --- СИНИЕ ССЫЛКИ --- */
+  .markdown-body a {
+    color: #3498db; /* Насыщенный синий */
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .markdown-body a:hover {
+    color: #5dade2;
+    text-decoration: underline;
+  }
+
+  /* --- АДАПТИВНЫЙ YOUTUBE --- */
+  .markdown-body iframe {
+    width: 100% !important;
+    aspect-ratio: 16 / 9;
+    height: auto !important;
+    border-radius: 12px;
+    margin: 20px 0;
+    border: 1px solid #1a1a1a;
   }
 </style>
 
@@ -171,7 +192,6 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 
   .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; }
 
-  /* --- МОБИЛЬНЫЕ СТИЛИ --- */
   .mobile-toggle-btn {
     display: none;
     position: fixed;
@@ -207,7 +227,7 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     .wiki-sidebar {
       position: fixed;
       top: 0;
-      left: -280px; /* Спрятан */
+      left: -280px;
       width: 280px;
       height: 100vh;
       z-index: 1050;
