@@ -7,7 +7,11 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 
 <MainLayout title={title}>
   <div class="wiki-container">
-    <aside class="wiki-sidebar">
+    <button id="wiki-mobile-toggle" class="mobile-toggle-btn">
+      <span class="icon">☰</span> Меню
+    </button>
+
+    <aside class="wiki-sidebar" id="wiki-sidebar">
       <div class="sidebar-header">Wiki</div>
       
       <div class="search-section">
@@ -29,10 +33,13 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
         <slot />
       </section>
     </article>
+
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
   </div>
 </MainLayout>
 
 <script is:inline>
+  // Логика внешних ссылок
   function handleExternalLinks() {
     const markdownContainer = document.querySelector('.markdown-body');
     if (!markdownContainer) return;
@@ -46,8 +53,40 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     });
   }
 
+  // Логика мобильного меню
+  function initMobileMenu() {
+    const btn = document.getElementById('wiki-mobile-toggle');
+    const sidebar = document.getElementById('wiki-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    if (!btn || !sidebar) return;
+
+    const toggle = () => {
+      sidebar.classList.toggle('active');
+      overlay?.classList.toggle('active');
+      btn.innerHTML = sidebar.classList.contains('active') ? '✕ Закрыть' : '☰ Меню';
+    };
+
+    btn.addEventListener('click', toggle);
+    overlay?.addEventListener('click', toggle);
+
+    // Закрывать при клике на ссылку
+    sidebar.addEventListener('click', (e) => {
+      if (e.target.closest('a')) {
+        sidebar.classList.remove('active');
+        overlay?.classList.remove('active');
+        btn.innerHTML = '☰ Меню';
+      }
+    });
+  }
+
   handleExternalLinks();
-  document.addEventListener('astro:after-swap', handleExternalLinks);
+  initMobileMenu();
+  
+  document.addEventListener('astro:after-swap', () => {
+    handleExternalLinks();
+    initMobileMenu();
+  });
 </script>
 
 <style is:global>
@@ -57,6 +96,7 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s, visibility 0.2s;
+    z-index: 2000; /* Выше мобильного меню */
   }
   #search-modal.open {
     pointer-events: auto;
@@ -95,13 +135,13 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 0 10px; /* Боковые отступы */
+    padding: 0 10px;
   }
 
   .sidebar-header { 
     font-size: 0.7rem; 
     color: #444; 
-    padding: 20px 10px 10px 10px; /* Отступ сверху */
+    padding: 20px 10px 10px 10px;
     text-transform: uppercase; 
     letter-spacing: 1.5px;
     flex-shrink: 0;
@@ -110,7 +150,7 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
   .search-section {
     flex-shrink: 0;
     padding: 0 5px;
-    height: 50px; /* Фиксируем зону поиска, чтобы не дергалось */
+    height: 50px;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -131,8 +171,64 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 
   .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; }
 
+  /* --- МОБИЛЬНЫЕ СТИЛИ --- */
+  .mobile-toggle-btn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1100;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
   @media (max-width: 768px) {
     .wiki-container { grid-template-columns: 1fr; }
-    .wiki-sidebar { display: none; }
+    
+    .mobile-toggle-btn { display: flex; align-items: center; gap: 8px; }
+
+    .wiki-sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px; /* Спрятан */
+      width: 280px;
+      height: 100vh;
+      z-index: 1050;
+      transition: left 0.3s ease;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    .wiki-sidebar.active {
+      left: 0;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .wiki-main {
+      padding: 30px 20px;
+    }
+    
+    .content-header h1 { font-size: 1.8rem; }
   }
 </style>
