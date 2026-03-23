@@ -2,17 +2,19 @@
 import MainLayout from './MainLayout.astro';
 import WikiSearch from '../components/WikiSearch.astro';
 
-const { title, lang = "ru", searchData = [] } = Astro.props; 
+const { title, lang = "ru", searchData = [], date } = Astro.props; 
 ---
 
 <MainLayout title={title}>
   <div class="wiki-container">
-    <button id="wiki-mobile-toggle" class="mobile-toggle-btn">
-      <span class="icon">☰</span> Меню
-    </button>
+    <div class="mobile-wiki-header">
+      <button id="wiki-mobile-toggle" class="mobile-toggle-btn">
+        <span>☰</span> Разделы Wiki
+      </button>
+    </div>
 
     <aside class="wiki-sidebar" id="wiki-sidebar">
-      <div class="sidebar-header">Wiki</div>
+      <div class="sidebar-header">Wiki Navigation</div>
       
       <div class="search-section">
         {searchData && searchData.length > 0 && (
@@ -28,7 +30,11 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     <article class="wiki-main">
       <header class="content-header">
         <h1>{title}</h1>
+        {date && <time class="post-date">📅 Обновлено: {new Date(date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}</time>}
       </header>
+      
+      <hr class="header-divider" />
+
       <section class="markdown-body">
         <slot />
       </section>
@@ -39,11 +45,9 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 </MainLayout>
 
 <script is:inline>
-  // Логика внешних ссылок
   function handleExternalLinks() {
     const markdownContainer = document.querySelector('.markdown-body');
     if (!markdownContainer) return;
-
     const links = markdownContainer.querySelectorAll('a');
     links.forEach(link => {
       if (link.hostname && link.hostname !== window.location.hostname) {
@@ -53,36 +57,29 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     });
   }
 
-  // Логика мобильного меню
   function initMobileMenu() {
     const btn = document.getElementById('wiki-mobile-toggle');
     const sidebar = document.getElementById('wiki-sidebar');
     const overlay = document.getElementById('sidebar-overlay');
-
     if (!btn || !sidebar) return;
 
     const toggle = () => {
       sidebar.classList.toggle('active');
       overlay?.classList.toggle('active');
-      btn.innerHTML = sidebar.classList.contains('active') ? '✕ Закрыть' : '☰ Меню';
     };
 
     btn.addEventListener('click', toggle);
     overlay?.addEventListener('click', toggle);
-
-    // Закрывать при клике на ссылку
     sidebar.addEventListener('click', (e) => {
       if (e.target.closest('a')) {
         sidebar.classList.remove('active');
         overlay?.classList.remove('active');
-        btn.innerHTML = '☰ Меню';
       }
     });
   }
 
   handleExternalLinks();
   initMobileMenu();
-  
   document.addEventListener('astro:after-swap', () => {
     handleExternalLinks();
     initMobileMenu();
@@ -90,54 +87,60 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
 </script>
 
 <style is:global>
-  /* Фикс для модалки поиска */
-  #search-modal {
-    pointer-events: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s, visibility 0.2s;
-    z-index: 2000;
-  }
-  #search-modal.open {
-    pointer-events: auto;
-    opacity: 1;
-    visibility: visible;
+  /* --- ИДЕАЛЬНЫЙ MARKDOWN СТИЛЬ --- */
+  
+  /* Цитаты (Blockquotes) */
+  .markdown-body blockquote {
+    margin: 24px 0;
+    padding: 16px 24px;
+    color: #999;
+    border-left: 4px solid #3498db;
+    background: rgba(52, 152, 219, 0.05);
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
   }
 
-  /* Скроллбар */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #0d0d0d; }
-  ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #333; }
-
-  .markdown-body {
+  /* Таблицы */
+  .markdown-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.95rem;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #222;
+  }
+  .markdown-body th {
+    background: #111;
+    color: #fff;
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid #222;
+  }
+  .markdown-body td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #1a1a1a;
     color: #ccc;
-    line-height: 1.6;
-    font-size: 1.05rem;
-    max-width: 900px;
-    margin: 0 auto;
+  }
+  .markdown-body tr:hover { background: rgba(255,255,255,0.02); }
+
+  /* Ссылки и видео */
+  .markdown-body a { color: #3498db; text-decoration: none; transition: 0.2s; }
+  .markdown-body a:hover { text-decoration: underline; color: #5dade2; }
+  .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #222; }
+
+  /* Код (Inline) */
+  .markdown-body :not(pre) > code {
+    background: #222;
+    color: #e68a00;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
   }
 
-  /* --- СИНИЕ ССЫЛКИ --- */
-  .markdown-body a {
-    color: #3498db; /* Насыщенный синий */
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .markdown-body a:hover {
-    color: #5dade2;
-    text-decoration: underline;
-  }
-
-  /* --- АДАПТИВНЫЙ YOUTUBE --- */
-  .markdown-body iframe {
-    width: 100% !important;
-    aspect-ratio: 16 / 9;
-    height: auto !important;
-    border-radius: 12px;
-    margin: 20px 0;
-    border: 1px solid #1a1a1a;
-  }
+  /* Поиск модалка */
+  #search-modal { z-index: 2000; pointer-events: none; opacity: 0; visibility: hidden; transition: 0.2s; }
+  #search-modal.open { pointer-events: auto; opacity: 1; visibility: visible; }
 </style>
 
 <style>
@@ -146,8 +149,15 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     grid-template-columns: 260px 1fr; 
     height: calc(100vh - 80px);
     background: #0d0d0d;
-    overflow: hidden;
     position: relative;
+  }
+
+  /* Шапка для мобильного меню */
+  .mobile-wiki-header {
+    display: none;
+    background: #050505;
+    padding: 10px 20px;
+    border-bottom: 1px solid #1a1a1a;
   }
 
   .wiki-sidebar {
@@ -156,99 +166,57 @@ const { title, lang = "ru", searchData = [] } = Astro.props;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: 0 10px;
   }
 
   .sidebar-header { 
-    font-size: 0.7rem; 
-    color: #444; 
-    padding: 20px 10px 10px 10px;
-    text-transform: uppercase; 
-    letter-spacing: 1.5px;
-    flex-shrink: 0;
-  }
-
-  .search-section {
-    flex-shrink: 0;
-    padding: 0 5px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .tree-section {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 0 5px 20px 5px;
+    font-size: 0.7rem; color: #444; padding: 20px;
+    text-transform: uppercase; letter-spacing: 1.5px;
   }
 
   .wiki-main {
-    padding: 40px 80px;
+    padding: 40px 60px;
     overflow-y: auto;
     background: #0d0d0d;
-    scroll-behavior: smooth;
   }
 
-  .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; }
+  .post-date {
+    display: block;
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 10px;
+  }
+
+  .header-divider { border: 0; border-top: 1px solid #222; margin: 20px 0 40px 0; }
+
+  .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; letter-spacing: -1px; }
 
   .mobile-toggle-btn {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1100;
-    background: #1a1a1a;
+    background: #111;
     border: 1px solid #333;
     color: #fff;
-    padding: 10px 18px;
-    border-radius: 12px;
-    font-size: 0.9rem;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 0.85rem;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
   }
 
   .sidebar-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    z-index: 1000; display: none; opacity: 0; transition: 0.3s;
   }
 
   @media (max-width: 768px) {
-    .wiki-container { grid-template-columns: 1fr; }
+    .wiki-container { grid-template-columns: 1fr; height: auto; }
+    .mobile-wiki-header { display: block; position: sticky; top: 0; z-index: 900; }
     
-    .mobile-toggle-btn { display: flex; align-items: center; gap: 8px; }
-
     .wiki-sidebar {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 280px;
-      height: 100vh;
-      z-index: 1050;
-      transition: left 0.3s ease;
-      box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+      position: fixed; top: 0; left: -280px;
+      width: 280px; height: 100vh; z-index: 1050;
+      transition: 0.3s ease;
     }
-
-    .wiki-sidebar.active {
-      left: 0;
-    }
-
-    .sidebar-overlay.active {
-      display: block;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .wiki-main {
-      padding: 30px 20px;
-    }
-    
+    .wiki-sidebar.active { left: 0; }
+    .sidebar-overlay.active { display: block; opacity: 1; }
+    .wiki-main { padding: 30px 20px; }
     .content-header h1 { font-size: 1.8rem; }
   }
 </style>
