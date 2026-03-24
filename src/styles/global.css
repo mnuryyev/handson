@@ -1,184 +1,98 @@
-/* --- ПЕРЕМЕННЫЕ --- */
-:root {
-  --bg-color: #0f0f0f;
-  --card-bg: #1e1e1e;
-  --text-primary: #ffffff;
-  --text-secondary: #aaaaaa;
-  --accent: #3ea6ff;
-  --accent-rgb: 62, 166, 255;
-}
+/* --- СТИЛИ ДЛЯ СТАТЬЕЙ (MARKDOWN) --- */
 
-/* --- БАЗОВЫЕ СТИЛИ --- */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  background-color: var(--bg-color);
+/* Контейнер для контента */
+.markdown-body {
+  line-height: 1.7;
   color: var(--text-primary);
-  font-family: 'Roboto', system-ui, -apple-system, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  overflow-x: hidden; /* Защита от горизонтальной прокрутки */
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  width: 100%;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-h1, h2 {
-  border-bottom: 1px solid #222;
-  padding-bottom: 10px;
-  margin-top: 0;
-}
-
-/* --- НАВИГАЦИЯ (NAVBAR) --- */
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: rgba(15, 15, 15, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #222;
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-}
-
-.nav-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.nav-logo a {
-  font-size: 1.4rem;
-  font-weight: 800;
-  letter-spacing: -1px;
+/* Заголовки внутри статей */
+.markdown-body h1, 
+.markdown-body h2, 
+.markdown-body h3 {
   color: #fff;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #222;
+  padding-bottom: 8px;
 }
 
-.nav-logo span {
+/* Цитаты (теперь везде одинаковые и стильные) */
+.markdown-body blockquote {
+  margin: 20px 0;
+  padding: 10px 20px;
+  color: var(--text-secondary);
+  border-left: 4px solid var(--accent);
+  background: rgba(var(--accent-rgb), 0.05);
+  font-style: italic;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Компактные цитаты, если внутри только одна строка */
+.markdown-body blockquote p {
+  margin: 0;
+}
+
+/* Таблицы как на GitHub */
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  border: 1px solid #222;
+  border-radius: 8px;
+  overflow: hidden;
+  display: block; /* Позволяет таблице скроллиться на мобилках */
+  overflow-x: auto;
+}
+
+.markdown-body th {
+  background: #161616;
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 2px solid #222;
+}
+
+.markdown-body td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #1a1a1a;
+  color: var(--text-secondary);
+}
+
+/* Ссылки в тексте */
+.markdown-body a {
   color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
 }
 
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 32px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
+.markdown-body a:hover {
+  border-bottom-color: var(--accent);
 }
 
-.nav-links a {
-  color: #aaa;
-  font-size: 0.95rem;
-  font-weight: 500;
+/* Списки */
+.markdown-body ul, 
+.markdown-body ol {
+  padding-left: 20px;
+  margin-bottom: 20px;
 }
 
-.nav-links a:hover {
-  color: #fff;
+.markdown-body li {
+  margin-bottom: 8px;
 }
 
-/* Кнопка GitHub / Проекты */
-.btn-projects {
+/* Инлайновый код (выделение слов) */
+.markdown-body :not(pre) > code {
   background: #222;
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: 1px solid #333;
-  color: #fff !important;
-  font-size: 0.9rem;
+  color: #e68a00;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
 }
 
-.btn-projects:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-/* --- СЕТКА КАРТОЧЕК (GRID) --- */
-.grid {
-  display: grid;
-  /* На десктопе карточки по 320px+, на мобилках растягиваются */
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ --- */
-
-
-
-@media (max-width: 900px) {
-  .nav-links {
-    gap: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 15px 0;
-  }
-
-  .nav-wrapper {
-    flex-direction: column; /* Лого сверху, меню снизу */
-    gap: 15px;
-    text-align: center;
-  }
-
-  .nav-links {
-    flex-wrap: wrap; /* Если не влезает в ряд, переносится */
-    justify-content: center;
-    gap: 15px;
-  }
-
-  .nav-links li {
-    margin: 0 5px;
-  }
-
-  h1 { font-size: 1.8rem; }
-  h2 { font-size: 1.4rem; }
-
-  .container {
-    padding: 0 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .nav-links {
-    gap: 10px;
-  }
-  
-  .nav-links a {
-    font-size: 0.85rem;
-  }
-
-  .grid {
-    /* На совсем маленьких экранах только одна колонка */
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .btn-projects {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
+/* Изображения в статьях */
+.markdown-body img {
+  border-radius: 10px;
+  margin: 20px 0;
+  border: 1px solid #222;
 }
