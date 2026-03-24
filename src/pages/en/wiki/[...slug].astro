@@ -5,7 +5,6 @@ import WikiTree from '../../../components/WikiTree.astro';
 
 export async function getStaticPaths() {
   const wikiEntries = await getCollection('wiki');
-  // 1. Берем только английские файлы
   const enEntries = wikiEntries.filter(entry => entry.id.startsWith('en/'));
   
   return enEntries.map(entry => ({
@@ -18,11 +17,9 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const allEntries = await getCollection('wiki');
 
-// 2. Оставляем только английские записи для дерева и поиска
 const enEntriesForSidebar = allEntries.filter(item => item.id.startsWith('en/'));
 const currentSlug = Astro.params.slug || '';
 
-// --- ПОДГОТОВКА ДАННЫХ ДЛЯ ПОИСКА (EN) ---
 const searchData = enEntriesForSidebar.map(page => ({
   title: page.data.title || page.id.split('/').pop().replace('.md', ''),
   content: page.body.toLowerCase().replace(/[#*`>]/g, '').substring(0, 500),
@@ -35,22 +32,15 @@ function buildTree(entries) {
     const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
-
     parts.forEach((part, index) => {
       if (!current[part]) {
         if (index === parts.length - 1) {
-          current[part] = { 
-            type: 'file', 
-            title: item.data?.title || part, 
-            slug: cleanId 
-          };
+          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
         } else {
           current[part] = { type: 'folder', children: {} };
         }
       }
-      if (current[part].type === 'folder') {
-        current = current[part].children;
-      }
+      if (current[part].type === 'folder') current = current[part].children;
     });
   });
   return tree;
@@ -59,18 +49,18 @@ function buildTree(entries) {
 const fileTree = buildTree(enEntriesForSidebar);
 ---
 
-<WikiLayout title={entry.data.title} lang="en" searchData={searchData}>
+<WikiLayout 
+  title={entry.data.title} 
+  date={entry.data.date} 
+  lang="en" 
+  searchData={searchData}
+>
   <div slot="sidebar">
     <WikiTree tree={fileTree} currentSlug={currentSlug} lang="en" />
   </div>
-  
   <Content />
 </WikiLayout>
 
 <style>
-  .wiki-tree-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+  .wiki-tree-container { display: flex; flex-direction: column; gap: 2px; }
 </style>
