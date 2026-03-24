@@ -521,6 +521,6 @@ tmpfs         /tmp      tmpfs   defaults      0       0
 
 ## References
 
-- [FHS 3.0 Specification](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) — the official standard
-- [man hier](https://man7.org/linux/man-pages/man7/hier.7.html) — run `man 7 hier` in your terminal
-- [Linux Foundation](https://www.linuxfoundation.org/) — the organization that maintains the standard
+- [FHS 3.0 Specification](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) - the official standard
+- [man hier](https://man7.org/linux/man-pages/man7/hier.7.html) - run `man 7 hier` in your terminal
+- [Linux Foundation](https://www.linuxfoundation.org/) - the organization that maintains the standard
