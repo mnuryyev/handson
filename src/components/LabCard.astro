@@ -3,84 +3,92 @@
 const { title, desc, url, image, date } = Astro.props;
 
 // 2. Получаем базовый путь проекта
-const base = import.meta.env.BASE_URL; // Это "/handson/"
+const base = import.meta.env.BASE_URL; // Например "/handson/"
 
-// 3. Определяем текущий язык
-const { pathname } = Astro.url;
-const isEn = pathname.includes('/en/');
-const lang = isEn ? 'en' : 'ru';
-
-// 4. Формируем правильную ссылку для карточки
-// Убираем начальный слеш у url, если он есть, и клеим к base + lang
+// 3. Формируем ссылки
 const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
 const finalUrl = `${base}${cleanUrl}`;
 
-// 5. Формируем путь к картинке
-// Если картинка лежит в public/images/lab.jpg, то image должен быть "images/lab.jpg"
 const cleanImage = image && image.startsWith('/') ? image.slice(1) : image;
 const finalImage = image ? `${base}${cleanImage}` : null;
+
+// 4. Форматируем дату (YYYY-MM-DD)
+const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-01-01";
 ---
 
-<a href={finalUrl} class="yt-video-card">
+<a href={finalUrl} class="lab-card">
   <div class="thumbnail">
     {finalImage ? (
-      <img src={finalImage} alt={title} class="card-img" />
+      <img src={finalImage} alt={title} class="card-img" loading="lazy" />
     ) : (
-      <div class="no-img">LAB PREVIEW</div>
+      <div class="no-img"><span>LAB PREVIEW</span></div>
     )}
+    <div class="card-overlay"></div>
   </div>
 
   <div class="meta">
-    <h3 class="title">{title}</h3>
+    <div class="header-row">
+      <h3 class="title">{title}</h3>
+    </div>
     <p class="description">{desc}</p>
-    <span class="date">{date || "2026"}</span>
+    <div class="footer-row">
+      <span class="date">📅 {formattedDate}</span>
+      <span class="read-more">View Lab →</span>
+    </div>
   </div>
 </a>
 
 <style>
-  .yt-video-card {
+  .lab-card {
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 8px;
-    border-radius: 16px;
-    border: 1px solid #424141;
-    transition: all 0.2s ease-in-out;
-    background: transparent;
+    background: #0f0f0f;
+    border-radius: 12px;
+    border: 1px solid #222;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
   }
 
   /* Эффект при наведении */
-  .yt-video-card:hover {
-    background: #1a1a1a;
-    border-color: #333;
-    transform: translateY(-4px);
+  .lab-card:hover {
+    border-color: var(--accent, #3ea6ff);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+                0 0 20px rgba(var(--accent-rgb, 62, 166, 255), 0.1);
   }
 
   .thumbnail {
     width: 100%;
     aspect-ratio: 16 / 9;
     background: #1a1a1a;
-    border-radius: 12px;
+    position: relative;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    outline: 1px solid rgba(255, 255, 255, 0.05);
-    outline-offset: -1px;
   }
 
   .card-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; 
-    object-position: center; 
-    transition: transform 0.3s ease;
+    object-fit: cover;
+    transition: transform 0.5s ease;
   }
 
-  .yt-video-card:hover .card-img {
-    transform: scale(1.05);
+  .lab-card:hover .card-img {
+    transform: scale(1.1);
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .lab-card:hover .card-overlay {
+    opacity: 1;
   }
 
   .no-img {
@@ -89,41 +97,67 @@ const finalImage = image ? `${base}${cleanImage}` : null;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #222;
-    color: #444;
+    background: #111;
+    color: #333;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
     font-weight: bold;
   }
 
   .meta {
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 0 4px 10px;
+    flex-grow: 1;
   }
 
   .title {
-    margin: 0;
-    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    font-size: 1.15rem;
     color: #fff;
     font-weight: 600;
-    line-height: 1.4;
-    display: block; 
-    margin-bottom: 6px;
+    line-height: 1.3;
   }
 
   .description {
-    margin: 0;
+    margin: 0 0 16px 0;
     font-size: 0.9rem;
     color: #aaa;
     line-height: 1.5;
-    white-space: normal; 
-    overflow: visible;
-    display: block;
-    margin-bottom: 8px;
+    /* Ограничение текста 3 строками */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #1a1a1a;
   }
 
   .date {
+    font-size: 0.75rem;
+    color: #555;
+    font-family: monospace;
+  }
+
+  .read-more {
     font-size: 0.8rem;
-    color: #666;
+    color: var(--accent, #3ea6ff);
+    font-weight: 500;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .lab-card:hover .read-more {
+    opacity: 1;
+    transform: translateX(0);
   }
 </style>
