@@ -82,7 +82,7 @@ const t = nav[lang];
         menuToggle.addEventListener('click', () => {
           menuToggle.classList.toggle('is-active');
           navMenu.classList.toggle('is-open');
-          document.body.classList.toggle('menu-open'); // Запрет скролла при открытом меню
+          document.body.classList.toggle('menu-open');
         });
       }
     </script>
@@ -90,16 +90,7 @@ const t = nav[lang];
 </html>
 
 <style is:global>
-  body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #000;
-    color: #fff;
-    font-family: system-ui, -apple-system, sans-serif;
-  }
-
+  /* Здесь ТОЛЬКО уникальные стили для этого файла, без дублей из global.css */
   body.menu-open {
     overflow: hidden;
   }
@@ -111,75 +102,13 @@ const t = nav[lang];
     padding-bottom: 60px;
   }
 
-  .navbar {
-    border-bottom: 1px solid #1a1a1a;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(12px);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .nav-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    gap: 25px;
-    margin: 0;
-    padding: 0;
-  }
-
-  .nav-links a {
-    text-decoration: none;
-    color: #888;
-    font-weight: 500;
-    transition: 0.3s;
-    font-size: 0.95rem;
-  }
-
-  .nav-links a:hover {
-    color: #fff;
-  }
-
-  .nav-logo a {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #fff;
-    text-decoration: none;
-  }
-
-  .nav-logo span {
-    color: var(--accent);
-  }
-
   .nav-actions {
     padding: 0 15px;
     border-left: 1px solid #222;
     border-right: 1px solid #222;
   }
 
-  .btn-projects {
-    background: #fff;
-    color: #000 !important;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-  }
-
-  /* --- СТИЛИ БУРГЕРА --- */
+  /* СТИЛИ БУРГЕРА */
   .menu-toggle {
     display: none;
     flex-direction: column;
@@ -201,12 +130,10 @@ const t = nav[lang];
     transition: all 0.3s ease-in-out;
   }
 
-  /* Анимация крестика */
   .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
   .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
   .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-  /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
   @media (max-width: 992px) {
     .menu-toggle { display: flex; }
 
@@ -216,7 +143,7 @@ const t = nav[lang];
       right: -100%;
       width: 100%;
       height: 100vh;
-      background: #000;
+      background: #0b0b0b;
       flex-direction: column;
       justify-content: center;
       gap: 30px;
@@ -236,7 +163,5 @@ const t = nav[lang];
       border: none;
       padding: 20px 0;
     }
-
-    .main-content { padding-top: 20px; }
   }
 </style>
