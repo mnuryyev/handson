@@ -456,7 +456,7 @@ lsof /var/log/syslog      # кто открыл файл
 
 ---
 
-## Права доступа и владение
+## Права доступа и владение - подробно [здесь](https://mnuryyev.github.io/handson/ru/wiki/linux/02_permissions/)
 
 ```bash
 # FHS регулирует не только расположение, но и права
