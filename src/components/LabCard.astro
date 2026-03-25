@@ -26,8 +26,13 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
 </a>
 
 <style>
+  .lab-card,
+  .lab-card:hover,
+  .lab-card * {
+    text-decoration: none !important;
+  }
+
   .lab-card {
-    text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
@@ -55,7 +60,6 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     flex-shrink: 0;
   }
 
-  /* !important чтобы перебить global.css */
   .lab-card .card-img {
     position: absolute !important;
     inset: 0 !important;
