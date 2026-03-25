@@ -113,82 +113,120 @@ a {
   margin-top: 20px;
 }
 
-/* --- СТИЛИ ДЛЯ СТАТЕЙ (Markdown-style) --- */
+/* --- СТИЛИ ДЛЯ СТАТЕЙ (Wiki-Markdown Style) --- */
+
 .markdown-content {
-  line-height: 1.6;
-  color: var(--text-primary);
+  line-height: 1.7;
+  color: #ccc; /* Светло-серый текст для чтения */
   word-wrap: break-word;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-/* Заголовки с линиями как в GitHub */
+/* Заголовки: Жирные, с коричневой линией */
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3 {
+  font-weight: 800; /* Максимально жирный */
+  color: #fff;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
 .markdown-content h1, 
 .markdown-content h2 {
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid #21262d;
-  margin-top: 24px;
-  margin-bottom: 16px;
-  font-weight: 600;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid #3d2b1f; /* Коричневый разделитель */
 }
 
-/* Стилизация цитат (>) */
+/* Цитаты (>) в стиле старой бумаги */
 .markdown-content blockquote {
-  padding: 0 1em;
-  color: var(--text-secondary);
-  border-left: 0.25em solid var(--accent);
-  margin: 0 0 16px 0;
-  background: rgba(62, 166, 255, 0.05);
-  padding: 10px 20px;
-  border-radius: 0 6px 6px 0;
+  margin: 20px 0;
+  padding: 15px 25px;
+  color: #b3b3b3;
+  border-left: 4px solid #e68a00; /* Оранжево-коричневый акцент */
+  background: rgba(230, 138, 0, 0.05); /* Легкий оттенок */
+  font-style: italic;
+  border-radius: 0 12px 12px 0;
 }
 
-/* Таблицы как в GitHub */
+/* ТАБЛИЦЫ: Строгие, как в энциклопедии */
 .markdown-content table {
-  display: block;
   width: 100%;
-  width: max-content;
-  max-width: 100%;
-  overflow: auto;
-  border-spacing: 0;
   border-collapse: collapse;
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin: 30px 0;
+  border: 1px solid #222;
+  background: #0d0d0d;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
-.markdown-content table th,
+.markdown-content table th {
+  background: #1a1512; /* Темно-коричневый подтон */
+  color: #e68a00;      /* Оранжевое выделение заголовков */
+  padding: 14px;
+  border-bottom: 2px solid #333;
+  text-align: left;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
 .markdown-content table td {
-  padding: 6px 13px;
-  border: 1px solid #30363d;
+  padding: 12px 14px;
+  border-bottom: 1px solid #1a1a1a;
+  color: #ccc;
 }
 
-.markdown-content table tr {
-  background-color: var(--bg-color);
-  border-top: 1px solid #21262d;
+.markdown-content table tr:hover {
+  background: #111; /* Подсветка строки при наведении */
 }
 
-.markdown-content table tr:nth-child(2n) {
-  background-color: #161b22;
-}
-
-/* Код в тексте `code` */
-.markdown-content code:not(pre code) {
-  padding: 0.2em 0.4em;
-  margin: 0;
-  font-size: 85%;
-  background-color: rgba(110, 118, 129, 0.4);
+/* Код в тексте `code` - Коричневый/Оранжевый */
+.markdown-content :not(pre) > code {
+  background: #1a1512;
+  color: #ff9d00;
+  padding: 3px 8px;
   border-radius: 6px;
-  font-family: ui-monospace, monospace;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  border: 1px solid #3d2b1f;
 }
 
 /* Списки */
 .markdown-content ul, 
 .markdown-content ol {
-  padding-left: 2em;
-  margin-bottom: 16px;
+  padding-left: 1.5em;
+  margin-bottom: 20px;
+}
+
+.markdown-content li {
+  margin-bottom: 8px;
+}
+
+.markdown-content li::marker {
+  color: #e68a00; /* Цветные точки списка */
+  font-weight: bold;
+}
+
+/* Ссылки */
+.markdown-content a {
+  color: #4a9eff;
+  text-decoration: none;
+  border-bottom: 1px dashed #4a9eff;
+  transition: 0.2s;
+}
+
+.markdown-content a:hover {
+  color: #e68a00;
+  border-bottom-style: solid;
 }
 
 /* Изображения */
 .markdown-content img {
-  border-radius: 8px;
-  border: 1px solid #30363d;
-  margin: 20px 0;
+  border-radius: 12px;
+  border: 1px solid #222;
+  margin: 30px auto;
+  display: block;
+  max-width: 100%;
 }
