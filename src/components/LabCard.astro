@@ -1,21 +1,12 @@
 ---
-// 1. Получаем данные из пропсов
 const { title, desc, url, image, date } = Astro.props;
-
-// 2. Получаем базовый путь проекта
-const base = import.meta.env.BASE_URL; // Например "/handson/"
-
-// 3. Формируем ссылки
+const base = import.meta.env.BASE_URL;
 const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
 const finalUrl = `${base}${cleanUrl}`;
-
 const cleanImage = image && image.startsWith('/') ? image.slice(1) : image;
 const finalImage = image ? `${base}${cleanImage}` : null;
-
-// 4. Форматируем дату (YYYY-MM-DD)
 const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-01-01";
 ---
-
 <a href={finalUrl} class="lab-card">
   <div class="thumbnail">
     {finalImage ? (
@@ -25,7 +16,6 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     )}
     <div class="card-overlay"></div>
   </div>
-
   <div class="meta">
     <div class="header-row">
       <h3 class="title">{title}</h3>
@@ -36,7 +26,6 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     </div>
   </div>
 </a>
-
 <style>
   .lab-card {
     text-decoration: none;
@@ -51,23 +40,27 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     position: relative;
   }
 
-  /* Эффект при наведении */
   .lab-card:hover {
     border-color: var(--accent, #3ea6ff);
     transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
                 0 0 20px rgba(var(--accent-rgb, 62, 166, 255), 0.1);
   }
 
   .thumbnail {
     width: 100%;
-    aspect-ratio: 16 / 9;
-    background: #1a1a1a;
+    /* ИСПРАВЛЕНИЕ: используем padding-top вместо aspect-ratio */
     position: relative;
+    padding-top: 56.25%; /* 16:9 */
+    background: #1a1a1a;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   .card-img {
+    /* ИСПРАВЛЕНИЕ: абсолютное позиционирование внутри padding-контейнера */
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -91,8 +84,8 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
   }
 
   .no-img {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +116,6 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     font-size: 0.9rem;
     color: #aaa;
     line-height: 1.5;
-    /* Ограничение текста 3 строками */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
