@@ -113,87 +113,88 @@ a {
   margin-top: 20px;
 }
 
-/* --- СТИЛИ ДЛЯ СТАТЕЙ (Wiki-Markdown Style) --- */
+/* --- СТИЛИ ДЛЯ СТАТЕЙ (Wiki-Blue Style) --- */
 
 .markdown-content {
   line-height: 1.7;
-  color: #ccc; /* Светло-серый текст для чтения */
+  color: #d1d5db; /* Мягкий светло-серый для текста */
   word-wrap: break-word;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Заголовки: Жирные, с коричневой линией */
+/* ЗАГОЛОВКИ: Очень жирные с синим акцентом */
 .markdown-content h1, 
 .markdown-content h2, 
 .markdown-content h3 {
-  font-weight: 800; /* Максимально жирный */
-  color: #fff;
+  font-weight: 800; 
+  color: #ffffff;
   margin-top: 32px;
   margin-bottom: 16px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .markdown-content h1, 
 .markdown-content h2 {
   padding-bottom: 0.4em;
-  border-bottom: 2px solid #03a1fc; /* Коричневый разделитель */
+  border-bottom: 2px solid #1a2638; /* Глубокий темно-синий разделитель */
 }
 
-/* Цитаты (>) в стиле старой бумаги */
+/* ЦИТАТЫ (>) в стиле Soft Blue */
 .markdown-content blockquote {
-  margin: 12px 0;
-  padding: 2px 12px;
-  color: #b3b3b3;
-  border-left: 4px solid #03a1fc; /* Оранжево-коричневый акцент */
-  background: rgba(230, 138, 0, 0.05); /* Легкий оттенок */
+  margin: 20px 0;
+  padding: 15px 25px;
+  color: #94a3b8;
+  border-left: 4px solid #3498db; /* Яркий синий акцент */
+  background: rgba(52, 152, 219, 0.08); /* Очень мягкий синий фон */
   font-style: italic;
   border-radius: 0 12px 12px 0;
 }
 
-/* ТАБЛИЦЫ: Строгие, как в энциклопедии */
+/* ТАБЛИЦЫ: Строгие, в темно-синих тонах */
 .markdown-content table {
   width: 100%;
   border-collapse: collapse;
   margin: 30px 0;
-  border: 1px solid #222;
-  background: #1a1c1c;
+  border: 1px solid #1e293b; /* Граница "Slate Blue" */
+  background: #0a0a0a;
   overflow: hidden;
   border-radius: 8px;
 }
 
 .markdown-content table th {
-  background: #1a1512; /* Темно-коричневый подтон */
-  color: #155163;      /* Оранжевое выделение заголовков */
+  background: #111827; /* Полночно-синий подтон */
+  color: #3498db;      /* Синий заголовок */
   padding: 14px;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid #1e293b;
   text-align: left;
-  font-weight: 500;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
 }
 
 .markdown-content table td {
   padding: 12px 14px;
-  border-bottom: 1px solid #1a1a1a;
-  color: #ccc;
+  border-bottom: 1px solid #111827;
+  color: #cbd5e1;
 }
 
 .markdown-content table tr:hover {
-  background: #111; /* Подсветка строки при наведении */
+  background: #0f172a; /* Темно-синяя подсветка строки */
 }
 
-/* Код в тексте `code` - Коричневый/Оранжевый */
+/* КОД: Внутри текста `code` */
 .markdown-content :not(pre) > code {
-  background: #1a1512;
-  color: #ff9d00;
+  background: #111827;
+  color: #60a5fa; /* Небесно-синий цвет кода */
   padding: 3px 8px;
   border-radius: 6px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  border: 1px solid #155163;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  border: 1px solid #1e293b;
 }
 
-/* Списки */
+/* СПИСКИ: С синими маркерами */
 .markdown-content ul, 
 .markdown-content ol {
   padding-left: 1.5em;
@@ -205,28 +206,27 @@ a {
 }
 
 .markdown-content li::marker {
-  color: #155163; /* Цветные точки списка */
-  font-weight: bold;
+  color: #3498db; /* Синие точки/цифры */
+  font-weight: 900;
 }
 
-/* Ссылки */
+/* ССЫЛКИ: Чистый синий */
 .markdown-content a {
-  color: #4a9eff;
+  color: #3498db;
   text-decoration: none;
-  border-bottom: 1px dashed #4a9eff;
   transition: 0.2s;
+  font-weight: 500;
 }
 
 .markdown-content a:hover {
-  color: #4a9eff;
-  border-bottom-style: solid;
+  color: #60a5fa;
+  text-decoration: underline;
 }
 
-/* Изображения */
+/* ИЗОБРАЖЕНИЯ */
 .markdown-content img {
   border-radius: 12px;
-  border: 1px solid #4a9eff;
+  border: 1px solid #1e293b;
   margin: 30px auto;
   display: block;
-  max-width: 100%;
 }
