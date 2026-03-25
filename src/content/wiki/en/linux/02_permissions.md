@@ -1,6 +1,6 @@
 ---
 title: "Linux File Permissions (chmod, chown, umask)"
-date: "2026-03-23"
+date: "2026-03-25"
 ---
 
 File permissions are the foundation of Linux security. Every file and directory has an owner, a group, and a set of permission bits that control who can read, modify, and execute it.
