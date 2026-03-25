@@ -112,3 +112,83 @@ a {
   gap: 24px;
   margin-top: 20px;
 }
+
+/* --- СТИЛИ ДЛЯ СТАТЕЙ (Markdown-style) --- */
+.markdown-content {
+  line-height: 1.6;
+  color: var(--text-primary);
+  word-wrap: break-word;
+}
+
+/* Заголовки с линиями как в GitHub */
+.markdown-content h1, 
+.markdown-content h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #21262d;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* Стилизация цитат (>) */
+.markdown-content blockquote {
+  padding: 0 1em;
+  color: var(--text-secondary);
+  border-left: 0.25em solid var(--accent);
+  margin: 0 0 16px 0;
+  background: rgba(62, 166, 255, 0.05);
+  padding: 10px 20px;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Таблицы как в GitHub */
+.markdown-content table {
+  display: block;
+  width: 100%;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-content table th,
+.markdown-content table td {
+  padding: 6px 13px;
+  border: 1px solid #30363d;
+}
+
+.markdown-content table tr {
+  background-color: var(--bg-color);
+  border-top: 1px solid #21262d;
+}
+
+.markdown-content table tr:nth-child(2n) {
+  background-color: #161b22;
+}
+
+/* Код в тексте `code` */
+.markdown-content code:not(pre code) {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(110, 118, 129, 0.4);
+  border-radius: 6px;
+  font-family: ui-monospace, monospace;
+}
+
+/* Списки */
+.markdown-content ul, 
+.markdown-content ol {
+  padding-left: 2em;
+  margin-bottom: 16px;
+}
+
+/* Изображения */
+.markdown-content img {
+  border-radius: 8px;
+  border: 1px solid #30363d;
+  margin: 20px 0;
+}
