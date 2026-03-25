@@ -104,41 +104,98 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   ::-webkit-scrollbar-thumb:hover { background: #333; }
   * { scrollbar-width: thin; scrollbar-color: #222 #0d0d0d; }
 
-  /* Markdown стили */
-  .markdown-body blockquote {
-    margin: 12px 0;
-    padding: 2px 8px;
-    color: #999;
-    border-left: 4px solid #3498db;
-    background: rgba(52, 152, 219, 0.05);
-    font-style: italic;
-    border-radius: 0 8px 8px 0;
+<style is:global>
+  /* Темный скроллбар */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #0d0d0d; }
+  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 2px solid #0d0d0d; }
+  ::-webkit-scrollbar-thumb:hover { background: #3498db; }
+  * { scrollbar-width: thin; scrollbar-color: #1e293b #0d0d0d; }
+
+  /* --- Wiki Blue Markdown Styles --- */
+  
+  /* Заголовки: Жирные и сочные */
+  .markdown-body h1, 
+  .markdown-body h2, 
+  .markdown-body h3 {
+    font-weight: 800;
+    color: #fff;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
   }
 
+  .markdown-body h1, 
+  .markdown-body h2 {
+    border-bottom: 2px solid #1a2638; /* Темно-синий разделитель */
+    padding-bottom: 0.3em;
+  }
+
+  /* Цитаты */
+  .markdown-body blockquote {
+    margin: 12px 0;
+    padding: 2px 12px;
+    color: #94a3b8;
+    border-left: 4px solid #3498db;
+    background: rgba(52, 152, 219, 0.08);
+    font-style: italic;
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* Таблицы: Строгий Wiki-вид */
   .markdown-body table {
     width: 100%;
     border-collapse: collapse;
     margin: 25px 0;
-    border: 1px solid #222;
+    border: 1px solid #1e293b;
     overflow: hidden;
     border-radius: 8px;
+    background: #0a0a0a;
   }
-  .markdown-body th { background: #1a1a1a; padding: 12px; border-bottom: 2px solid #222; text-align: left; }
-  .markdown-body td { padding: 12px; border-bottom: 1px solid #1a1a1a; color: #ccc; }
+  
+  .markdown-body th { 
+    background: #111827; /* Полночно-синий */
+    color: #3498db; 
+    padding: 14px; 
+    border-bottom: 2px solid #1e293b; 
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .markdown-body td { 
+    padding: 12px; 
+    border-bottom: 1px solid #111827; 
+    color: #cbd5e1; 
+  }
 
-  .markdown-body a { color: #3498db; text-decoration: none; }
-  .markdown-body a:hover { text-decoration: underline; }
+  .markdown-body tr:hover {
+    background: rgba(52, 152, 219, 0.03);
+  }
 
-  .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; }
+  /* Ссылки */
+  .markdown-body a { color: #3498db; text-decoration: none; font-weight: 500; }
+  .markdown-body a:hover { color: #60a5fa; text-decoration: underline; }
 
+  /* Инлайновый код: Маленький и аккуратный */
   .markdown-body :not(pre) > code {
-    background: #1a1a1a;
-    color: #e68a00;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    border: 1px solid #333;
+    background: #111827;
+    color: #60a5fa; /* Синий вместо оранжевого */
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em; /* Уменьшили размер */
+    border: 1px solid #1e293b;
+    vertical-align: middle;
   }
+
+  /* Списки */
+  .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-bottom: 16px; }
+  .markdown-body li { margin-bottom: 6px; }
+  .markdown-body li::marker { color: #3498db; font-weight: bold; }
+
+  /* Видео и Медиа */
+  .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #1e293b; }
 </style>
 
 <style>
