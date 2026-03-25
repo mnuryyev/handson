@@ -247,3 +247,12 @@ a {
   margin: 30px auto;
   display: block;
 }
+
+/* В global.css или в стили markdown */
+.markdown-content img, 
+.markdown-body img {
+  max-width: 100%; /* Чтобы не вылезала за края */
+  height: auto;    /* Чтобы сохраняла пропорции и не сплющивалась */
+  display: block;
+  object-fit: contain; /* Гарантирует, что картинка видна целиком */
+}
