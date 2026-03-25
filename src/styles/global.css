@@ -141,8 +141,8 @@ a {
 
 /* ЦИТАТЫ (>) в стиле Soft Blue */
 .markdown-content blockquote {
-  margin: 20px 0;
-  padding: 15px 25px;
+  margin: 12px 0;
+  padding: 2px 12px;
   color: #94a3b8;
   border-left: 4px solid #3498db; /* Яркий синий акцент */
   background: rgba(52, 152, 219, 0.08); /* Очень мягкий синий фон */
