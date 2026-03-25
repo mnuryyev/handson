@@ -199,13 +199,23 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 </style>
 
 <style>
-  .wiki-container {
-    display: grid;
-    grid-template-columns: 260px 1fr; 
-    height: calc(100vh - 80px);
-    background: #0d0d0d;
-    position: relative;
-  }
+  /* Найти в блоке <style> */
+.wiki-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  /* ЗАМЕНИ ЭТО: */
+  min-height: calc(100vh - 80px); /* Используем min-height вместо height */
+  height: auto; 
+  background: #0d0d0d;
+  position: relative;
+}
+
+.wiki-main {
+  padding: 40px 60px;
+  /* УДАЛИ height или overflow-y, если хочешь, чтобы скроллилась вся страница целиком */
+  /* overflow-y: auto; <-- это может создавать пустоту внизу */
+  background: #0d0d0d;
+}
 
   .mobile-wiki-header {
     display: none;
