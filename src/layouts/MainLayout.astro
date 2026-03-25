@@ -6,7 +6,6 @@ const base = import.meta.env.BASE_URL;
 
 const { title } = Astro.props;
 const { pathname } = Astro.url;
-
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
 const nav = {
@@ -57,7 +56,6 @@ const t = nav[lang];
           <li><a href={`${base}${lang}/tools/1`}>{t.tools}</a></li>
           <li><a href={`${base}${lang}/projects`}>{t.projects}</a></li>
           <li><a href={`${base}${lang}/wiki`}>{t.wiki}</a></li>
-          
           <li class="nav-actions">
             <LangSwitcher />
           </li>
@@ -79,7 +77,6 @@ const t = nav[lang];
     <script is:inline>
       const menuToggle = document.getElementById('menu-toggle');
       const navMenu = document.getElementById('nav-menu');
-
       if (menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => {
           menuToggle.classList.toggle('is-active');
@@ -109,7 +106,6 @@ const t = nav[lang];
     border-right: 1px solid #222;
   }
 
-  /* БУРГЕР */
   .menu-toggle {
     display: none;
     flex-direction: column;
@@ -136,7 +132,9 @@ const t = nav[lang];
   .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
   @media (max-width: 992px) {
-    .menu-toggle { display: flex; }
+    .menu-toggle {
+      display: flex;
+    }
 
     .nav-links {
       position: fixed;
@@ -147,16 +145,18 @@ const t = nav[lang];
       background: #0b0b0b;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      gap: 30px;
+      align-items: center; /* ← всё по центру */
+      gap: 8px;
       transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 1050;
+      padding: 40px 20px;
     }
 
     .nav-links.is-open {
       right: 0;
     }
 
+    /* каждый пункт — на всю ширину, текст по центру */
     .nav-links li {
       width: 100%;
       text-align: center;
@@ -165,80 +165,56 @@ const t = nav[lang];
     }
 
     .nav-links a {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
+      padding: 10px 0;
+      display: block;
+      width: 100%;
+      text-align: center;
     }
 
+    /* nav-actions: убираем боковые бордеры, центрируем */
     .nav-actions {
       border: none;
-      padding: 20px 0;
-      display: flex;
-      justify-content: center;  /* ← это уже было */
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+      padding: 16px 0;
       width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-projects {
+      display: inline-block;
+      text-align: center;
     }
   }
 
-  /* --- МОБИЛЬНЫЕ: карточки и страницы --- */
   @media (max-width: 768px) {
     .main-content {
       padding-top: 24px;
       padding-bottom: 40px;
     }
 
-    /* Сетка карточек: 1 колонка на мобилке */
-    .grid {
-      grid-template-columns: 1fr !important;
-      gap: 16px !important;
-    }
-
-    /* Заголовок страницы */
-    .page-header h1 {
-      font-size: 1.5rem !important;
-    }
-
-    .page-header p {
-      font-size: 0.9rem !important;
-    }
-
-    /* Пагинация */
-    .pagination {
-      gap: 12px !important;
-      margin-top: 40px !important;
-    }
-
-    /* Контент статей */
-    .markdown-content h1 {
-      font-size: 1.6rem !important;
-    }
-
-    .markdown-content h2 {
-      font-size: 1.3rem !important;
-    }
-
-    .markdown-content h3 {
-      font-size: 1.1rem !important;
-    }
-
-    .markdown-content pre {
-      font-size: 0.78em !important;
-    }
-
-    /* Таблицы на мобилке — горизонтальный скролл */
+    /* таблицы скроллятся горизонтально */
     .markdown-content table,
     .markdown-body table {
       display: block;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
+
+    .markdown-content h1 { font-size: 1.6rem; }
+    .markdown-content h2 { font-size: 1.3rem; }
+    .markdown-content h3 { font-size: 1.1rem; }
+
+    .markdown-content pre {
+      font-size: 0.78em;
+    }
   }
 
   @media (max-width: 480px) {
     .container {
-      padding: 0 14px !important;
-    }
-
-    .grid {
-      grid-template-columns: 1fr !important;
-      gap: 14px !important;
+      padding: 0 14px;
     }
   }
 </style>
