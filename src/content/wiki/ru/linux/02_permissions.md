@@ -1,6 +1,9 @@
-# Права доступа в Linux (chmod, chown, umask)
+---
+title: "Права доступа в Linux (chmod, chown, umask)"
+date: "2026-03-23"
+---
 
-Права доступа — фундамент безопасности Linux. Каждый файл и директория имеют владельца, группу и набор разрешений, которые определяют кто может читать, изменять и выполнять файл.
+Права доступа - фундамент безопасности Linux. Каждый файл и директория имеют владельца, группу и набор разрешений, которые определяют кто может читать, изменять и выполнять файл.
 
 ---
 
@@ -74,7 +77,7 @@ ls -la /dev/
 
 ## Числовая (восьмеричная) запись
 
-Каждый блок прав — это три бита: `r=4`, `w=2`, `x=1`. Складываем:
+Каждый блок прав - это три бита: `r=4`, `w=2`, `x=1`. Складываем:
 
 ```
 rwx = 4+2+1 = 7
@@ -107,7 +110,7 @@ chmod 777 shared/
 
 ---
 
-## chmod — изменение прав
+## chmod - изменение прав
 
 ### Числовой способ
 
@@ -151,7 +154,7 @@ find /var/www/html -type d -exec chmod 755 {} \;   # папки: 755
 
 ---
 
-## chown — смена владельца и группы
+## chown - смена владельца и группы
 
 ```bash
 # Синтаксис: chown [владелец][:группа] файл
@@ -177,7 +180,7 @@ sudo chown root:root /etc/myconfig
 
 ---
 
-## chgrp — смена группы
+## chgrp - смена группы
 
 ```bash
 # Аналог chown только для группы
@@ -190,7 +193,7 @@ chown :developers project/
 
 ---
 
-## umask — маска по умолчанию
+## umask - маска по умолчанию
 
 `umask` определяет права, которые **убираются** при создании новых файлов и директорий.
 
@@ -258,7 +261,7 @@ chmod 4755 /path/to/program   # 4 — SUID
 find / -perm -4000 -type f 2>/dev/null
 ```
 
-> ⚠️ SUID на скриптах (sh, bash, python) игнорируется ядром по соображениям безопасности.
+> SUID на скриптах (sh, bash, python) игнорируется ядром по соображениям безопасности.
 
 ### SGID (Set Group ID) — бит 2
 
@@ -313,7 +316,7 @@ chmod 1777 /shared/   # 1 — sticky bit
 
 ---
 
-## ACL — расширенные права доступа
+## ACL - расширенные права доступа
 
 Стандартных `rwx` иногда не хватает. ACL позволяет задать права **отдельным пользователям и группам**.
 
@@ -378,7 +381,7 @@ chattr -i file.txt
 lsattr /etc/ | grep "\-i-"
 ```
 
-> 🔒 `chattr +i` — мощная защита конфигов: даже root не может удалить файл без снятия атрибута.
+> `chattr +i` — мощная защита конфигов: даже root не может удалить файл без снятия атрибута.
 
 ---
 
@@ -479,13 +482,13 @@ find / -nouser 2>/dev/null      # файлы без владельца (поте
 | `750` | `rwxr-x---` | Программы для группы |
 | `755` | `rwxr-xr-x` | Программы, директории |
 | `775` | `rwxrwxr-x` | Командные директории |
-| `777` | `rwxrwxrwx` | ⚠️ Только для /tmp-подобного (опасно) |
+| `777` | `rwxrwxrwx` | !!! Только для /tmp-подобного (опасно) |
 
 ---
 
 ## Ссылки
 
-- [chmod man page](https://man7.org/linux/man-pages/man1/chmod.1.html) — `man chmod`
-- [chown man page](https://man7.org/linux/man-pages/man1/chown.1.html) — `man chown`
-- [acl man page](https://man7.org/linux/man-pages/man5/acl.5.html) — `man 5 acl`
-- [Linux File Permissions Explained](https://wiki.archlinux.org/title/File_permissions_and_attributes) — Arch Wiki
+- [chmod man page](https://man7.org/linux/man-pages/man1/chmod.1.html) - `man chmod`
+- [chown man page](https://man7.org/linux/man-pages/man1/chown.1.html) - `man chown`
+- [acl man page](https://man7.org/linux/man-pages/man5/acl.5.html) - `man 5 acl`
+- [Linux File Permissions Explained](https://wiki.archlinux.org/title/File_permissions_and_attributes) - Arch Wiki
