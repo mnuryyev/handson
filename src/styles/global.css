@@ -136,7 +136,7 @@ a {
 .markdown-content h1, 
 .markdown-content h2 {
   padding-bottom: 0.4em;
-  border-bottom: 2px solid #3d2b1f; /* Коричневый разделитель */
+  border-bottom: 2px solid #03a1fc; /* Коричневый разделитель */
 }
 
 /* Цитаты (>) в стиле старой бумаги */
@@ -144,7 +144,7 @@ a {
   margin: 12px 0;
   padding: 2px 12px;
   color: #b3b3b3;
-  border-left: 4px solid #4a9eff; /* Оранжево-коричневый акцент */
+  border-left: 4px solid #03a1fc; /* Оранжево-коричневый акцент */
   background: rgba(230, 138, 0, 0.05); /* Легкий оттенок */
   font-style: italic;
   border-radius: 0 12px 12px 0;
@@ -156,7 +156,7 @@ a {
   border-collapse: collapse;
   margin: 30px 0;
   border: 1px solid #222;
-  background: #0d0d0d;
+  background: #155163;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -167,9 +167,9 @@ a {
   padding: 14px;
   border-bottom: 2px solid #333;
   text-align: left;
-  font-weight: 700;
+  font-weight: 500;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .markdown-content table td {
@@ -189,8 +189,8 @@ a {
   padding: 3px 8px;
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9em;
-  border: 1px solid #3d2b1f;
+  font-size: 12px;
+  border: 1px solid #155163;
 }
 
 /* Списки */
@@ -205,7 +205,7 @@ a {
 }
 
 .markdown-content li::marker {
-  color: #e68a00; /* Цветные точки списка */
+  color: #155163; /* Цветные точки списка */
   font-weight: bold;
 }
 
@@ -218,14 +218,14 @@ a {
 }
 
 .markdown-content a:hover {
-  color: #e68a00;
+  color: #4a9eff;
   border-bottom-style: solid;
 }
 
 /* Изображения */
 .markdown-content img {
   border-radius: 12px;
-  border: 1px solid #222;
+  border: 1px solid #4a9eff;
   margin: 30px auto;
   display: block;
   max-width: 100%;
