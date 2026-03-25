@@ -456,7 +456,7 @@ lsof /var/log/syslog      # who has the file open
 
 ---
 
-## Permissions and Ownership
+## Permissions and Ownership - more details [here](https://mnuryyev.github.io/handson/en/wiki/linux/02_permissions/)
 
 ```bash
 # FHS defines not just location, but also permissions
