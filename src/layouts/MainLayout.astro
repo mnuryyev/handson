@@ -69,7 +69,8 @@ const t = nav[lang];
     </nav>
 
     <main class="container main-content">
-      <div class="markdown-content"> <slot />
+      <div class="markdown-content">
+        <slot />
       </div>
     </main>
 
@@ -91,11 +92,10 @@ const t = nav[lang];
 </html>
 
 <style is:global>
-  /* Здесь ТОЛЬКО уникальные стили для этого файла, без дублей из global.css */
   body.menu-open {
     overflow: hidden;
   }
-  
+
   .main-content {
     flex: 1;
     width: 100%;
@@ -109,7 +109,7 @@ const t = nav[lang];
     border-right: 1px solid #222;
   }
 
-  /* СТИЛИ БУРГЕРА */
+  /* БУРГЕР */
   .menu-toggle {
     display: none;
     flex-direction: column;
@@ -147,6 +147,7 @@ const t = nav[lang];
       background: #0b0b0b;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       gap: 30px;
       transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 1050;
@@ -156,6 +157,11 @@ const t = nav[lang];
       right: 0;
     }
 
+    .nav-links li {
+      width: 100%;
+      text-align: center;
+    }
+
     .nav-links a {
       font-size: 1.4rem;
     }
@@ -163,6 +169,71 @@ const t = nav[lang];
     .nav-actions {
       border: none;
       padding: 20px 0;
+    }
+  }
+
+  /* --- МОБИЛЬНЫЕ: карточки и страницы --- */
+  @media (max-width: 768px) {
+    .main-content {
+      padding-top: 24px;
+      padding-bottom: 40px;
+    }
+
+    /* Сетка карточек: 1 колонка на мобилке */
+    .grid {
+      grid-template-columns: 1fr !important;
+      gap: 16px !important;
+    }
+
+    /* Заголовок страницы */
+    .page-header h1 {
+      font-size: 1.5rem !important;
+    }
+
+    .page-header p {
+      font-size: 0.9rem !important;
+    }
+
+    /* Пагинация */
+    .pagination {
+      gap: 12px !important;
+      margin-top: 40px !important;
+    }
+
+    /* Контент статей */
+    .markdown-content h1 {
+      font-size: 1.6rem !important;
+    }
+
+    .markdown-content h2 {
+      font-size: 1.3rem !important;
+    }
+
+    .markdown-content h3 {
+      font-size: 1.1rem !important;
+    }
+
+    .markdown-content pre {
+      font-size: 0.78em !important;
+    }
+
+    /* Таблицы на мобилке — горизонтальный скролл */
+    .markdown-content table,
+    .markdown-body table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 14px !important;
+    }
+
+    .grid {
+      grid-template-columns: 1fr !important;
+      gap: 14px !important;
     }
   }
 </style>
