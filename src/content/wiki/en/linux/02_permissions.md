@@ -1,4 +1,7 @@
-# Linux File Permissions (chmod, chown, umask)
+---
+title: "Linux File Permissions (chmod, chown, umask)"
+date: "2026-03-23"
+---
 
 File permissions are the foundation of Linux security. Every file and directory has an owner, a group, and a set of permission bits that control who can read, modify, and execute it.
 
@@ -107,7 +110,7 @@ chmod 777 shared/
 
 ---
 
-## chmod — Changing Permissions
+## chmod - Changing Permissions
 
 ### Numeric mode
 
@@ -151,7 +154,7 @@ find /var/www/html -type d -exec chmod 755 {} \;   # dirs:  755
 
 ---
 
-## chown — Changing Owner and Group
+## chown - Changing Owner and Group
 
 ```bash
 # Syntax: chown [owner][:group] file
@@ -177,7 +180,7 @@ sudo chown root:root /etc/myconfig
 
 ---
 
-## chgrp — Changing Group
+## chgrp - Changing Group
 
 ```bash
 # Dedicated command for changing the group
@@ -190,7 +193,7 @@ chown :developers project/
 
 ---
 
-## umask — Default Permission Mask
+## umask - Default Permission Mask
 
 `umask` defines the permissions that are **subtracted** when new files and directories are created.
 
@@ -236,7 +239,7 @@ echo "umask 027" >> ~/.bashrc
 
 Beyond standard `rwx`, there are three special permission bits.
 
-### SUID (Set User ID) — bit 4
+### SUID (Set User ID) - bit 4
 
 The file runs with the permissions of its **owner**, not the user who launched it.
 
@@ -258,9 +261,9 @@ chmod 4755 /path/to/program   # 4 — SUID prefix
 find / -perm -4000 -type f 2>/dev/null
 ```
 
-> ⚠️ SUID on scripts (sh, bash, python) is ignored by the kernel for security reasons.
+> SUID on scripts (sh, bash, python) is ignored by the kernel for security reasons.
 
-### SGID (Set Group ID) — bit 2
+### SGID (Set Group ID) - bit 2
 
 **On a file:** runs with the permissions of the file's **group owner**.  
 **On a directory:** new files inside inherit the directory's group.
@@ -288,7 +291,7 @@ chmod 2755 /path/to/dir   # 2 — SGID prefix
 find / -perm -2000 -type f 2>/dev/null
 ```
 
-### Sticky Bit — bit 1
+### Sticky Bit - bit 1
 
 **On a directory:** a file can only be deleted by its **owner**, even if others have write access.
 
@@ -313,7 +316,7 @@ chmod 1777 /shared/   # 1 — sticky bit prefix
 
 ---
 
-## ACL — Extended Access Control Lists
+## ACL - Extended Access Control Lists
 
 Standard `rwx` is sometimes not enough. ACL lets you set permissions for **specific users and groups**.
 
@@ -378,7 +381,7 @@ chattr -i file.txt
 lsattr /etc/ | grep "\-i-"
 ```
 
-> 🔒 `chattr +i` is powerful protection for configs: even root can't delete the file without removing the attribute first.
+> `chattr +i` is powerful protection for configs: even root can't delete the file without removing the attribute first.
 
 ---
 
@@ -479,13 +482,13 @@ find / -nouser 2>/dev/null      # files with no owner (potentially dangerous)
 | `750` | `rwxr-x---` | Programs for a group |
 | `755` | `rwxr-xr-x` | Programs, directories |
 | `775` | `rwxrwxr-x` | Team directories |
-| `777` | `rwxrwxrwx` | ⚠️ Only for /tmp-like dirs (dangerous) |
+| `777` | `rwxrwxrwx` | !!! Only for /tmp-like dirs (dangerous) |
 
 ---
 
 ## References
 
-- [chmod man page](https://man7.org/linux/man-pages/man1/chmod.1.html) — `man chmod`
-- [chown man page](https://man7.org/linux/man-pages/man1/chown.1.html) — `man chown`
-- [acl man page](https://man7.org/linux/man-pages/man5/acl.5.html) — `man 5 acl`
-- [File permissions and attributes](https://wiki.archlinux.org/title/File_permissions_and_attributes) — Arch Wiki
+- [chmod man page](https://man7.org/linux/man-pages/man1/chmod.1.html) - `man chmod`
+- [chown man page](https://man7.org/linux/man-pages/man1/chown.1.html) - `man chown`
+- [acl man page](https://man7.org/linux/man-pages/man5/acl.5.html) - `man 5 acl`
+- [File permissions and attributes](https://wiki.archlinux.org/title/File_permissions_and_attributes) - Arch Wiki
