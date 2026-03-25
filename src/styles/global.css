@@ -141,10 +141,10 @@ a {
 
 /* Цитаты (>) в стиле старой бумаги */
 .markdown-content blockquote {
-  margin: 20px 0;
-  padding: 15px 25px;
+  margin: 12px 0;
+  padding: 2px 12px;
   color: #b3b3b3;
-  border-left: 4px solid #e68a00; /* Оранжево-коричневый акцент */
+  border-left: 4px solid #4a9eff; /* Оранжево-коричневый акцент */
   background: rgba(230, 138, 0, 0.05); /* Легкий оттенок */
   font-style: italic;
   border-radius: 0 12px 12px 0;
@@ -169,7 +169,7 @@ a {
   text-align: left;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 14px;
 }
 
 .markdown-content table td {
