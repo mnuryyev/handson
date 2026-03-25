@@ -199,23 +199,15 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 </style>
 
 <style>
-  /* Найти в блоке <style> */
-.wiki-container {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  /* ЗАМЕНИ ЭТО: */
-  min-height: calc(100vh - 80px); /* Используем min-height вместо height */
-  height: auto; 
-  background: #0d0d0d;
-  position: relative;
-}
-
-.wiki-main {
-  padding: 40px 60px;
-  /* УДАЛИ height или overflow-y, если хочешь, чтобы скроллилась вся страница целиком */
-  /* overflow-y: auto; <-- это может создавать пустоту внизу */
-  background: #0d0d0d;
-}
+  .wiki-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    /* ИСПРАВЛЕНИЕ: min-height вместо height — контейнер растягивается по контенту */
+    min-height: calc(100vh - 64px);
+    background: #0d0d0d;
+    position: relative;
+    align-items: start; /* ИСПРАВЛЕНИЕ: колонки не растягиваются до высоты грида */
+  }
 
   .mobile-wiki-header {
     display: none;
@@ -230,11 +222,19 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    /* ИСПРАВЛЕНИЕ: сайдбар прилипает при скролле страницы */
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
   }
 
-  .sidebar-header { 
-    font-size: 0.7rem; color: #444; padding: 20px 20px 10px 20px;
-    text-transform: uppercase; letter-spacing: 1.5px;
+  .sidebar-header {
+    font-size: 0.7rem;
+    color: #444;
+    padding: 20px 20px 10px 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
   }
 
   .search-section {
@@ -250,8 +250,9 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 
   .wiki-main {
     padding: 40px 60px;
-    overflow-y: auto;
+    /* ИСПРАВЛЕНИЕ: убираем overflow-y и height — скролл идёт по всей странице */
     background: #0d0d0d;
+    min-height: 0;
   }
 
   .post-date {
@@ -259,12 +260,20 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     font-size: 0.85rem;
     color: #555;
     margin-top: 12px;
-    font-family: monospace; /* Для строгого вида даты */
+    font-family: monospace;
   }
 
-  .header-divider { border: 0; border-top: 1px solid #222; margin: 20px 0 30px 0; }
+  .header-divider {
+    border: 0;
+    border-top: 1px solid #222;
+    margin: 20px 0 30px 0;
+  }
 
-  .content-header h1 { font-size: 2.5rem; color: #fff; margin: 0; }
+  .content-header h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0;
+  }
 
   .mobile-toggle-btn {
     background: #111;
@@ -275,16 +284,31 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   }
 
   .sidebar-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    z-index: 1000; display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    display: none;
   }
 
   @media (max-width: 768px) {
-    .wiki-container { grid-template-columns: 1fr; height: auto; }
-    .mobile-wiki-header { display: block; position: sticky; top: 0; z-index: 900; }
+    .wiki-container {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+    .mobile-wiki-header {
+      display: block;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
     .wiki-sidebar {
-      position: fixed; top: 0; left: -280px;
-      width: 280px; height: 100vh; z-index: 1050;
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100vh;
+      z-index: 1050;
       transition: 0.3s ease;
     }
     .wiki-sidebar.active { left: 0; }
