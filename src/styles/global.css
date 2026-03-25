@@ -184,14 +184,31 @@ a {
 }
 
 /* КОД: Внутри текста `code` */
+/* КОД: Внутри текста `code` — Скорректированный размер */
 .markdown-content :not(pre) > code {
   background: #111827;
-  color: #60a5fa; /* Небесно-синий цвет кода */
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.9em;
+  color: #60a5fa; 
+  /* Уменьшаем до 0.85em или 13px, чтобы не казался огромным */
+  font-size: 0.85em; 
+  padding: 0.15em 0.4em; /* Более аккуратные отступы */
+  margin: 0 2px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   border: 1px solid #1e293b;
+  /* Выравнивание, чтобы код не "прыгал" выше основного текста */
+  vertical-align: middle; 
+  word-break: break-word;
+}
+
+/* Если у тебя есть блоки с кодом (многострочные), тоже поправим их */
+.markdown-content pre {
+  font-size: 0.85em; /* Тот же размер для консистентности */
+  line-height: 1.5;
+  padding: 16px;
+  border-radius: 8px;
+  background: #050505;
+  border: 1px solid #1e293b;
+  overflow-x: auto;
 }
 
 /* СПИСКИ: С синими маркерами */
