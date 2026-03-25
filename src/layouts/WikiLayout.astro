@@ -202,18 +202,19 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   .wiki-container {
     display: grid;
     grid-template-columns: 260px 1fr;
-    /* ИСПРАВЛЕНИЕ: min-height вместо height — контейнер растягивается по контенту */
     min-height: calc(100vh - 64px);
     background: #0d0d0d;
     position: relative;
-    align-items: start; /* ИСПРАВЛЕНИЕ: колонки не растягиваются до высоты грида */
+    align-items: start;
   }
 
   .mobile-wiki-header {
     display: none;
     background: #050505;
-    padding: 10px 20px;
+    padding: 10px 16px;
     border-bottom: 1px solid #1a1a1a;
+    /* Занимает всю ширину грида */
+    grid-column: 1 / -1;
   }
 
   .wiki-sidebar {
@@ -221,8 +222,6 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     border-right: 1px solid #1a1a1a;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    /* ИСПРАВЛЕНИЕ: сайдбар прилипает при скролле страницы */
     position: sticky;
     top: 64px;
     height: calc(100vh - 64px);
@@ -235,11 +234,13 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     padding: 20px 20px 10px 20px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
+    flex-shrink: 0;
   }
 
   .search-section {
     padding: 10px 15px;
     margin-bottom: 10px;
+    flex-shrink: 0;
   }
 
   .tree-section {
@@ -250,9 +251,12 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 
   .wiki-main {
     padding: 40px 60px;
-    /* ИСПРАВЛЕНИЕ: убираем overflow-y и height — скролл идёт по всей странице */
     background: #0d0d0d;
     min-height: 0;
+    /* Чтобы длинные слова не вылезали за края */
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
   }
 
   .post-date {
@@ -281,12 +285,20 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     color: #fff;
     padding: 8px 15px;
     border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .mobile-toggle-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   .sidebar-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     z-index: 1000;
     display: none;
   }
@@ -294,25 +306,71 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   @media (max-width: 768px) {
     .wiki-container {
       grid-template-columns: 1fr;
-      height: auto;
+      min-height: auto;
     }
+
     .mobile-wiki-header {
-      display: block;
+      display: flex;
+      align-items: center;
       position: sticky;
       top: 0;
       z-index: 900;
     }
+
     .wiki-sidebar {
       position: fixed;
       top: 0;
-      left: -280px;
+      left: -300px;
       width: 280px;
       height: 100vh;
       z-index: 1050;
-      transition: 0.3s ease;
+      transition: left 0.3s ease;
+      /* Сайдбар поверх всего */
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.8);
     }
-    .wiki-sidebar.active { left: 0; }
-    .sidebar-overlay.active { display: block; opacity: 1; }
-    .wiki-main { padding: 30px 20px; }
+
+    .wiki-sidebar.active {
+      left: 0;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+    }
+
+    .wiki-main {
+      padding: 24px 16px 40px 16px;
+    }
+
+    .content-header h1 {
+      font-size: 1.6rem;
+    }
+
+    /* Код не вылезает за экран */
+    .markdown-body pre {
+      font-size: 0.78em !important;
+    }
+
+    /* Таблицы скроллятся горизонтально */
+    .markdown-body table {
+      display: block !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Изображения не вылезают */
+    .markdown-body img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .wiki-main {
+      padding: 16px 12px 32px 12px;
+    }
+
+    .content-header h1 {
+      font-size: 1.3rem;
+    }
   }
 </style>
