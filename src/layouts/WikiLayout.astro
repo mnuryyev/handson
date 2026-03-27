@@ -131,53 +131,49 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     border-radius: 0 12px 12px 0;
   }
 
-  /* --- ТАБЛИЦЫ: СТИЛЬ ИЗ ДРУГИХ РАЗДЕЛОВ + СКРОЛЛ --- */
+  /* --- ТАБЛИЦЫ: ФИНАЛЬНЫЙ ФИКС ШИРИНЫ --- */
   .markdown-body table {
-    display: block;            /* Включаем возможность скролла */
-    width: 100%;               
-    overflow-x: auto;          /* Горизонтальный скролл */
+    display: block;            
+    width: fit-content;        /* ТАБЛИЦА СЖИМАЕТСЯ ПО КОНТЕНТУ */
+    max-width: 100%;           /* Но не вылезает за экран */
+    overflow-x: auto;          
     -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
-    margin: 30px 0;            /* Отступ как в примере */
-    border: 1px solid #1e293b; /* Slate Blue граница */
+    margin: 30px 0;            
+    border: 1px solid #1e293b; 
     background: #0a0a0a;
     border-radius: 8px;
-    /* Убрали overflow: hidden, чтобы видеть скроллбар */
   }
   
   .markdown-body th { 
-    background: #111827;       /* Полночно-синий подтон */
-    color: #3498db;            /* Синий заголовок */
-    padding: 14px; 
+    background: #111827;       
+    color: #3498db;            
+    padding: 14px 20px;        /* Чуть больше отступов для красоты */
     border-bottom: 2px solid #1e293b; 
     text-align: left;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 1px;
-    white-space: nowrap;       /* Чтобы заголовок не ломался */
+    white-space: nowrap;       
   }
   
   .markdown-body td { 
-    padding: 12px 14px; 
+    padding: 12px 20px; 
     border-bottom: 1px solid #111827; 
     color: #cbd5e1;
-    /* Чтобы данные (Да/Нет/Цифры) не улетали далеко от заголовка */
-    width: auto;
+    white-space: nowrap;       /* По умолчанию не рвем строки */
   }
 
-  /* Разрешаем перенос текста только в колонке с описанием (обычно 2 или 3) */
-  .markdown-body td {
-    white-space: nowrap; 
-  }
-  .markdown-body td:nth-child(2),
+  /* Разрешаем перенос текста только для колонки с описанием */
   .markdown-body td:nth-child(3) {
-    white-space: normal;      /* Здесь текст может переноситься */
-    min-width: 200px;         /* Но колонка не должна быть слишком узкой */
+    white-space: normal;      
+    min-width: 250px;          /* Ограничиваем минимальную ширину для текста */
+    max-width: 400px;          /* Чтобы описание не было слишком длинным в одну строку */
   }
 
   .markdown-body tr:hover {
-    background: #0f172a;       /* Темно-синяя подсветка как в примере */
+    background: #0f172a;       
   }
 
   /* --- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ --- */
@@ -202,7 +198,6 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 
   .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #1e293b; }
 </style>
-
 <style>
   .wiki-container {
     display: grid;
