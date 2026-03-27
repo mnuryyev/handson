@@ -143,8 +143,15 @@ const platforms = [
   .thm .icon-box { border-bottom: 2px solid #cc2929; }
   .htb .icon-box { border-bottom: 2px solid #9fe52d; }
 
-  @media (max-width: 768px) {
-    .icon-box { height: 140px; } /* На мобилках чуть пониже */
-    .text-box { padding: 0 25px; }
+@media (max-width: 768px) {
+    .container { margin: 20px auto; }
+    .platform-grid { gap: 20px; }
+    .page-header h1 { font-size: 1.5rem; }
+  }
+
+  @media (max-width: 480px) {
+    .icon-box { height: 150px; }
+    .text-box h2 { font-size: 1.3rem; }
+    .text-box p { margin-right: 0; } /* Убираем лишний отступ справа */
   }
 </style>
