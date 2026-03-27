@@ -97,14 +97,14 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 </script>
 
 <style is:global>
-  /* Темный скроллбар */
+  /* --- ТЕМНЫЙ СКРОЛЛБАР --- */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #0d0d0d; }
   ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 2px solid #0d0d0d; }
   ::-webkit-scrollbar-thumb:hover { background: #3498db; }
   * { scrollbar-width: thin; scrollbar-color: #1e293b #0d0d0d; }
 
-  /* --- Wiki Blue Markdown Styles --- */
+  /* --- WIKI BLUE MARKDOWN STYLES --- */
   
   .markdown-body h1, 
   .markdown-body h2, 
@@ -131,61 +131,60 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     border-radius: 0 12px 12px 0;
   }
 
-  /* --- ТАБЛИЦЫ: Фикс выравнивания колонок --- */
+  /* --- ТАБЛИЦЫ: СТИЛЬ ИЗ ДРУГИХ РАЗДЕЛОВ + СКРОЛЛ --- */
   .markdown-body table {
-    display: block;            
+    display: block;            /* Включаем возможность скролла */
     width: 100%;               
-    overflow-x: auto;          
+    overflow-x: auto;          /* Горизонтальный скролл */
     -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
-    margin: 25px 0;
-    border: 1px solid #1e293b;
-    border-radius: 8px;
+    margin: 30px 0;            /* Отступ как в примере */
+    border: 1px solid #1e293b; /* Slate Blue граница */
     background: #0a0a0a;
-  }
-  
-  /* Убираем display: table, чтобы колонки не растягивались искусственно */
-  .markdown-body table thead,
-  .markdown-body table tbody {
-    width: auto; 
-    min-width: 100%; /* Таблица будет занимать минимум всю ширину, но не растягивать колонки */
+    border-radius: 8px;
+    /* Убрали overflow: hidden, чтобы видеть скроллбар */
   }
   
   .markdown-body th { 
-    background: #111827; 
-    color: #3498db; 
-    padding: 12px 16px; 
+    background: #111827;       /* Полночно-синий подтон */
+    color: #3498db;            /* Синий заголовок */
+    padding: 14px; 
     border-bottom: 2px solid #1e293b; 
     text-align: left;
-    font-size: 0.85rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap; /* Заголовки всегда в одну строку */
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    white-space: nowrap;       /* Чтобы заголовок не ломался */
   }
   
   .markdown-body td { 
-    padding: 10px 16px; 
+    padding: 12px 14px; 
     border-bottom: 1px solid #111827; 
     color: #cbd5e1;
-    /* Убираем min-width, чтобы колонка "Да/Нет" была узкой */
-    white-space: nowrap; 
+    /* Чтобы данные (Да/Нет/Цифры) не улетали далеко от заголовка */
+    width: auto;
   }
 
-  /* Для колонки "Описание" разрешим перенос текста, чтобы таблица не была бесконечно длинной */
+  /* Разрешаем перенос текста только в колонке с описанием (обычно 2 или 3) */
+  .markdown-body td {
+    white-space: nowrap; 
+  }
+  .markdown-body td:nth-child(2),
   .markdown-body td:nth-child(3) {
-    white-space: normal;
-    min-width: 200px;
+    white-space: normal;      /* Здесь текст может переноситься */
+    min-width: 200px;         /* Но колонка не должна быть слишком узкой */
   }
 
   .markdown-body tr:hover {
-    background: rgba(52, 152, 219, 0.03);
+    background: #0f172a;       /* Темно-синяя подсветка как в примере */
   }
 
-  /* Ссылки */
+  /* --- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ --- */
+
   .markdown-body a { color: #3498db; text-decoration: none; font-weight: 500; }
   .markdown-body a:hover { color: #60a5fa; text-decoration: underline; }
 
-  /* Код */
   .markdown-body :not(pre) > code {
     background: #111827;
     color: #60a5fa; 
@@ -197,12 +196,10 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     vertical-align: middle;
   }
 
-  /* Списки */
   .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-bottom: 16px; }
   .markdown-body li { margin-bottom: 6px; }
   .markdown-body li::marker { color: #3498db; font-weight: bold; }
 
-  /* Видео */
   .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #1e293b; }
 </style>
 
