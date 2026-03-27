@@ -60,4 +60,9 @@ const htmlContent = marked.parse(content);
   .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; }
   .article-body :global(pre) { background: #0b0b0b; padding: 20px; border-radius: 12px; border: 1px solid #222; overflow-x: auto; }
   .article-body :global(img) { width: 100%; border-radius: 10px; margin: 1.5rem 0; border: 1px solid #333; }
+  @media (max-width: 768px) {
+    .article-container { margin: 40px auto; padding: 0 20px; }
+    .article-body { text-align: left; }
+    .article-header h1 { font-size: 2rem; }
+  }
 </style>
