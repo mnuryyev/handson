@@ -3,7 +3,7 @@ title: "Processes and Signals (ps, kill, top, htop)"
 date: "2026-03-27"
 ---
 
-A process is a running program loaded into memory. Every process has a unique identifier (PID), a parent, resources, and a state. Managing processes is one of the core tasks of a system administrator.
+A process is a running program loaded into memory. Every process has a unique identifier (PID), a parent, resources, and a state.
 
 ---
 
