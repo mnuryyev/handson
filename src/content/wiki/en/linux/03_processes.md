@@ -224,17 +224,17 @@ A signal is an asynchronous notification sent to a process. The kernel delivers 
 
 | Number | Name | Description | Catchable? |
 |--------|------|-------------|------------|
-| `1` | `SIGHUP` | Hang Up - reload config | ✅ Yes |
-| `2` | `SIGINT` | Interrupt - same as Ctrl+C | ✅ Yes |
-| `3` | `SIGQUIT` | Quit - like Ctrl+\ (with core dump) | ✅ Yes |
-| `9` | `SIGKILL` | Kill - immediate termination | ❌ No |
-| `10` | `SIGUSR1` | User-defined signal 1 | ✅ Yes |
-| `12` | `SIGUSR2` | User-defined signal 2 | ✅ Yes |
-| `15` | `SIGTERM` | Terminate - graceful shutdown | ✅ Yes |
-| `17` | `SIGCHLD` | Child - child process exited | ✅ Yes |
-| `18` | `SIGCONT` | Continue - resume after STOP | ✅ Yes |
-| `19` | `SIGSTOP` | Stop - freeze the process | ❌ No |
-| `20` | `SIGTSTP` | Terminal Stop - same as Ctrl+Z | ✅ Yes |
+| `1` | `SIGHUP` | Hang Up - reload config | Yes |
+| `2` | `SIGINT` | Interrupt - same as Ctrl+C | Yes |
+| `3` | `SIGQUIT` | Quit - like Ctrl+\ (with core dump) | Yes |
+| `9` | `SIGKILL` | Kill - immediate termination | No |
+| `10` | `SIGUSR1` | User-defined signal 1 | Yes |
+| `12` | `SIGUSR2` | User-defined signal 2 | Yes |
+| `15` | `SIGTERM` | Terminate - graceful shutdown | Yes |
+| `17` | `SIGCHLD` | Child - child process exited | Yes |
+| `18` | `SIGCONT` | Continue - resume after STOP | Yes |
+| `19` | `SIGSTOP` | Stop - freeze the process | No |
+| `20` | `SIGTSTP` | Terminal Stop - same as Ctrl+Z | Yes |
 
 ```bash
 # List all signals
