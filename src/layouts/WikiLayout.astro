@@ -373,4 +373,23 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
       font-size: 1.3rem;
     }
   }
+
+  @media (max-width: 768px) {
+  /* Запрещаем скролл основной страницы, когда открыто меню вики */
+  body:has(.wiki-sidebar.active) {
+    overflow: hidden;
+  }
+
+  .wiki-container {
+    overflow: hidden; /* Не дает внутренним элементам выходить за край */
+  }
+
+  .wiki-main {
+    /* На мобилках делаем отступы меньше, как в книгах */
+    padding: 20px 16px !important; 
+    width: 100%;
+    max-width: 100vw;
+  }
+}
 </style>
+
