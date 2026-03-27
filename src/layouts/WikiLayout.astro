@@ -141,19 +141,29 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     border-radius: 0 12px 12px 0;
   }
 
-  /* Таблицы: Строгий Wiki-вид */
+  /* --- ТАБЛИЦЫ: Исправленный вариант со скроллом --- */
   .markdown-body table {
-    width: 100%;
+    display: block;            /* Позволяет контейнеру скроллиться */
+    width: 100%;               /* Занимает всю ширину контента */
+    overflow-x: auto;          /* Включает горизонтальный скролл */
+    -webkit-overflow-scrolling: touch; /* Плавность на мобилках */
     border-collapse: collapse;
     margin: 25px 0;
     border: 1px solid #1e293b;
-    overflow: hidden;
     border-radius: 8px;
     background: #0a0a0a;
   }
   
+  /* Гарантируем, что таблица внутри блока не сожмется в кашу */
+  .markdown-body table thead,
+  .markdown-body table tbody {
+    display: table;
+    width: 100%;
+    min-width: 600px; /* Минимальная ширина, чтобы заставить работать скролл */
+  }
+  
   .markdown-body th { 
-    background: #111827; /* Полночно-синий */
+    background: #111827; 
     color: #3498db; 
     padding: 14px; 
     border-bottom: 2px solid #1e293b; 
@@ -161,12 +171,14 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap; /* Заголовки в одну строку */
   }
   
   .markdown-body td { 
     padding: 12px; 
     border-bottom: 1px solid #111827; 
-    color: #cbd5e1; 
+    color: #cbd5e1;
+    min-width: 100px; /* Чтобы колонки имели форму при скролле */
   }
 
   .markdown-body tr:hover {
@@ -180,11 +192,11 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   /* Инлайновый код: Маленький и аккуратный */
   .markdown-body :not(pre) > code {
     background: #111827;
-    color: #60a5fa; /* Синий вместо оранжевого */
+    color: #60a5fa; 
     padding: 0.2em 0.4em;
     border-radius: 6px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85em; /* Уменьшили размер */
+    font-size: 0.85em; 
     border: 1px solid #1e293b;
     vertical-align: middle;
   }
