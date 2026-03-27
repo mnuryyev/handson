@@ -1,4 +1,7 @@
-# Processes and Signals (ps, kill, top, htop)
+---
+title: "Processes and Signals (ps, kill, top, htop)"
+date: "2026-03-27"
+---
 
 A process is a running program loaded into memory. Every process has a unique identifier (PID), a parent, resources, and a state. Managing processes is one of the core tasks of a system administrator.
 
@@ -8,16 +11,16 @@ A process is a running program loaded into memory. Every process has a unique id
 
 When a program is launched, the kernel creates a process and allocates it:
 
-- **PID** — unique numeric identifier
-- **PPID** — parent process PID
-- **UID / GID** — which user/group it runs as
-- **Virtual memory** — its address space
-- **File descriptors** — open files and sockets
-- **Priority** — nice value, influences CPU scheduling
+- **PID** - unique numeric identifier
+- **PPID** - parent process PID
+- **UID / GID** - which user/group it runs as
+- **Virtual memory** - its address space
+- **File descriptors** - open files and sockets
+- **Priority** - nice value, influences CPU scheduling
 
 ```bash
 # Every process is born via fork() + exec()
-# init/systemd (PID 1) — the ancestor of all processes
+# init/systemd (PID 1) - the ancestor of all processes
 
 pstree -p              # process tree with PIDs
 pstree -p | head -20
@@ -43,7 +46,7 @@ pstree -p | head -20
 
 ---
 
-## ps — Process Snapshot
+## ps - Process Snapshot
 
 `ps` shows a snapshot of current processes at the moment it's called.
 
@@ -119,7 +122,7 @@ ps -eo pid,ppid,user,stat,ni,pcpu,pmem,vsz,rss,etime,comm
 
 ---
 
-## top — Interactive Monitor
+## top - Interactive Monitor
 
 `top` shows processes in real time, refreshing every 3 seconds by default.
 
@@ -144,11 +147,11 @@ MiB Swap:   2048.0 total,   2001.3 free,     46.7 used.   3712.4 avail Mem
 | Field | Description |
 |-------|-------------|
 | `load average` | Average load over 1/5/15 minutes |
-| `us` | User — user-space processes |
-| `sy` | System — kernel |
-| `ni` | Nice — processes with adjusted priority |
-| `id` | Idle — doing nothing |
-| `wa` | Wait — waiting for I/O |
+| `us` | User - user-space processes |
+| `sy` | System - kernel |
+| `ni` | Nice - processes with adjusted priority |
+| `id` | Idle - doing nothing |
+| `wa` | Wait - waiting for I/O |
 | `hi` | Hardware IRQ |
 | `si` | Software IRQ |
 | `buff/cache` | Filesystem cache (reclaimable) |
@@ -221,17 +224,17 @@ A signal is an asynchronous notification sent to a process. The kernel delivers 
 
 | Number | Name | Description | Catchable? |
 |--------|------|-------------|------------|
-| `1` | `SIGHUP` | Hang Up — reload config | ✅ Yes |
-| `2` | `SIGINT` | Interrupt — same as Ctrl+C | ✅ Yes |
-| `3` | `SIGQUIT` | Quit — like Ctrl+\ (with core dump) | ✅ Yes |
-| `9` | `SIGKILL` | Kill — immediate termination | ❌ No |
+| `1` | `SIGHUP` | Hang Up - reload config | ✅ Yes |
+| `2` | `SIGINT` | Interrupt - same as Ctrl+C | ✅ Yes |
+| `3` | `SIGQUIT` | Quit - like Ctrl+\ (with core dump) | ✅ Yes |
+| `9` | `SIGKILL` | Kill - immediate termination | ❌ No |
 | `10` | `SIGUSR1` | User-defined signal 1 | ✅ Yes |
 | `12` | `SIGUSR2` | User-defined signal 2 | ✅ Yes |
-| `15` | `SIGTERM` | Terminate — graceful shutdown | ✅ Yes |
-| `17` | `SIGCHLD` | Child — child process exited | ✅ Yes |
-| `18` | `SIGCONT` | Continue — resume after STOP | ✅ Yes |
-| `19` | `SIGSTOP` | Stop — freeze the process | ❌ No |
-| `20` | `SIGTSTP` | Terminal Stop — same as Ctrl+Z | ✅ Yes |
+| `15` | `SIGTERM` | Terminate - graceful shutdown | ✅ Yes |
+| `17` | `SIGCHLD` | Child - child process exited | ✅ Yes |
+| `18` | `SIGCONT` | Continue - resume after STOP | ✅ Yes |
+| `19` | `SIGSTOP` | Stop - freeze the process | ❌ No |
+| `20` | `SIGTSTP` | Terminal Stop - same as Ctrl+Z | ✅ Yes |
 
 ```bash
 # List all signals
@@ -241,7 +244,7 @@ kill -l
 
 ---
 
-## kill — Sending Signals
+## kill - Sending Signals
 
 Despite the name, `kill` sends **any signal**, not just termination ones.
 
@@ -272,7 +275,7 @@ kill -TERM -1234       # entire process group
 ### Correct termination order
 
 ```bash
-# 1. SIGTERM first — give the process a chance to clean up
+# 1. SIGTERM first - give the process a chance to clean up
 kill -15 $PID
 
 # 2. Wait
@@ -314,7 +317,7 @@ long_running_command &
 disown %1              # detach the last background job
 ```
 
-### jobs — job management
+### jobs - job management
 
 ```bash
 jobs                   # list background jobs
@@ -381,7 +384,7 @@ cat /proc/1234/limits
 
 ---
 
-## lsof — Open Files and Sockets
+## lsof - Open Files and Sockets
 
 ```bash
 lsof                          # all open files (a lot)
@@ -437,7 +440,7 @@ vmstat 1 5             # update every second, 5 times
 ### I/O monitoring
 
 ```bash
-# iostat — disk statistics
+# iostat - disk statistics
 iostat -x 1            # extended, every second
 iostat -x -d sda 1     # just sda
 
@@ -538,7 +541,7 @@ strace -e trace=signal -p $PID  # observe signal handling
 
 ## References
 
-- [ps man page](https://man7.org/linux/man-pages/man1/ps.1.html) — `man ps`
-- [signal man page](https://man7.org/linux/man-pages/man7/signal.7.html) — `man 7 signal`
-- [proc man page](https://man7.org/linux/man-pages/man5/proc.5.html) — `man 5 proc`
-- [htop official site](https://htop.dev/) — documentation and screenshots
+- [ps man page](https://man7.org/linux/man-pages/man1/ps.1.html) - `man ps`
+- [signal man page](https://man7.org/linux/man-pages/man7/signal.7.html) - `man 7 signal`
+- [proc man page](https://man7.org/linux/man-pages/man5/proc.5.html) - `man 5 proc`
+- [htop official site](https://htop.dev/) - documentation and screenshots
