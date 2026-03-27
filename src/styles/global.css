@@ -256,3 +256,55 @@ a {
   display: block;
   object-fit: contain; /* Гарантирует, что картинка видна целиком */
 }
+
+/* 1. Блокируем горизонтальный скролл всей страницы */
+html, body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* 2. Контейнер статьи: на мобилках убираем лишние отступы, чтобы текст был шире */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 20px;
+    padding-bottom: 40px;
+    /* Уменьшаем боковые отступы контейнера, чтобы больше текста влезало */
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Чтобы таблицы и код не "ломали" ширину сайта */
+  .markdown-content, 
+  .markdown-body {
+    width: 100%;
+    overflow-x: hidden; /* Важно! */
+  }
+
+  /* Таблицы: разрешаем скролл ТОЛЬКО внутри таблицы */
+  .markdown-content table,
+  .markdown-body table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+    /* Убираем лишние внешние границы, если они мешают */
+  }
+
+  /* Код: тоже запираем внутри блока */
+  .markdown-content pre,
+  .markdown-body pre {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    white-space: pre; /* Не даем коду переноситься, лучше пусть скроллится внутри */
+    word-wrap: normal;
+  }
+  
+  /* Картинки: строго в рамках экрана */
+  .markdown-content img,
+  .markdown-body img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
