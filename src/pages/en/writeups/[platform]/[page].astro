@@ -113,4 +113,38 @@ const nextUrl = getPageUrl(page.url.next);
   .breadcrumb { margin-bottom: 20px; color: #555; font-size: 0.9rem; }
   .breadcrumb a { color: #3498db; text-decoration: none; }
   h1 { color: #fff; margin-bottom: 40px; font-size: 2.5rem; }
+    @media (max-width: 768px) {
+    .container {
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+    }
+
+    .page-header h1 {
+      font-size: 1.4rem;
+    }
+
+    .page-header p {
+      font-size: 0.9rem;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .pagination {
+      margin-top: 36px;
+      gap: 10px;
+    }
+
+    .p-btn {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+  }
 </style>
