@@ -100,21 +100,12 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   /* Темный скроллбар */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #0d0d0d; }
-  ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; border: 2px solid #0d0d0d; }
-  ::-webkit-scrollbar-thumb:hover { background: #333; }
-  * { scrollbar-width: thin; scrollbar-color: #222 #0d0d0d; }
-
-<style is:global>
-  /* Темный скроллбар */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #0d0d0d; }
   ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 2px solid #0d0d0d; }
   ::-webkit-scrollbar-thumb:hover { background: #3498db; }
   * { scrollbar-width: thin; scrollbar-color: #1e293b #0d0d0d; }
 
   /* --- Wiki Blue Markdown Styles --- */
   
-  /* Заголовки: Жирные и сочные */
   .markdown-body h1, 
   .markdown-body h2, 
   .markdown-body h3 {
@@ -126,11 +117,10 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
 
   .markdown-body h1, 
   .markdown-body h2 {
-    border-bottom: 2px solid #1a2638; /* Темно-синий разделитель */
+    border-bottom: 2px solid #1a2638;
     padding-bottom: 0.3em;
   }
 
-  /* Цитаты */
   .markdown-body blockquote {
     margin: 12px 0;
     padding: 2px 12px;
@@ -141,12 +131,12 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     border-radius: 0 12px 12px 0;
   }
 
-  /* --- ТАБЛИЦЫ: Исправленный вариант со скроллом --- */
+  /* --- ТАБЛИЦЫ: Фикс выравнивания колонок --- */
   .markdown-body table {
-    display: block;            /* Позволяет контейнеру скроллиться */
-    width: 100%;               /* Занимает всю ширину контента */
-    overflow-x: auto;          /* Включает горизонтальный скролл */
-    -webkit-overflow-scrolling: touch; /* Плавность на мобилках */
+    display: block;            
+    width: 100%;               
+    overflow-x: auto;          
+    -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
     margin: 25px 0;
     border: 1px solid #1e293b;
@@ -154,31 +144,37 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     background: #0a0a0a;
   }
   
-  /* Гарантируем, что таблица внутри блока не сожмется в кашу */
+  /* Убираем display: table, чтобы колонки не растягивались искусственно */
   .markdown-body table thead,
   .markdown-body table tbody {
-    display: table;
-    width: 100%;
-    min-width: 600px; /* Минимальная ширина, чтобы заставить работать скролл */
+    width: auto; 
+    min-width: 100%; /* Таблица будет занимать минимум всю ширину, но не растягивать колонки */
   }
   
   .markdown-body th { 
     background: #111827; 
     color: #3498db; 
-    padding: 14px; 
+    padding: 12px 16px; 
     border-bottom: 2px solid #1e293b; 
     text-align: left;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    white-space: nowrap; /* Заголовки в одну строку */
+    white-space: nowrap; /* Заголовки всегда в одну строку */
   }
   
   .markdown-body td { 
-    padding: 12px; 
+    padding: 10px 16px; 
     border-bottom: 1px solid #111827; 
     color: #cbd5e1;
-    min-width: 100px; /* Чтобы колонки имели форму при скролле */
+    /* Убираем min-width, чтобы колонка "Да/Нет" была узкой */
+    white-space: nowrap; 
+  }
+
+  /* Для колонки "Описание" разрешим перенос текста, чтобы таблица не была бесконечно длинной */
+  .markdown-body td:nth-child(3) {
+    white-space: normal;
+    min-width: 200px;
   }
 
   .markdown-body tr:hover {
@@ -189,7 +185,7 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   .markdown-body a { color: #3498db; text-decoration: none; font-weight: 500; }
   .markdown-body a:hover { color: #60a5fa; text-decoration: underline; }
 
-  /* Инлайновый код: Маленький и аккуратный */
+  /* Код */
   .markdown-body :not(pre) > code {
     background: #111827;
     color: #60a5fa; 
@@ -206,7 +202,7 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   .markdown-body li { margin-bottom: 6px; }
   .markdown-body li::marker { color: #3498db; font-weight: bold; }
 
-  /* Видео и Медиа */
+  /* Видео */
   .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #1e293b; }
 </style>
 
