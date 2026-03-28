@@ -1,4 +1,9 @@
-# Linux Filesystem - полная карта прав доступа
+---
+title: "Linux Filesystem - полная карта прав доступа"
+description: "В данной работе разберём Unix-права доступа: создадим изолированную структуру директорий, настроим пользователей и воспроизведём реальные сценарии атак"
+image: "/images/permissions_linux_sec/main.png"
+date: "2026-03-28"
+---
 
 ## Введение
 
@@ -55,7 +60,7 @@ sudo mkdir -p /lab/public /lab/private /lab/shared
 ls -la /lab/
 ```
 
-![01_mkdir](screens/01_mkdir.png)
+![01_mkdir](/handson/images/permissions_linux_sec/01_mkdir.png)
 
 По умолчанию `mkdir` выставляет права `755` - владелец имеет полный доступ, остальные могут только читать и заходить внутрь.
 
@@ -80,9 +85,9 @@ sudo bash -c 'echo "secret data"  > /lab/secret/file.txt'
 ls -la /lab/
 ```
 
-![02_chmod](screens/02_chmod.png)
+![02_chmod](/handson/images/permissions_linux_sec/02_chmod.png)
 
-![03_echo_ls](screens/03_echo_ls.png)
+![03_echo_ls](/handson/images/permissions_linux_sec/03_echo_ls.png)
 
 Обратите внимание на колонку прав в выводе `ls -la`: `drwxrwxrwx` для public, `drwxr-xr-x` для private и `drwx------` для secret. Директория secret полностью закрыта для всех кроме root.
 
@@ -104,7 +109,7 @@ id user1
 id user2
 ```
 
-![04_add_users](screens/04_add_users.png)
+![04_add_users](/handson/images/permissions_linux_sec/04_add_users.png)
 
 Команда `id` показывает UID и GID каждого пользователя. Оба принадлежат только своим группам - они не входят в группу root и не имеют sudo-прав.
 
@@ -125,7 +130,7 @@ id
 exit
 ```
 
-![05_login_user1](screens/05_login_user1.png)
+![05_login_user1](/handson/images/permissions_linux_sec/05_login_user1.png)
 
 Ключевой момент: директория `/lab/private` с правами `755` **видна** обычному пользователю. Многие думают, что "private" значит закрыто — нет. Закрытое — это `700`.
 
@@ -139,7 +144,7 @@ ls /lab/public    # видит файлы
 exit
 ```
 
-![06_login_user2](screens/06_login_user2.png)
+![06_login_user2](/handson/images/permissions_linux_sec/06_login_user2.png)
 
 Оба пользователя получают одинаковый результат - `/lab/secret` недоступен ни одному из них. Права `700` означают: **только владелец (root) имеет доступ**.
 
@@ -156,7 +161,7 @@ sudo chmod 1777 /lab/shared
 ls -la /lab/
 ```
 
-![07_sticky_1](screens/07_sticky_1.png)
+![07_sticky_1](/handson/images/permissions_linux_sec/07_sticky_1.png)
 
 В выводе `ls` видна буква `t` в конце прав: `drwxrwxrwt`. Без sticky bit это была бы `drwxrwxrwx` - и любой пользователь мог бы удалить чужие файлы.
 
@@ -171,7 +176,7 @@ ls -la /lab/shared/
 exit
 ```
 
-![08_user2_creates_file](screens/08_user2_creates_file.png)
+![08_user2_creates_file](/handson/images/permissions_linux_sec/08_user2_creates_file.png)
 
 Файл создан. Владелец - user2, группа - user2. Права `664` - user2 может читать и писать, остальные только читают.
 
@@ -192,9 +197,9 @@ rm /lab/shared/user1_file.txt  # работает
 exit
 ```
 
-![09_user1_trying_delete](screens/09_user1_trying_delete.png)
+![09_user1_trying_delete](/handson/images/permissions_linux_sec/09_user1_trying_delete.png)
 
-![10_user1_deleting_his_file](screens/10_user1_deleting_his_file.png)
+![10_user1_deleting_his_file](/handson/images/permissions_linux_sec/10_user1_deleting_his_file.png)
 
 Именно так работает `/tmp` в любой Linux-системе: все могут писать, но никто не может удалить чужие временные файлы.
 
@@ -210,7 +215,7 @@ exit
 find / -perm -4000 2>/dev/null
 ```
 
-![11_suid_files](screens/11_suid_files.png)
+![11_suid_files](/handson/images/permissions_linux_sec/11_suid_files.png)
 
 В выводе видны ключевые системные утилиты: `/usr/bin/passwd`, `/usr/bin/su`, `/usr/bin/sudo`, `/usr/bin/mount`. Все они запускаются с правами root именно потому, что их задача - выполнять привилегированные операции от имени обычного пользователя в контролируемом режиме.
 
@@ -220,7 +225,7 @@ find / -perm -4000 2>/dev/null
 find / -perm -2000 2>/dev/null
 ```
 
-![12_sgid_files](screens/12_sgid_files.png)
+![12_sgid_files](/handson/images/permissions_linux_sec/12_sgid_files.png)
 
 SGID-файлы включают `/usr/bin/crontab` и утилиты проверки паролей вроде `unix_chkpwd`. Последняя имеет SGID группы `shadow` — именно так она получает доступ к `/etc/shadow` для проверки паролей, не требуя полных прав root.
 
@@ -232,7 +237,7 @@ SGID-файлы включают `/usr/bin/crontab` и утилиты прове
 find / -perm /6000 -type f 2>/dev/null | xargs ls -la 2>/dev/null
 ```
 
-![13_together](screens/13_together.png)
+![13_together](/handson/images/permissions_linux_sec/13_together.png)
 
 Обратите внимание: большинство найденных файлов находится в snap-окружении (`/snap/core22/...`). Snap-пакеты содержат свои копии стандартных утилит — это нормально, но при пентесте стоит проверить каждый нестандартный путь.
 
@@ -247,9 +252,9 @@ ls -la /usr/bin/passwd
 ls -la /etc/shadow
 ```
 
-![14_only_standart](screens/14_only_standart.png)
+![14_only_standart](/handson/images/permissions_linux_sec/14_only_standart.png)
 
-![15_suid_shadow](screens/15_suid_shadow.png)
+![15_suid_shadow](/handson/images/permissions_linux_sec/15_suid_shadow.png)
 
 `/etc/shadow` хранит хэши паролей всех пользователей. Права на него - `640` с владельцем root и группой shadow. Обычный пользователь не входит в эту группу и не может читать файл напрямую.
 
@@ -260,7 +265,7 @@ su - user1
 cat /etc/shadow  # Permission denied
 ```
 
-![16_user1_cat_shadow](images/lab01_permissions/16_user1_cat_shadow.png)
+![16_user1_cat_shadow](/handson/images/permissions_linux_sec/16_user1_cat_shadow.png)
 
 Прямой доступ к `/etc/shadow` заблокирован. Но пользователь должен иметь возможность **сменить свой** пароль.
 
@@ -274,7 +279,7 @@ passwd
 # passwd: password updated successfully
 ```
 
-![17_changing_pass](screens/17_changing_pass.png)
+![17_changing_pass](/handson/images/permissions_linux_sec/17_changing_pass.png)
 
 Это и есть смысл SUID. `passwd` запускается с правами root, записывает **только строку текущего пользователя** в `/etc/shadow`, и завершается. Контролируемый доступ к привилегированному ресурсу.
 
@@ -286,7 +291,7 @@ passwd
 sudo strace -e trace=open,openat passwd 2>&1 | grep shadow
 ```
 
-![18_strace](screens/18_strace.png)
+![18_strace](/handson/images/permissions_linux_sec/18_strace.png)
 
 `strace` перехватывает системные вызовы `open` и `openat` - именно через них программы открывают файлы. Если в выводе появляется `/etc/shadow`, это подтверждает: `passwd` действительно обращается к защищённому файлу, действуя с правами root через механизм SUID.
 
@@ -306,7 +311,7 @@ id user1 2>&1      # no such user
 ls /lab 2>&1       # No such file or directory
 ```
 
-![19_deleting_all](screens/19_deleting_all.png)
+![19_deleting_all](/handson/images/permissions_linux_sec/19_deleting_all.png)
 
 Флаг `-r` у `userdel` удаляет домашнюю директорию пользователя вместе с ним. Предупреждение о mail spool - нормально, его просто не существовало.
 
