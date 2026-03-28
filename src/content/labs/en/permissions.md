@@ -1,8 +1,11 @@
-# Lab 01. Linux Filesystem — Complete Access Control Map
+---
+title: "Linux Filesystem - Complete Access Control Map"
+description: "In this lab we will cover Unix permissions not in theory but in practice: build an isolated directory structure, set up users and reproduce real attack scenarios"
+image: "/images/permissions_linux_sec/main.png"
+date: "2026-03-28"
+---
 
-## Introduction
-
-Every time an administrator sets permissions on a file or directory, they are making a decision about who can do what on the system. Misconfigured permissions are one of the most common causes of successful attacks on Linux systems — not exploits, not zero-days, just `chmod 777` in the wrong place.
+Every time an administrator sets permissions on a file or directory, they are making a decision about who can do what on the system. Misconfigured permissions are one of the most common causes of successful attacks on Linux systems - not exploits, not zero-days, just `chmod 777` in the wrong place.
 
 In this lab we will cover Unix permissions not in theory but in practice: build an isolated directory structure, set up users, reproduce real attack scenarios, and understand why SUID, SGID, and Sticky bit exist in the first place.
 
@@ -48,14 +51,14 @@ In symbolic notation the special bits appear as:
 
 ### Step 1. Creating the Directory Tree
 
-We create a directory tree under `/lab`. The `-p` flag creates all intermediate directories in one command — if `/lab` already exists, no error is produced.
+We create a directory tree under `/lab`. The `-p` flag creates all intermediate directories in one command - if `/lab` already exists, no error is produced.
 
 ```bash
 sudo mkdir -p /lab/public /lab/private /lab/shared
 ls -la /lab/
 ```
 
-![01_mkdir](images/lab01_permissions/01_mkdir.png)
+![01_mkdir](/handson/images/permissions_linux_sec/01_mkdir.png)
 
 By default `mkdir` sets permissions to `755` — the owner has full access, everyone else can only read and enter the directory.
 
@@ -80,9 +83,9 @@ sudo bash -c 'echo "secret data"  > /lab/secret/file.txt'
 ls -la /lab/
 ```
 
-![02_chmod](images/lab01_permissions/02_chmod.png)
+![02_chmod](/handson/images/permissions_linux_sec/02_chmod.png)
 
-![03_echo_ls](images/lab01_permissions/03_echo_ls.png)
+![03_echo_ls](/handson/images/permissions_linux_sec/03_echo_ls.png)
 
 Notice the permission column in `ls -la`: `drwxrwxrwx` for public, `drwxr-xr-x` for private, and `drwx------` for secret. The secret directory is completely closed to everyone except root.
 
@@ -104,9 +107,9 @@ id user1
 id user2
 ```
 
-![04_add_users](images/lab01_permissions/04_add_users.png)
+![04_add_users](/handson/images/permissions_linux_sec/04_add_users.png)
 
-The `id` command shows the UID and GID of each user. Both belong only to their own groups — they are not in the root group and have no sudo privileges.
+The `id` command shows the UID and GID of each user. Both belong only to their own groups - they are not in the root group and have no sudo privileges.
 
 ### Step 4. Checking Access as user1
 
@@ -115,37 +118,37 @@ Switch to user1 and verify what they can and cannot access:
 ```bash
 su - user1
 
-ls /lab/public    # ✅ accessible — permissions 777
-ls /lab/private   # ✅ accessible — permissions 755, x set for others
-ls /lab/secret    # ❌ Permission denied — permissions 700, root only
+ls /lab/public    # accessible — permissions 777
+ls /lab/private   # accessible — permissions 755, x set for others
+ls /lab/secret    # Permission denied — permissions 700, root only
 
-cat /lab/secret/file.txt  # ❌ also denied
+cat /lab/secret/file.txt  # also denied
 
 id
 exit
 ```
 
-![05_login_user1](images/lab01_permissions/05_login_user1.png)
+![05_login_user1](/handson/images/permissions_linux_sec/05_login_user1.png)
 
-Key point: `/lab/private` with permissions `755` **is visible** to a regular user. Many assume "private" means closed — it does not. Closed means `700`.
+Key point: `/lab/private` with permissions `755` **is visible** to a regular user. Many assume "private" means closed - it does not. Closed means `700`.
 
 ### Step 5. Checking Access as user2
 
 ```bash
 su - user2
 
-ls /lab/secret    # ❌ Permission denied — same result
-ls /lab/public    # ✅ can see files
+ls /lab/secret    # Permission denied — same result
+ls /lab/public    # can see files
 exit
 ```
 
 ![06_login_user2](images/lab01_permissions/06_login_user2.png)
 
-Both users get the same result — `/lab/secret` is inaccessible to both. Permissions `700` mean: **only the owner (root) has access**.
+Both users get the same result - `/lab/secret` is inaccessible to both. Permissions `700` mean: **only the owner (root) has access**.
 
 ---
 
-## Phase 3. Sticky Bit — Protecting Against Deletion of Others' Files
+## Phase 3. Sticky Bit - Protecting Against Deletion of Others' Files
 
 ### Step 6. Applying the Sticky Bit to /lab/shared
 
@@ -156,9 +159,9 @@ sudo chmod 1777 /lab/shared
 ls -la /lab/
 ```
 
-![07_sticky_1](images/lab01_permissions/07_sticky_1.png)
+![07_sticky_1](/handson/images/permissions_linux_sec/07_sticky_1.png)
 
-The letter `t` is now visible at the end of the permissions: `drwxrwxrwt`. Without the sticky bit this would be `drwxrwxrwx` — and any user could delete anyone else's files.
+The letter `t` is now visible at the end of the permissions: `drwxrwxrwt`. Without the sticky bit this would be `drwxrwxrwx` - and any user could delete anyone else's files.
 
 ### Step 7. user2 Creates a File in shared
 
@@ -171,9 +174,9 @@ ls -la /lab/shared/
 exit
 ```
 
-![08_user2_creates_file](images/lab01_permissions/08_user2_creates_file.png)
+![08_user2_creates_file](/handson/images/permissions_linux_sec/08_user2_creates_file.png)
 
-File created. Owner is user2, group is user2. Permissions `664` — user2 can read and write, others can only read.
+File created. Owner is user2, group is user2. Permissions `664` - user2 can read and write, others can only read.
 
 ### Step 8. user1 Tries to Delete user2's File
 
@@ -184,17 +187,17 @@ su - user1
 
 rm /lab/shared/user2_important.txt
 # rm: remove write-protected regular file ...? y
-# rm: cannot remove ...: Operation not permitted ❌
+# rm: cannot remove ...: Operation not permitted
 
 # But deleting own files works fine:
 touch /lab/shared/user1_file.txt
-rm /lab/shared/user1_file.txt  # ✅ works
+rm /lab/shared/user1_file.txt  # works
 exit
 ```
 
-![09_user1_trying_delete](images/lab01_permissions/09_user1_trying_delete.png)
+![09_user1_trying_delete](/handson/images/permissions_linux_sec/09_user1_trying_delete.png)
 
-![10_user1_deleting_his_file](images/lab01_permissions/10_user1_deleting_his_file.png)
+![10_user1_deleting_his_file](/handson/images/permissions_linux_sec/10_user1_deleting_his_file.png)
 
 This is exactly how `/tmp` works on any Linux system: everyone can write, but no one can delete someone else's temporary files.
 
@@ -210,7 +213,7 @@ This is exactly how `/tmp` works on any Linux system: everyone can write, but no
 find / -perm -4000 2>/dev/null
 ```
 
-![11_suid_files](images/lab01_permissions/11_suid_files.png)
+![11_suid_files](/handson/images/permissions_linux_sec/11_suid_files.png)
 
 The output includes key system utilities: `/usr/bin/passwd`, `/usr/bin/su`, `/usr/bin/sudo`, `/usr/bin/mount`. All of them run as root precisely because their job is to perform privileged operations on behalf of regular users in a controlled manner.
 
@@ -220,11 +223,11 @@ The output includes key system utilities: `/usr/bin/passwd`, `/usr/bin/su`, `/us
 find / -perm -2000 2>/dev/null
 ```
 
-![12_sgid_files](images/lab01_permissions/12_sgid_files.png)
+![12_sgid_files](/handson/images/permissions_linux_sec/12_sgid_files.png)
 
 SGID files include `/usr/bin/crontab` and password-checking utilities like `unix_chkpwd`. The latter has SGID set to the `shadow` group — this is how it gains access to `/etc/shadow` to verify passwords without requiring full root privileges.
 
-### Step 11. Both Bits — Extended Output
+### Step 11. Both Bits - Extended Output
 
 The `/6000` mask means "bit 4000 OR bit 2000". We pipe the result into `xargs ls -la` to display detailed permissions for each file:
 
@@ -232,13 +235,13 @@ The `/6000` mask means "bit 4000 OR bit 2000". We pipe the result into `xargs ls
 find / -perm /6000 -type f 2>/dev/null | xargs ls -la 2>/dev/null
 ```
 
-![13_together](images/lab01_permissions/13_together.png)
+![13_together](/handson/images/permissions_linux_sec/13_together.png)
 
 Notice that most found files reside inside snap packages (`/snap/core22/...`). Snap packages bundle their own copies of standard utilities — this is expected, but during a pentest every non-standard path deserves a closer look.
 
 ---
 
-## Phase 5. Analysing /usr/bin/passwd — Why SUID Is Necessary
+## Phase 5. Analysing /usr/bin/passwd - Why SUID Is Necessary
 
 ### Step 12. Permissions on passwd and shadow
 
@@ -247,7 +250,9 @@ ls -la /usr/bin/passwd
 ls -la /etc/shadow
 ```
 
-![15_suid_shadow](images/lab01_permissions/15_suid_shadow.png)
+![14_only_standart](/handson/images/permissions_linux_sec/14_only_standart.png)
+
+![15_suid_shadow](/handson/images/permissions_linux_sec/15_suid_shadow.png)
 
 `/etc/shadow` stores password hashes for all users. Its permissions are `640` with owner root and group shadow. A regular user is not in this group and cannot read the file directly.
 
@@ -255,10 +260,10 @@ ls -la /etc/shadow
 
 ```bash
 su - user1
-cat /etc/shadow  # ❌ Permission denied
+cat /etc/shadow  # Permission denied
 ```
 
-![16_user1_cat_shadow](images/lab01_permissions/16_user1_cat_shadow.png)
+![16_user1_cat_shadow](/handson/images/permissions_linux_sec/16_user1_cat_shadow.png)
 
 Direct access to `/etc/shadow` is blocked. Yet users must be able to **change their own** password.
 
@@ -269,10 +274,10 @@ su - user1
 passwd
 # Current password: ...
 # New password: ...
-# passwd: password updated successfully ✅
+# passwd: password updated successfully
 ```
 
-![17_changing_pass](images/lab01_permissions/17_changing_pass.png)
+![17_changing_pass](/handson/images/permissions_linux_sec/17_changing_pass.png)
 
 This is the purpose of SUID. `passwd` runs with root's privileges, writes **only the current user's entry** in `/etc/shadow`, and exits. Controlled access to a privileged resource.
 
@@ -284,9 +289,9 @@ Let's observe what actually happens inside `passwd` at the system call level:
 sudo strace -e trace=open,openat passwd 2>&1 | grep shadow
 ```
 
-![18_strace](images/lab01_permissions/18_strace.png)
+![18_strace](/handson/images/permissions_linux_sec/18_strace.png)
 
-`strace` intercepts `open` and `openat` system calls — the calls programs use to open files. When `/etc/shadow` appears in the output it confirms that `passwd` does access the protected file, acting with root's privileges through the SUID mechanism.
+`strace` intercepts `open` and `openat` system calls - the calls programs use to open files. When `/etc/shadow` appears in the output it confirms that `passwd` does access the protected file, acting with root's privileges through the SUID mechanism.
 
 ---
 
@@ -304,9 +309,9 @@ id user1 2>&1      # no such user
 ls /lab 2>&1       # No such file or directory
 ```
 
-![19_deleting_all](images/lab01_permissions/19_deleting_all.png)
+![19_deleting_all](/handson/images/permissions_linux_sec/19_deleting_all.png)
 
-The `-r` flag in `userdel` removes the user's home directory along with the account. The warning about the mail spool is normal — it simply never existed.
+The `-r` flag in `userdel` removes the user's home directory along with the account. The warning about the mail spool is normal - it simply never existed.
 
 ---
 
@@ -343,4 +348,4 @@ find / -type d -perm -0002 2>/dev/null | grep -v proc
 find / -nouser -o -nogroup 2>/dev/null
 ```
 
-In this lab we built a complete practical map of Unix access controls — from basic `chmod` to special bits SUID, SGID, and Sticky. Each mechanism was tested in real scenarios with multiple users, which is exactly how permissions behave in production systems. Understanding these mechanisms is critical both for hardening systems and for auditing them.
+In this lab we built a complete practical map of Unix access controls - from basic `chmod` to special bits SUID, SGID, and Sticky.
