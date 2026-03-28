@@ -260,7 +260,7 @@ su - user1
 cat /etc/shadow  # Permission denied
 ```
 
-![16_user1_cat_shadow](images/lab01_permissions/16_user1_cat_shadow.png)
+![16_user1_cat_shadow](screens/16_user1_cat_shadow.png)
 
 Прямой доступ к `/etc/shadow` заблокирован. Но пользователь должен иметь возможность **сменить свой** пароль.
 
