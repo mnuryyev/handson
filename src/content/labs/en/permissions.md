@@ -142,7 +142,7 @@ ls /lab/public    # can see files
 exit
 ```
 
-![06_login_user2](images/lab01_permissions/06_login_user2.png)
+![06_login_user2](/handson/images/permissions_linux_sec/06_login_user2.png)
 
 Both users get the same result - `/lab/secret` is inaccessible to both. Permissions `700` mean: **only the owner (root) has access**.
 
