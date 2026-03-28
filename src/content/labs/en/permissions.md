@@ -5,6 +5,8 @@ image: "/images/permissions_linux_sec/main.png"
 date: "2026-03-28"
 ---
 
+## Introduction
+
 Every time an administrator sets permissions on a file or directory, they are making a decision about who can do what on the system.
 
 In this lab we will cover Unix permissions not in theory but in practice: build an isolated directory structure, set up users, reproduce real attack scenarios, and understand why SUID, SGID, and Sticky bit exist in the first place.
