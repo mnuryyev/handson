@@ -8,12 +8,16 @@ const labs = defineCollection({
     description: z.string(),
     image: z.string().optional(),
     date: z.string().optional(),
+    tags: z.array(z.string()).default([]), // <-- ДОБАВИЛИ ТЕГИ
   }),
 });
 
 const articles = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/articles" }),
-  schema: z.object({ title: z.string() }),
+  schema: z.object({ 
+    title: z.string(),
+    tags: z.array(z.string()).default([]), // <-- ДОБАВИЛИ ТЕГИ
+  }),
 });
 
 const wiki = defineCollection({
@@ -21,7 +25,8 @@ const wiki = defineCollection({
   schema: z.object({ 
     title: z.string(),
     description: z.string().optional(),
-    date: z.string().optional(), // <--- ДОБАВЬ ЭТУ СТРОКУ
+    date: z.string().optional(),
+    tags: z.array(z.string()).default([]), // <-- ДОБАВИЛИ ТЕГИ
   }),
 });
 
