@@ -2,6 +2,7 @@
 title: "DHCP: Server Configuration, Relay and Traffic Analysis in Wireshark"
 description: "In this work, we'll thoroughly examine how DHCP works, from the DORA message exchange process (Discover, Offer, Request, Acknowledge), through network traffic analysis in Wireshark"
 image: "/images/dhcp_net/dhcp_main.jpg"
+tags: ["dhcp", "dhcp-relay", "dora", "isc-dhcp-server"]
 date: "2026-02-12"
 ---
 
