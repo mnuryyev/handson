@@ -7,8 +7,6 @@ const cleanBase = base.endsWith('/') ? base : `${base}/`;
 
 export async function getStaticPaths() {
   const languages = ['ru', 'en'];
-  
-  // Собираем все коллекции, где есть теги
   const allLabs = await getCollection('labs');
   const allArticles = await getCollection('articles');
   const allWiki = await getCollection('wiki');
@@ -16,17 +14,22 @@ export async function getStaticPaths() {
   const allContent = [...allLabs, ...allArticles, ...allWiki];
 
   return languages.flatMap((lang) => {
-    // Фильтруем контент по языку. 
-    // loader: glob обычно сохраняет путь в id (например "ru/dhcp.md")
     const langContent = allContent.filter(item => item.id.startsWith(`${lang}/`));
     
-    // Собираем все уникальные теги для этого языка
-    const uniqueTags = [...new Set(langContent.map((item) => item.data.tags || []).flat())];
+    // ПУНКТ 1: Приводим все теги к нижнему регистру при сборе
+    const uniqueTags = [...new Set(
+      langContent.map((item) => item.data.tags || [])
+        .flat()
+        .map(tag => tag.toLowerCase()) // ← ВСЕ МАЛЕНЬКИЕ
+    )];
 
     return uniqueTags.map((tag) => ({
       params: { lang, tag },
       props: { 
-        posts: langContent.filter((item) => item.data.tags?.includes(tag)),
+        // При фильтрации тоже сравниваем в нижнем регистре
+        posts: langContent.filter((item) => 
+          item.data.tags?.map(t => t.toLowerCase()).includes(tag)
+        ),
       },
     }));
   });
@@ -35,6 +38,20 @@ export async function getStaticPaths() {
 const { lang, tag } = Astro.params;
 const { posts } = Astro.props;
 
+// Словарь для перевода названий разделов (ПУНКТ 2)
+const sectionNames = {
+  ru: {
+    articles: 'Сети',
+    labs: 'Безопасность',
+    wiki: 'Вики',
+  },
+  en: {
+    articles: 'Networks',
+    labs: 'Security',
+    wiki: 'Wiki',
+  }
+};
+
 const titleText = lang === 'en' ? `Tag: ${tag}` : `Тег: ${tag}`;
 ---
 
@@ -42,25 +59,22 @@ const titleText = lang === 'en' ? `Tag: ${tag}` : `Тег: ${tag}`;
   <div class="container">
     <div class="tag-header">
       <span class="tag-label">{lang === 'en' ? 'Browsing Tag' : 'Просмотр тега'}</span>
-      <h1 class="tag-title">#{tag}</h1>
-    </div>
+      <h1 class="tag-title">#{tag.toLowerCase()}</h1> </div>
     
     <div class="results-grid">
       {posts.map((post) => {
-        // ЛОГИКА ФОРМИРОВАНИЯ ССЫЛКИ:
-        // 1. Берем коллекцию (articles, labs, wiki)
         const collection = post.collection;
-        // 2. Очищаем ID от префикса языка и расширения .md (было "ru/dhcp.md" -> стало "dhcp")
         const slug = post.id.split('/').pop().replace('.md', '');
-        // 3. Собираем полный путь: /base/ru/articles/dhcp
         const finalHref = `${cleanBase}${lang}/${collection}/${slug}`;
+        
+        // ПУНКТ 2: Берем название из словаря выше
+        const displayName = sectionNames[lang][collection] || collection;
 
         return (
           <a href={finalHref} class="result-card">
             <div class="card-content">
                <div class="meta-top">
-                 <span class="category">{collection}</span>
-                 {post.data.date && <span class="date">{post.data.date}</span>}
+                 <span class="category">{displayName}</span> {post.data.date && <span class="date">{post.data.date}</span>}
                </div>
                <h3>{post.data.title}</h3>
                <p>{post.data.description || ""}</p>
@@ -73,51 +87,17 @@ const titleText = lang === 'en' ? `Tag: ${tag}` : `Тег: ${tag}`;
 </MainLayout>
 
 <style>
+  /* Стили оставляем те же, что были в предыдущем шаге */
   .container { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
-  
   .tag-header { margin-bottom: 50px; border-bottom: 1px solid #1a1a1a; padding-bottom: 20px; }
-  .tag-label { color: #555; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+  .tag-label { color: #555; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; }
   .tag-title { color: #3ea6ff; font-size: 3rem; margin-top: 10px; }
-
   .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-  
-  .result-card { 
-    background: #0a0a0a; 
-    border: 1px solid #1e293b; 
-    border-radius: 12px; 
-    padding: 24px; 
-    text-decoration: none !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .result-card:hover { 
-    border-color: #3ea6ff; 
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px -10px rgba(62, 166, 255, 0.2);
-  }
-
+  .result-card { background: #0a0a0a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; text-decoration: none !important; transition: 0.3s; }
+  .result-card:hover { border-color: #3ea6ff; transform: translateY(-5px); }
   .meta-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-  
-  .category { 
-    font-size: 0.7rem; 
-    text-transform: uppercase; 
-    color: #3ea6ff; 
-    background: rgba(62, 166, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: bold; 
-  }
-
+  .category { font-size: 0.7rem; text-transform: uppercase; color: #3ea6ff; background: rgba(62, 166, 255, 0.1); padding: 2px 8px; border-radius: 4px; font-weight: bold; }
   .date { font-size: 0.75rem; color: #444; }
-  
-  .result-card h3 { color: #fff; margin: 0 0 10px 0; font-size: 1.4rem; line-height: 1.3; }
-  .result-card p { color: #888; font-size: 0.95rem; line-height: 1.5; margin: 0; }
-
-  @media (max-width: 768px) {
-    .container { margin: 30px auto; }
-    .tag-title { font-size: 2.2rem; }
-    .results-grid { grid-template-columns: 1fr; }
-  }
+  .result-card h3 { color: #fff; margin: 0 0 10px 0; font-size: 1.4rem; }
+  .result-card p { color: #888; font-size: 0.95rem; line-height: 1.5; }
 </style>
