@@ -1,0 +1,68 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const languages = ['ru', 'en'];
+  // Собираем контент из всех нужных коллекций
+  const allLabs = await getCollection('labs');
+  const allArticles = await getCollection('articles');
+  const allContent = [...allLabs, ...allArticles];
+
+  return languages.flatMap((lang) => {
+    // Фильтруем по языку (проверяем id или slug на наличие префикса ru/ или en/)
+    const langContent = allContent.filter(item => item.id.startsWith(`${lang}/`));
+    
+    // Собираем все уникальные теги
+    const uniqueTags = [...new Set(langContent.map((item) => item.data.tags || []).flat())];
+
+    return uniqueTags.map((tag) => ({
+      params: { lang, tag },
+      props: { 
+        posts: langContent.filter((item) => item.data.tags?.includes(tag)),
+      },
+    }));
+  });
+}
+
+const { lang, tag } = Astro.params;
+const { posts } = Astro.props;
+
+const titleText = lang === 'en' ? `Tag: ${tag}` : `Тег: ${tag}`;
+---
+
+<MainLayout title={titleText}>
+  <div class="container">
+    <h1 class="tag-title">#{tag}</h1>
+    
+    <div class="results-grid">
+      {posts.map((post) => (
+        <a href={`/${post.id.replace('.md', '')}`} class="result-card">
+          <div class="card-content">
+             <span class="category">{post.collection}</span>
+             <h3>{post.data.title}</h3>
+             <p>{post.data.description || ""}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .container { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
+  .tag-title { color: var(--accent); font-size: 2.5rem; margin-bottom: 40px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .result-card { 
+    background: #0d0d0d; 
+    border: 1px solid #222; 
+    border-radius: 12px; 
+    padding: 20px; 
+    text-decoration: none !important;
+    transition: 0.3s;
+  }
+  .result-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .category { font-size: 0.7rem; text-transform: uppercase; color: #555; font-weight: bold; }
+  .result-card h3 { color: #fff; margin: 5px 0; }
+  .result-card p { color: #888; font-size: 0.9rem; }
+</style>
