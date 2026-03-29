@@ -21,12 +21,12 @@ const lang = "ru";
 const filePath = path.join('./src/content/articles/ru', `${slug}.md`);
 const fileContent = fs.readFileSync(filePath, 'utf-8');
 
-// Извлекаем tags из data (frontmatter)
+// Извлекаем данные статьи
 const { data, content } = matter(fileContent);
 const htmlContent = marked.parse(content);
 ---
 
-<MainLayout title={data.title} tags={data.tags}>
+<MainLayout title={data.title}>
   <div class="article-container">
     <nav class="breadcrumb">
       <a href={`${cleanBase}${lang}/articles/1`}>Сети и администрирование</a> 
@@ -37,9 +37,22 @@ const htmlContent = marked.parse(content);
     <article class="prose">
       <header class="article-header">
         <h1>{data.title}</h1>
-        </header>
+      </header>
       
       <div class="article-body" set:html={htmlContent} />
+
+      {data.tags && data.tags.length > 0 && (
+        <div class="post-footer-tags">
+          <span class="tags-label">{lang === 'en' ? 'Tags:' : 'Теги:'}</span>
+          <div class="tags-list">
+            {data.tags.map((tag) => (
+              <a href={`${cleanBase}${lang}/tags/${tag}`} class="tag-item">
+                #{tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   </div>
 </MainLayout>
@@ -52,7 +65,7 @@ const htmlContent = marked.parse(content);
   
   .article-header h1 { 
     font-size: 2.8rem; 
-    margin-bottom: 20px; /* Увеличили отступ, так как под ним будут теги или текст */
+    margin-bottom: 30px; 
     color: #fff; 
     line-height: 1.2;
   }
@@ -63,10 +76,34 @@ const htmlContent = marked.parse(content);
   .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
   .article-body :global(h3) { font-size: 1.4rem; margin: 1.2em 0 0.6em; color: #3ea6ff; }
   
+  /* Стили для тегов в футере статьи */
+  .post-footer-tags {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid #1a1a1a;
+  }
+  
+  .tags-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #555;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Сами плашки тегов подхватят стили .tag-item из MainLayout */
+
   .article-body :global(p) { margin-bottom: 1.2em; }
   .article-body :global(img) { width: 100%; border-radius: 12px; margin: 2rem 0; border: 1px solid #333; }
   
-  /* Стили для кода */
   .article-body :global(pre) { 
     background: #0b0b0b; 
     padding: 20px; 
@@ -84,5 +121,6 @@ const htmlContent = marked.parse(content);
   @media (max-width: 768px) {
     .article-container { margin: 20px auto; padding: 0 20px; }
     .article-header h1 { font-size: 2rem; }
+    .post-footer-tags { margin-top: 40px; }
   }
 </style>
