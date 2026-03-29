@@ -9,7 +9,7 @@ const base = import.meta.env.BASE_URL;
 // Она склеит твой домен из конфига и текущий путь страницы
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title } = Astro.props;
+const { title, tags = [] } = Astro.props; 
 const { pathname } = Astro.url;
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
@@ -78,6 +78,16 @@ const t = nav[lang];
 
     <main class="container main-content">
       <div class="markdown-content">
+        {tags.length > 0 && (
+          <div class="page-tags">
+            {tags.map((tag) => (
+              <a href={`${base}${lang}/tags/${tag}`} class="tag-item">
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+        
         <slot />
       </div>
     </main>
