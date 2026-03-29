@@ -113,6 +113,49 @@ const t = nav[lang];
     overflow: hidden;
   }
 
+  /* --- Страничные теги --- */
+  .page-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .tag-item {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #3ea6ff; /* Твой фирменный синий */
+    background: rgba(62, 166, 255, 0.07);
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(62, 166, 255, 0.2);
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .tag-item:hover {
+    background: #3ea6ff;
+    color: #000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(62, 166, 255, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .page-tags {
+      margin-bottom: 20px;
+      gap: 8px;
+    }
+    .tag-item {
+      font-size: 0.7rem;
+      padding: 3px 10px;
+    }
+  }
+
   .main-content {
     flex: 1;
     width: 100%;
