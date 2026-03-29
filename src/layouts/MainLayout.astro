@@ -6,9 +6,9 @@ import LangSwitcher from '../components/LangSwitcher.astro';
 const base = import.meta.env.BASE_URL;
 
 // Генерируем правильную каноническую ссылку для Google
-// Она склеит твой домен из конфига и текущий путь страницы
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
+// Принимаем пропсы. tags оставляем в пропсах на случай, если они понадобятся для мета-тегов
 const { title, tags = [] } = Astro.props; 
 const { pathname } = Astro.url;
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
@@ -43,7 +43,6 @@ const t = nav[lang];
     <title>{title}</title>
     
     <link rel="canonical" href={canonicalURL} />
-    
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
@@ -78,16 +77,6 @@ const t = nav[lang];
 
     <main class="container main-content">
       <div class="markdown-content">
-        {tags.length > 0 && (
-          <div class="page-tags">
-            {tags.map((tag) => (
-              <a href={`${base}${lang}/tags/${tag}`} class="tag-item">
-                #{tag}
-              </a>
-            ))}
-          </div>
-        )}
-        
         <slot />
       </div>
     </main>
@@ -113,23 +102,14 @@ const t = nav[lang];
     overflow: hidden;
   }
 
-  /* --- Страничные теги --- */
-  .page-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #1a1a1a;
-  }
-
+  /* --- Общие стили для тегов (используются в статьях и списках) --- */
   .tag-item {
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #3ea6ff; /* Твой фирменный синий */
+    color: #3ea6ff; 
     background: rgba(62, 166, 255, 0.07);
     padding: 4px 12px;
     border-radius: 6px;
@@ -143,17 +123,6 @@ const t = nav[lang];
     color: #000 !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(62, 166, 255, 0.3);
-  }
-
-  @media (max-width: 768px) {
-    .page-tags {
-      margin-bottom: 20px;
-      gap: 8px;
-    }
-    .tag-item {
-      font-size: 0.7rem;
-      padding: 3px 10px;
-    }
   }
 
   .main-content {
@@ -195,10 +164,7 @@ const t = nav[lang];
   .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
   @media (max-width: 992px) {
-    .menu-toggle {
-      display: flex;
-    }
-
+    .menu-toggle { display: flex; }
     .nav-links {
       position: fixed;
       top: 0;
@@ -208,76 +174,26 @@ const t = nav[lang];
       background: #0b0b0b;
       flex-direction: column;
       justify-content: center;
-      align-items: center; /* ← всё по центру */
+      align-items: center;
       gap: 8px;
       transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 1050;
       padding: 40px 20px;
     }
-
-    .nav-links.is-open {
-      right: 0;
-    }
-
-    /* каждый пункт — на всю ширину, текст по центру */
-    .nav-links li {
-      width: 100%;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-    }
-
-    .nav-links a {
-      font-size: 1.3rem;
-      padding: 10px 0;
-      display: block;
-      width: 100%;
-      text-align: center;
-    }
-
-    /* nav-actions: убираем боковые бордеры, центрируем */
-    .nav-actions {
-      border: none;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-      padding: 16px 0;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .btn-projects {
-      display: inline-block;
-      text-align: center;
-    }
+    .nav-links.is-open { right: 0; }
+    .nav-links li { width: 100%; text-align: center; display: flex; justify-content: center; }
+    .nav-links a { font-size: 1.3rem; padding: 10px 0; display: block; width: 100%; }
+    .nav-actions { border: none; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; padding: 16px 0; width: 100%; display: flex; justify-content: center; }
   }
 
   @media (max-width: 768px) {
-    .main-content {
-      padding-top: 24px;
-      padding-bottom: 40px;
-    }
-
-    /* таблицы скроллятся горизонтально */
-    .markdown-content table,
-    .markdown-body table {
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
+    .main-content { padding-top: 24px; padding-bottom: 40px; }
+    .markdown-content table, .markdown-body table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .markdown-content h1 { font-size: 1.6rem; }
     .markdown-content h2 { font-size: 1.3rem; }
     .markdown-content h3 { font-size: 1.1rem; }
-
-    .markdown-content pre {
-      font-size: 0.78em;
-    }
+    .markdown-content pre { font-size: 0.78em; }
   }
 
-  @media (max-width: 480px) {
-    .container {
-      padding: 0 14px;
-    }
-  }
+  @media (max-width: 480px) { .container { padding: 0 14px; } }
 </style>
