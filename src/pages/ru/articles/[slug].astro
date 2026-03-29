@@ -46,8 +46,8 @@ const htmlContent = marked.parse(content);
           <span class="tags-label">{lang === 'en' ? 'Tags:' : 'Теги:'}</span>
           <div class="tags-list">
             {data.tags.map((tag) => (
-              <a href={`${cleanBase}${lang}/tags/${tag}`} class="tag-item">
-                #{tag}
+            <a href={`${cleanBase}${lang}/tags/${tag.toLowerCase()}`} class="tag-item">
+              #{tag.toLowerCase()}
               </a>
             ))}
           </div>
