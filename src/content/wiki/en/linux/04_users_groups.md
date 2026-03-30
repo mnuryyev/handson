@@ -217,7 +217,7 @@ adduser alice sudo              # add to sudo group
 adduser alice developers        # add to developers group
 ```
 
-### usermod — modifying a user
+### usermod - modifying a user
 
 ```bash
 usermod -s /bin/zsh alice              # change shell
@@ -236,7 +236,7 @@ usermod -c "Alice Smith" alice         # change comment
 
 > !!! `usermod -G` **without** `-a` replaces all of the user's groups. Always use `usermod -aG` when adding to a group.
 
-### userdel — deleting a user
+### userdel - deleting a user
 
 ```bash
 userdel alice                  # delete user (keep home directory)
@@ -266,7 +266,7 @@ passwd -S alice         # password status
 #       └──────────── P=set, L=locked, NP=no password
 ```
 
-### chage — password aging policy
+### chage - password aging policy
 
 ```bash
 chage -l alice                  # show current policy
@@ -355,7 +355,7 @@ sudo -v                         # update timestamp (extend session)
 sudo -k                         # invalidate timestamp (require password again)
 ```
 
-### /etc/sudoers — configuration
+### /etc/sudoers - configuration
 
 ```bash
 # NEVER edit /etc/sudoers directly
