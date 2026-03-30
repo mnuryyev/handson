@@ -1,6 +1,9 @@
-# Пользователи и группы (sudo, /etc/passwd, /etc/shadow)
+---
+title: "Пользователи и группы (sudo, /etc/passwd, /etc/shadow)"
+date: "2026-03-30"
+---
 
-Linux — многопользовательская система. Каждый процесс, файл и ресурс принадлежит конкретному пользователю и группе. Понимание этой модели — основа системного администрирования и безопасности.
+Linux - многопользовательская система. Каждый процесс, файл и ресурс принадлежит конкретному пользователю и группе.
 
 ---
 
@@ -23,9 +26,9 @@ logname         # имя пользователя, который вошёл в 
 
 ---
 
-## /etc/passwd — база пользователей
+## /etc/passwd - база пользователей
 
-Каждая строка — один пользователь. Файл читаем всеми.
+Каждая строка - один пользователь. Файл читаем всеми.
 
 ```bash
 cat /etc/passwd
@@ -50,15 +53,15 @@ alice : x : 1001 : 1001 : Alice Smith,,, : /home/alice : /bin/bash
 ```
 
 **Поле пароля:**
-- `x` — пароль хранится в `/etc/shadow`
-- `*` — вход запрещён (системные аккаунты)
-- пусто — пароль не требуется (небезопасно)
+- `x` - пароль хранится в `/etc/shadow`
+- `*` - вход запрещён (системные аккаунты)
+- пусто - пароль не требуется (небезопасно)
 
 **Поле shell:**
-- `/bin/bash` — обычный интерактивный вход
-- `/usr/sbin/nologin` — вход запрещён (для демонов)
-- `/bin/false` — вход запрещён (альтернатива)
-- `/bin/sync` — только команда sync
+- `/bin/bash` - обычный интерактивный вход
+- `/usr/sbin/nologin` - вход запрещён (для демо)
+- `/bin/false` - вход запрещён (альтернатива)
+- `/bin/sync` - только команда sync
 
 ```bash
 # Посмотреть только логины и shells
@@ -73,7 +76,7 @@ awk -F: '($2 == "" )' /etc/passwd
 
 ---
 
-## /etc/shadow — хэши паролей
+## /etc/shadow - хэши паролей
 
 Читается только root. Хранит пароли и политики устаревания.
 
@@ -101,13 +104,13 @@ alice : $6$xyz$hash : 19500 : 0 : 90 : 7 : 14 : :
 ```
 
 **Статус аккаунта по хэшу:**
-- `$6$...` — SHA-512 хэш (активный аккаунт)
-- `$5$...` — SHA-256 хэш
-- `$1$...` — MD5 хэш (устарел, небезопасен)
-- `$y$...` — yescrypt (современный, Debian 11+)
-- `!` — аккаунт заблокирован
-- `!!` — пароль никогда не устанавливался
-- пусто — пароль не требуется (опасно)
+- `$6$...` - SHA-512 хэш (активный аккаунт)
+- `$5$...` - SHA-256 хэш
+- `$1$...` - MD5 хэш (устарел, небезопасен)
+- `$y$...` - yescrypt (современный, Debian 11+)
+- `!` - аккаунт заблокирован
+- `!!` - пароль никогда не устанавливался
+- пусто - пароль не требуется (опасно)
 
 ```bash
 # Формат хэша: $алгоритм$параметры$соль$хэш
@@ -119,7 +122,7 @@ alice : $6$xyz$hash : 19500 : 0 : 90 : 7 : 14 : :
 
 ---
 
-## /etc/group — группы
+## /etc/group - группы
 
 ```bash
 cat /etc/group
@@ -155,7 +158,7 @@ getent group developers
 
 ---
 
-## /etc/gshadow — пароли групп
+## /etc/gshadow - пароли групп
 
 ```bash
 sudo cat /etc/gshadow
@@ -169,7 +172,7 @@ sudo cat /etc/gshadow
 
 ## Управление пользователями
 
-### useradd — создание пользователя
+### useradd - создание пользователя
 
 ```bash
 # Базовое создание
@@ -198,10 +201,10 @@ useradd -e 2024-12-31 alice        # дата истечения аккаунт�
 useradd -D                         # показать значения по умолчанию
 ```
 
-### adduser — интерактивный (Debian/Ubuntu)
+### adduser - интерактивный (Debian/Ubuntu)
 
 ```bash
-# adduser — высокоуровневый wrapper над useradd
+# adduser - высокоуровневый wrapper над useradd
 adduser alice
 # Creating user `alice'...
 # Adding new group `alice' (1001)...
@@ -214,7 +217,7 @@ adduser alice sudo              # добавить в группу sudo
 adduser alice developers        # добавить в группу developers
 ```
 
-### usermod — изменение пользователя
+### usermod - изменение пользователя
 
 ```bash
 usermod -s /bin/zsh alice              # изменить shell
@@ -231,7 +234,7 @@ usermod -e "" alice                    # снять дату истечения
 usermod -c "Alice Smith" alice         # изменить комментарий
 ```
 
-> ⚠️ `usermod -G` **без** `-a` заменяет все группы пользователя. Всегда используй `usermod -aG` для добавления в группу.
+> !!! `usermod -G` **без** `-a` заменяет все группы пользователя. Всегда использовать `usermod -aG` для добавления в группу.
 
 ### userdel — удаление пользователя
 
@@ -239,7 +242,7 @@ usermod -c "Alice Smith" alice         # изменить комментарий
 userdel alice                  # удалить пользователя (сохранить home)
 userdel -r alice               # удалить вместе с домашней директорией и почтой
 
-# Перед удалением — найти все файлы пользователя
+# Перед удалением - найти все файлы пользователя
 find / -user alice 2>/dev/null
 find / -uid 1001 2>/dev/null   # по UID (если пользователь уже удалён)
 ```
@@ -248,7 +251,7 @@ find / -uid 1001 2>/dev/null   # по UID (если пользователь у�
 
 ## Управление паролями
 
-### passwd — смена пароля
+### passwd - смена пароля
 
 ```bash
 passwd                  # изменить свой пароль
@@ -258,18 +261,18 @@ passwd -u alice         # разблокировать аккаунт (unlock)
 passwd -d alice         # удалить пароль (небезопасно)
 passwd -e alice         # истечение — пользователь должен сменить при входе
 passwd -S alice         # статус пароля
-# alice P 2024-01-15 0 90 7 14
+# alice P 2025-03-15 0 90 7 14
 #       │ └────────── дата последней смены
 #       └──────────── P=установлен, L=заблокирован, NP=нет пароля
 ```
 
-### chage — политика устаревания паролей
+### chage - политика устаревания паролей
 
 ```bash
 chage -l alice                  # показать текущую политику
-# Last password change          : Jan 15, 2024
-# Password expires              : Apr 15, 2024
-# Password inactive             : Apr 29, 2024
+# Last password change          : Jan 15, 2026
+# Password expires              : Apr 15, 2026
+# Password inactive             : Apr 29, 2026
 # Account expires               : never
 # Minimum number of days        : 0
 # Maximum number of days        : 90
@@ -279,7 +282,7 @@ chage -M 90 alice               # максимум 90 дней до смены �
 chage -m 7 alice                # минимум 7 дней между сменами
 chage -W 14 alice               # предупреждать за 14 дней
 chage -I 30 alice               # неактивность 30 дней = блокировка
-chage -E 2025-12-31 alice       # аккаунт истекает 31.12.2025
+chage -E 2026-12-31 alice       # аккаунт истекает 31.12.2026
 chage -E -1 alice               # никогда не истекает
 chage -d 0 alice                # истечение немедленно (смена при след. входе)
 ```
@@ -316,7 +319,7 @@ getent group developers
 grep "^developers" /etc/group
 ```
 
-### newgrp — временная смена группы
+### newgrp - временная смена группы
 
 ```bash
 # Сменить активную группу в текущей сессии
@@ -332,7 +335,7 @@ exit
 
 ---
 
-## sudo — выполнение с привилегиями
+## sudo - выполнение с привилегиями
 
 `sudo` (superuser do) позволяет выполнять команды от имени другого пользователя (обычно root).
 
@@ -417,7 +420,7 @@ cat /etc/sudoers.d/developers
 
 ---
 
-## su — переключение пользователя
+## su - переключение пользователя
 
 ```bash
 su alice                # переключиться на alice (нужен пароль alice)
@@ -426,11 +429,11 @@ su -                    # стать root (нужен пароль root)
 su -c "command" alice   # выполнить команду от имени alice
 ```
 
-> Разница `su` и `su -`: без дефиса переменные окружения остаются от текущего пользователя; с дефисом — полноценный вход (загружаются `.bashrc`, `.profile` целевого пользователя).
+> Разница `su` и `su -`: без дефиса переменные окружения остаются от текущего пользователя; с дефисом - полноценный вход (загружаются `.bashrc`, `.profile` целевого пользователя).
 
 ---
 
-## PAM — Pluggable Authentication Modules
+## PAM - Pluggable Authentication Modules
 
 PAM управляет аутентификацией в Linux. Конфиги в `/etc/pam.d/`.
 
@@ -481,9 +484,9 @@ awk -F: '$2 ~ /^!/' /etc/shadow
 
 ---
 
-## getent — запрос к базе NSS
+## getent - запрос к базе NSS
 
-`getent` запрашивает данные через Name Service Switch — работает и с локальными файлами, и с LDAP/AD.
+`getent` запрашивает данные через Name Service Switch - работает и с локальными файлами, и с LDAP/AD.
 
 ```bash
 getent passwd alice              # запись пользователя
@@ -600,7 +603,7 @@ getent group wheel
 
 ## Ссылки
 
-- [passwd man page](https://man7.org/linux/man-pages/man5/passwd.5.html) — `man 5 passwd`
-- [shadow man page](https://man7.org/linux/man-pages/man5/shadow.5.html) — `man 5 shadow`
-- [sudoers man page](https://man7.org/linux/man-pages/man5/sudoers.5.html) — `man 5 sudoers`
-- [PAM Linux](http://www.linux-pam.org/Linux-PAM-html/) — документация PAM
+- [passwd man page](https://man7.org/linux/man-pages/man5/passwd.5.html) - `man 5 passwd`
+- [shadow man page](https://man7.org/linux/man-pages/man5/shadow.5.html) - `man 5 shadow`
+- [sudoers man page](https://man7.org/linux/man-pages/man5/sudoers.5.html) - `man 5 sudoers`
+- [PAM Linux](http://www.linux-pam.org/Linux-PAM-html/) - документация PAM
