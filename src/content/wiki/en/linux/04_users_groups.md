@@ -1,6 +1,9 @@
-# Users and Groups (sudo, /etc/passwd, /etc/shadow)
+---
+title: "Users and Groups (sudo, /etc/passwd, /etc/shadow)"
+date: "2026-03-30"
+---
 
-Linux is a multi-user system. Every process, file, and resource belongs to a specific user and group. Understanding this model is the foundation of system administration and security.
+Linux is a multi-user system. Every process, file, and resource belongs to a specific user and group.
 
 ---
 
@@ -23,7 +26,7 @@ logname         # the user who logged in (not affected by su)
 
 ---
 
-## /etc/passwd — User Database
+## /etc/passwd - User Database
 
 One line per user. World-readable.
 
@@ -50,15 +53,15 @@ alice : x : 1001 : 1001 : Alice Smith,,, : /home/alice : /bin/bash
 ```
 
 **Password field values:**
-- `x` — password is stored in `/etc/shadow`
-- `*` — login disabled (system accounts)
+- `x` - password is stored in `/etc/shadow`
+- `*` - login disabled (system accounts)
 - empty — no password required (insecure)
 
 **Shell field values:**
-- `/bin/bash` — normal interactive login
-- `/usr/sbin/nologin` — login disabled (for daemons)
-- `/bin/false` — login disabled (alternative)
-- `/bin/sync` — only runs sync command
+- `/bin/bash` - normal interactive login
+- `/usr/sbin/nologin` - login disabled (for daemons)
+- `/bin/false` - login disabled (alternative)
+- `/bin/sync` - only runs sync command
 
 ```bash
 # List all logins and their shells
@@ -73,7 +76,7 @@ awk -F: '($2 == "" )' /etc/passwd
 
 ---
 
-## /etc/shadow — Password Hashes
+## /etc/shadow - Password Hashes
 
 Root-readable only. Stores password hashes and aging policy.
 
@@ -101,13 +104,13 @@ alice : $6$xyz$hash : 19500 : 0 : 90 : 7 : 14 : :
 ```
 
 **Account status from the hash field:**
-- `$6$...` — SHA-512 hash (active account)
-- `$5$...` — SHA-256 hash
-- `$1$...` — MD5 hash (deprecated, insecure)
-- `$y$...` — yescrypt (modern, Debian 11+)
-- `!` — account locked
-- `!!` — password was never set
-- empty — no password required (dangerous)
+- `$6$...` - SHA-512 hash (active account)
+- `$5$...` - SHA-256 hash
+- `$1$...` - MD5 hash (deprecated, insecure)
+- `$y$...` - yescrypt (modern, Debian 11+)
+- `!` - account locked
+- `!!` - password was never set
+- empty - no password required (dangerous)
 
 ```bash
 # Hash format: $algorithm$parameters$salt$hash
@@ -119,7 +122,7 @@ alice : $6$xyz$hash : 19500 : 0 : 90 : 7 : 14 : :
 
 ---
 
-## /etc/group — Groups
+## /etc/group - Groups
 
 ```bash
 cat /etc/group
@@ -155,7 +158,7 @@ getent group developers
 
 ---
 
-## /etc/gshadow — Group Passwords
+## /etc/gshadow - Group Passwords
 
 ```bash
 sudo cat /etc/gshadow
@@ -169,7 +172,7 @@ Rarely used in practice. `!` or `*` means no group password is set.
 
 ## Managing Users
 
-### useradd — creating a user
+### useradd - creating a user
 
 ```bash
 # Basic creation
@@ -194,11 +197,11 @@ useradd -r -s /usr/sbin/nologin -d /var/lib/myapp myapp
 useradd -u 1500 alice              # set a specific UID
 useradd -g developers alice        # primary group
 useradd -G sudo,docker alice       # supplementary groups
-useradd -e 2024-12-31 alice        # account expiration date
+useradd -e 2026-12-31 alice        # account expiration date
 useradd -D                         # show default values
 ```
 
-### adduser — interactive (Debian/Ubuntu)
+### adduser - interactive (Debian/Ubuntu)
 
 ```bash
 # adduser is a high-level wrapper around useradd
@@ -226,12 +229,12 @@ usermod -aG sudo alice                 # add to a group (-a = append, important!
 usermod -G sudo,developers alice       # set exact group list (removes others)
 usermod -L alice                       # lock account
 usermod -U alice                       # unlock account
-usermod -e 2025-12-31 alice            # set expiration date
+usermod -e 2026-12-31 alice            # set expiration date
 usermod -e "" alice                    # remove expiration date
 usermod -c "Alice Smith" alice         # change comment
 ```
 
-> ⚠️ `usermod -G` **without** `-a` replaces all of the user's groups. Always use `usermod -aG` when adding to a group.
+> !!! `usermod -G` **without** `-a` replaces all of the user's groups. Always use `usermod -aG` when adding to a group.
 
 ### userdel — deleting a user
 
@@ -248,7 +251,7 @@ find / -uid 1001 2>/dev/null   # by UID (if user is already deleted)
 
 ## Managing Passwords
 
-### passwd — changing passwords
+### passwd - changing passwords
 
 ```bash
 passwd                  # change your own password
@@ -258,7 +261,7 @@ passwd -u alice         # unlock account
 passwd -d alice         # remove password (insecure)
 passwd -e alice         # expire — user must change password at next login
 passwd -S alice         # password status
-# alice P 2024-01-15 0 90 7 14
+# alice P 2026-03-15 0 90 7 14
 #       │ └────────── date of last change
 #       └──────────── P=set, L=locked, NP=no password
 ```
@@ -267,9 +270,9 @@ passwd -S alice         # password status
 
 ```bash
 chage -l alice                  # show current policy
-# Last password change          : Jan 15, 2024
-# Password expires              : Apr 15, 2024
-# Password inactive             : Apr 29, 2024
+# Last password change          : Jan 15, 2026
+# Password expires              : Apr 15, 2026
+# Password inactive             : Apr 29, 2026
 # Account expires               : never
 # Minimum number of days        : 0
 # Maximum number of days        : 90
@@ -279,7 +282,7 @@ chage -M 90 alice               # max 90 days between password changes
 chage -m 7 alice                # min 7 days between changes
 chage -W 14 alice               # warn 14 days before expiry
 chage -I 30 alice               # 30 days of inactivity = lock
-chage -E 2025-12-31 alice       # account expires on 2025-12-31
+chage -E 2026-12-31 alice       # account expires on 2026-12-31
 chage -E -1 alice               # account never expires
 chage -d 0 alice                # expire immediately (force change at next login)
 ```
@@ -316,7 +319,7 @@ getent group developers
 grep "^developers" /etc/group
 ```
 
-### newgrp — temporarily switch active group
+### newgrp - temporarily switch active group
 
 ```bash
 # Switch active group in the current session
@@ -332,7 +335,7 @@ exit
 
 ---
 
-## sudo — Running Commands with Elevated Privileges
+## sudo - Running Commands with Elevated Privileges
 
 `sudo` (superuser do) allows executing commands as another user (usually root).
 
@@ -417,7 +420,7 @@ cat /etc/sudoers.d/developers
 
 ---
 
-## su — Switching Users
+## su - Switching Users
 
 ```bash
 su alice                # switch to alice (requires alice's password)
@@ -430,7 +433,7 @@ su -c "command" alice   # run a command as alice
 
 ---
 
-## PAM — Pluggable Authentication Modules
+## PAM - Pluggable Authentication Modules
 
 PAM controls authentication in Linux. Configs live in `/etc/pam.d/`.
 
@@ -481,9 +484,9 @@ awk -F: '$2 ~ /^!/' /etc/shadow
 
 ---
 
-## getent — NSS Database Queries
+## getent - NSS Database Queries
 
-`getent` queries data through the Name Service Switch — works with local files and LDAP/AD alike.
+`getent` queries data through the Name Service Switch - works with local files and LDAP/AD alike.
 
 ```bash
 getent passwd alice              # user entry
@@ -600,7 +603,7 @@ getent group wheel
 
 ## References
 
-- [passwd man page](https://man7.org/linux/man-pages/man5/passwd.5.html) — `man 5 passwd`
-- [shadow man page](https://man7.org/linux/man-pages/man5/shadow.5.html) — `man 5 shadow`
-- [sudoers man page](https://man7.org/linux/man-pages/man5/sudoers.5.html) — `man 5 sudoers`
-- [Linux-PAM documentation](http://www.linux-pam.org/Linux-PAM-html/) — PAM reference
+- [passwd man page](https://man7.org/linux/man-pages/man5/passwd.5.html) - `man 5 passwd`
+- [shadow man page](https://man7.org/linux/man-pages/man5/shadow.5.html) - `man 5 shadow`
+- [sudoers man page](https://man7.org/linux/man-pages/man5/sudoers.5.html) - `man 5 sudoers`
+- [Linux-PAM documentation](http://www.linux-pam.org/Linux-PAM-html/) - PAM reference
