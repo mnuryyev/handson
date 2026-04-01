@@ -1,10 +1,13 @@
-# Bash Scripting — Variables, Loops, Conditionals
+---
+title: "Bash Scripting - Variables, Loops, Conditionals"
+date: "2026-04-01"
+---
 
 Bash (Bourne Again Shell) is a command interpreter and scripting language, the standard shell on most Linux systems. Scripts automate routine tasks: deployment, backups, system administration, and more.
 
 ---
 
-## Your First Script
+## First Script
 
 ```bash
 #!/usr/bin/env bash
@@ -44,7 +47,7 @@ set -euo pipefail
 ### Declaring and using
 
 ```bash
-# Assignment — no spaces around =
+# Assignment - no spaces around =
 name="Alice"
 age=30
 path=/home/alice
@@ -303,7 +306,7 @@ fi
 [ -f "$f" -a -r "$f" ]   # AND inside brackets
 [ -f "$f" -o -d "$f" ]   # OR inside brackets
 
-# [[ ]] — extended conditionals (bash, not POSIX)
+# [[ ]] - extended conditionals (bash, not POSIX)
 [[ $a == "foo" && $b != "bar" ]]
 [[ $str =~ ^[0-9]+$ ]]          # regex matching
 [[ $str == *.txt ]]             # glob matching
@@ -312,9 +315,9 @@ fi
 ### [ ] vs [[ ]] vs (( ))
 
 ```bash
-# [ ]   — POSIX compatible, requires careful quoting
-# [[ ]] — bash-specific, safer, supports regex and glob
-# (( )) — arithmetic evaluation only
+# [ ]   - POSIX compatible, requires careful quoting
+# [[ ]] - bash-specific, safer, supports regex and glob
+# (( )) - arithmetic evaluation only
 
 # Recommended: [[ ]] in bash scripts
 if [[ -f "$file" && -r "$file" ]]; then
@@ -392,7 +395,7 @@ for fruit in "${fruits[@]}"; do
 done
 ```
 
-### while — loop with condition
+### while - loop with condition
 
 ```bash
 # Basic while
@@ -424,7 +427,7 @@ while IFS=',' read -r name age city; do
 done < users.csv
 ```
 
-### until — loop until true
+### until - loop until true
 
 ```bash
 # Opposite of while — runs while condition is FALSE
@@ -479,7 +482,7 @@ done
 ```bash
 # Declare a function
 greet() {
-    echo "Hello, $1!"          # $1 — first argument to the function
+    echo "Hello, $1!"          # $1 - first argument to the function
 }
 
 # Call it
@@ -488,7 +491,7 @@ greet "World"
 
 # Function with a return value
 get_user_home() {
-    local user="$1"            # local — variable is scoped to the function
+    local user="$1"            # local - variable is scoped to the function
     local home
     home=$(getent passwd "$user" | cut -d: -f6)
     echo "$home"               # "return" via stdout
@@ -793,7 +796,7 @@ exit 1
 
 ## References
 
-- [Bash Manual](https://www.gnu.org/software/bash/manual/) — official documentation
-- [Bash Hackers Wiki](https://wiki.bash-hackers.org/) — in-depth reference
-- [ShellCheck](https://www.shellcheck.net/) — online script analyzer
-- [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html) — style guide
+- [Bash Manual](https://www.gnu.org/software/bash/manual/) - official documentation
+- [Bash Hackers Wiki](https://wiki.bash-hackers.org/) - in-depth reference
+- [ShellCheck](https://www.shellcheck.net/) - online script analyzer
+- [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html) - style guide
