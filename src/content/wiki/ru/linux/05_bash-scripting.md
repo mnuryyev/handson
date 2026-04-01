@@ -1,6 +1,9 @@
-# Bash Scripting — переменные, циклы, условия
+---
+title: "Bash Scripting - переменные, циклы, условия"
+date: "2026-04-01"
+---
 
-Bash (Bourne Again Shell) — командный интерпретатор и язык сценариев, стандартный для большинства Linux-систем. Скрипты автоматизируют рутинные задачи, развёртывание, резервное копирование и администрирование.
+Bash (Bourne Again Shell) - командный интерпретатор и язык сценариев, стандартный для большинства Linux-систем. Скрипты автоматизируют рутинные задачи, развёртывание, резервное копирование и администрирование.
 
 ---
 
@@ -52,7 +55,7 @@ path=/home/alice
 # Использование — $ перед именем
 echo $name
 echo "Hello, $name"
-echo "Age: ${age}"        # фигурные скобки — явное ограничение имени
+echo "Age: ${age}"        # фигурные скобки - явное ограничение имени
 
 # Неправильно (пробелы создают ошибку)
 name = "Alice"   # ошибка!
@@ -356,7 +359,7 @@ esac
 
 ## Циклы
 
-### for — перебор элементов
+### for - перебор элементов
 
 ```bash
 # Перебор списка
@@ -398,7 +401,7 @@ done
 # Лучше — while read (см. ниже)
 ```
 
-### while — цикл с условием
+### while - цикл с условием
 
 ```bash
 # Базовый while
@@ -430,7 +433,7 @@ while IFS=',' read -r name age city; do
 done < users.csv
 ```
 
-### until — цикл до истины
+### until - цикл до истины
 
 ```bash
 # Противоположность while — выполняется пока условие ЛОЖНО
@@ -535,7 +538,7 @@ echo "Бэкап создан: $backup_path"
 ## Ввод и вывод
 
 ```bash
-# read — чтение ввода
+# read - чтение ввода
 read -p "Введи имя: " name
 read -s -p "Введи пароль: " password   # -s = скрытый ввод
 echo ""                                 # новая строка после скрытого ввода
@@ -799,7 +802,7 @@ exit 1
 
 ## Ссылки
 
-- [Bash Manual](https://www.gnu.org/software/bash/manual/) — официальная документация
-- [Bash Hackers Wiki](https://wiki.bash-hackers.org/) — подробный справочник
-- [ShellCheck](https://www.shellcheck.net/) — онлайн-анализатор скриптов
-- [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html) — стайлгайд
+- [Bash Manual](https://www.gnu.org/software/bash/manual/) - официальная документация
+- [Bash Hackers Wiki](https://wiki.bash-hackers.org/) - подробный справочник
+- [ShellCheck](https://www.shellcheck.net/) - онлайн-анализатор скриптов
+- [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html) - стайлгайд
