@@ -11,7 +11,7 @@ Bash (Bourne Again Shell) - командный интерпретатор и я�
 
 ```bash
 #!/usr/bin/env bash
-# Shebang — указывает интерпретатор
+# Shebang - указывает интерпретатор
 # Комментарий начинается с #
 
 echo "Hello, World!"
@@ -47,12 +47,12 @@ set -euo pipefail
 ### Объявление и использование
 
 ```bash
-# Присваивание — без пробелов вокруг =
+# Присваивание - без пробелов вокруг =
 name="Alice"
 age=30
 path=/home/alice
 
-# Использование — $ перед именем
+# Использование - $ перед именем
 echo $name
 echo "Hello, $name"
 echo "Age: ${age}"        # фигурные скобки - явное ограничение имени
@@ -68,13 +68,13 @@ name="Alice Smith"
 
 echo $name          # Alice Smith (работает, но опасно)
 echo "$name"        # Alice Smith (правильно, двойные кавычки)
-echo '$name'        # $name (одинарные — без подстановки)
+echo '$name'        # $name (одинарные - без подстановки)
 echo "${name}"      # Alice Smith (явные границы переменной)
 
 # Пример опасности без кавычек
 file="my file.txt"
 rm $file            # попытается удалить "my" и "file.txt" — ошибка!
-rm "$file"          # удалит "my file.txt" — правильно
+rm "$file"          # удалит "my file.txt" - правильно
 ```
 
 ### Специальные переменные
@@ -454,7 +454,7 @@ echo "Сервис готов!"
 ### Управление циклами
 
 ```bash
-# break — выйти из цикла
+# break - выйти из цикла
 for i in {1..10}; do
     if [ $i -eq 5 ]; then
         break
@@ -582,7 +582,7 @@ if ! command -v git &>/dev/null; then
     exit 1
 fi
 
-# trap — перехват сигналов и ошибок
+# trap - перехват сигналов и ошибок
 cleanup() {
     echo "Очистка временных файлов..."
     rm -f /tmp/myscript_*
