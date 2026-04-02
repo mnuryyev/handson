@@ -32,15 +32,25 @@ function buildTree(entries) {
     const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
+
     parts.forEach((part, index) => {
-      if (!current[part]) {
-        if (index === parts.length - 1) {
-          current[part] = { type: 'file', title: item.data?.title || part, slug: cleanId };
-        } else {
+      const isLast = index === parts.length - 1;
+
+      if (isLast) {
+        // Это файл
+        current[part] = { 
+          type: 'file', 
+          title: item.data?.title || part, 
+          slug: cleanId 
+        };
+      } else {
+        // Это папка. Если её нет — создаем.
+        if (!current[part]) {
           current[part] = { type: 'folder', children: {} };
         }
+        // Переходим глубже
+        current = current[part].children;
       }
-      if (current[part].type === 'folder') current = current[part].children;
     });
   });
   return tree;
