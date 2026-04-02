@@ -23,19 +23,26 @@ function buildTree(entries) {
     const cleanId = item.id.replace(/^en\//, '').replace(/\.md$/, '');
     const parts = cleanId.split('/');
     let current = tree;
+
     parts.forEach((part, index) => {
-      if (!current[part]) {
-        if (index === parts.length - 1) {
-          current[part] = { 
-            type: 'file', 
-            title: item.data?.title || part, 
-            slug: cleanId 
-          };
-        } else {
+      const isLast = index === parts.length - 1;
+
+      if (isLast) {
+        current[part] = { 
+          type: 'file', 
+          title: item.data?.title || part, 
+          slug: cleanId 
+        };
+      } else {
+        // Проверяем, существует ли папка, чтобы не перезаписать её
+        if (!current[part]) {
           current[part] = { type: 'folder', children: {} };
         }
+        // Убеждаемся, что мы не пытаемся зайти в 'children' файла (на случай ошибок в структуре)
+        if (current[part].type === 'folder') {
+          current = current[part].children;
+        }
       }
-      if (current[part].type === 'folder') current = current[part].children;
     });
   });
   return tree;
