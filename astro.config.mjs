@@ -2,13 +2,16 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // Указываем полный путь к сайту для canonical ссылок
+  // site указываем без подпапок
   site: 'https://mnuryyev.github.io',
-  // Базовая папка на GitHub Pages
-  base: '/handson/',
-  // Автоматическая генерация карты сайта для Google
-  integrations: [
-    sitemap() 
-  ],
-  trailingSlash: 'always' 
+  // base указывает на подпапку репозитория
+  base: '/handson', 
+  // Интеграции
+  integrations: [sitemap()],
+  // Строго заставляем Astro всегда добавлять слэш в конце URL
+  trailingSlash: 'always',
+  // Это поможет sitemap генерировать правильные ссылки
+  build: {
+    format: 'directory'
+  }
 });
