@@ -5,6 +5,8 @@ import LangSwitcher from '../components/LangSwitcher.astro';
 
 const base = import.meta.env.BASE_URL;
 
+// 1. ПРАВИЛЬНАЯ ЛОГИКА ДЛЯ GOOGLE:
+// Гарантируем, что канонический URL всегда заканчивается на слэш
 const { pathname } = Astro.url;
 const normalizedPathname = pathname.endsWith('/') ? pathname : `${pathname}/`;
 const canonicalURL = new URL(normalizedPathname, Astro.site);
@@ -41,7 +43,7 @@ const t = nav[lang];
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     
-    <link rel="canonical" href={canonicalURL} />
+    <link rel="canonical" href={canonicalURL.href} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body>
@@ -58,12 +60,12 @@ const t = nav[lang];
         </button>
 
         <ul class="nav-links" id="nav-menu">
-          <li><a href={`${base}${lang}/articles/1`}>{t.articles}</a></li>
-          <li><a href={`${base}${lang}/labs/1`}>{t.labs}</a></li>
-          <li><a href={`${base}${lang}/writeups`}>{t.writeups}</a></li>
-          <li><a href={`${base}${lang}/tools/1`}>{t.tools}</a></li>
-          <li><a href={`${base}${lang}/projects`}>{t.projects}</a></li>
-          <li><a href={`${base}${lang}/wiki`}>{t.wiki}</a></li>
+          <li><a href={`${base}${lang}/articles/1/`}>{t.articles}</a></li>
+          <li><a href={`${base}${lang}/labs/1/`}>{t.labs}</a></li>
+          <li><a href={`${base}${lang}/writeups/`}>{t.writeups}</a></li>
+          <li><a href={`${base}${lang}/tools/1/`}>{t.tools}</a></li>
+          <li><a href={`${base}${lang}/projects/`}>{t.projects}</a></li>
+          <li><a href={`${base}${lang}/wiki/`}>{t.wiki}</a></li>
           <li class="nav-actions">
             <LangSwitcher />
           </li>
@@ -97,11 +99,9 @@ const t = nav[lang];
 </html>
 
 <style is:global>
-  body.menu-open {
-    overflow: hidden;
-  }
+  /* Стили оставляем как есть, они правильные */
+  body.menu-open { overflow: hidden; }
 
-  /* --- Общие стили для тегов (используются в статьях и списках) --- */
   .tag-item {
     display: inline-block;
     font-size: 0.75rem;
