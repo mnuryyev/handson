@@ -45,7 +45,7 @@ chmod +x audit.sh
 nano audit.sh
 ```
 
-![01_create_file](screens/01_create_file.png)
+![01_create_file](/handson/images/bash_audit_sec/01_create_file.png)
 
 The `+x` flag makes the file executable - without it bash will refuse to run the script directly through `./audit.sh`.
 
@@ -78,7 +78,7 @@ START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
 exec > >(tee -a "$REPORT") 2>&1
 ```
 
-![02_creating](screens/02_creating.png)
+![02_creating](/handson/images/bash_audit_sec/02_creating.png)
 
 We check permissions on the created file:
 
@@ -86,7 +86,7 @@ We check permissions on the created file:
 ls -la audit.sh
 ```
 
-![03_ls](screens/03_ls.png)
+![03_ls](/handson/images/bash_audit_sec/03_ls.png)
 
 The file has permissions `-rwxrwxr-x` - executable for all. Size 717 bytes after the first part of the script.
 
@@ -113,7 +113,7 @@ if [[ "$1" == "--help" ]]; then
 fi
 ```
 
-![04_system](screens/04_system.png)
+![04_system](/handson/images/bash_audit_sec/04_system.png)
 
 We check:
 
@@ -121,7 +121,7 @@ We check:
 ./audit.sh --help
 ```
 
-![05_help](screens/05_help.png)
+![05_help](/handson/images/bash_audit_sec/05_help.png)
 
 Help is displayed correctly and the script exits with code 0.
 
@@ -146,7 +146,7 @@ ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | while read ip; do
 done
 ```
 
-![06_system_info](screens/06_system_info.png)
+![06_system_info](/handson/images/bash_audit_sec/06_system_info.png)
 
 We run:
 
@@ -154,7 +154,7 @@ We run:
 sudo ./audit.sh
 ```
 
-![07_running_systeminfo](screens/07_running_systeminfo.png)
+![07_running_systeminfo](/handson/images/bash_audit_sec/07_running_systeminfo.png)
 
 The script outputs hostname `ubuntu`, kernel `6.17.0-14-generic`, OS `Ubuntu 25.10`, uptime `up 9 minutes`, and two IP addresses: loopback `127.0.0.1` and network `10.10.70.130`.
 
@@ -192,9 +192,9 @@ while IFS=: read user pass uid gid desc home shell; do
 done
 ```
 
-![08_users](screens/08_users.png)
+![08_users](/handson/images/bash_audit_sec/08_users.png)
 
-![09_logged_in](screens/09_logged_in.png)
+![09_logged_in](/handson/images/bash_audit_sec/09_logged_in.png)
 
 The output shows: no one is currently logged into the system. In the list of users with shell - root (highlighted in red as a warning), system `sync`, and `ubuntu`.
 
@@ -221,9 +221,9 @@ TOTAL=$(systemctl list-units --type=service --state=running \
 note "Total running services: $TOTAL"
 ```
 
-![10_running_services](screens/10_running_services.png)
+![10_running_services](/handson/images/bash_audit_sec/10_running_services.png)
 
-![11_result](screens/11_result.png)
+![11_result](/handson/images/bash_audit_sec/11_result.png)
 
 The system started **29 services**. Among them: `cron.service`, `NetworkManager.service`, `snapd.service`, `gdm.service`, `dbus.service`. Nothing suspicious - standard Ubuntu set with desktop.
 
@@ -251,9 +251,9 @@ ss -tlnp 2>/dev/null | grep LISTEN | while read line; do
 done
 ```
 
-![12_listening_ports](screens/12_listening_ports.png)
+![12_listening_ports](/handson/images/bash_audit_sec/12_listening_ports.png)
 
-![13_result](screens/13_result.png)
+![13_result](/handson/images/bash_audit_sec/13_result.png)
 
 There are no ports open to the outside - all listen on `127.0.0.1` or `127.0.0.53`. Port 53 — DNS through `systemd-resolved`, port 631 — CUPS (printing). The system is closed from external connections.
 
@@ -296,9 +296,9 @@ find / -perm -o+w -type f \
 done
 ```
 
-![14_files](screens/14_files.png)
+![14_files](/handson/images/bash_audit_sec/14_files.png)
 
-![15_result](screens/15_result.png)
+![15_result](/handson/images/bash_audit_sec/15_result.png)
 
 In the last 24 hours **88 files** were modified - this is normal for a freshly started system. Among them: `/var/lib/snapd/state.json`, `/var/lib/systemd/random-seed`, `/var/lib/plymouth/boot-duration`. Everything is system-related, nothing suspicious.
 
@@ -317,7 +317,7 @@ info "Finished : $END_TIME"
 info "Saved to : $REPORT"
 ```
 
-![16_final](screens/16_final.png)
+![16_final](/handson/images/bash_audit_sec/16_final.png)
 
 ### Step 10. Full Run
 
@@ -325,7 +325,7 @@ info "Saved to : $REPORT"
 sudo ./audit.sh
 ```
 
-![17_saved](screens/17_saved.png)
+![17_saved](/handson/images/bash_audit_sec/17_saved.png)
 
 The full audit took **5 seconds** (from 21:44:59 to 21:45:04). The report was saved to file.
 
@@ -336,7 +336,7 @@ ls -la report_*.txt
 cat report_20260402_214459.txt | head -40
 ```
 
-![18_result](screens/18_result.png)
+![18_result](/handson/images/bash_audit_sec/18_result.png)
 
 The report file weighs **8735 bytes**, belongs to root (we ran through sudo). The contents are identical to the terminal output - exactly this is ensured by the construction `exec > >(tee -a "$REPORT") 2>&1`.
 
