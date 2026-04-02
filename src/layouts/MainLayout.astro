@@ -5,12 +5,11 @@ import LangSwitcher from '../components/LangSwitcher.astro';
 
 const base = import.meta.env.BASE_URL;
 
-// Генерируем правильную каноническую ссылку для Google
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
-// Принимаем пропсы. tags оставляем в пропсах на случай, если они понадобятся для мета-тегов
-const { title, tags = [] } = Astro.props; 
 const { pathname } = Astro.url;
+const normalizedPathname = pathname.endsWith('/') ? pathname : `${pathname}/`;
+const canonicalURL = new URL(normalizedPathname, Astro.site);
+
+const { title, tags = [] } = Astro.props; 
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
 const nav = {
