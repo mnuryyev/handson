@@ -1,15 +1,18 @@
-# Bash Scripting — функции, массивы, regex
+---
+title: "Bash Scripting - функции, массивы, regex"
+date: "2026-04-03"
+---
 
-Продолжение темы Bash scripting. Здесь — углублённо про функции, все виды массивов и работу с регулярными выражениями через встроенные средства bash и внешние утилиты.
+Здесь углублённо про функции, все виды массивов и работу с регулярными выражениями через встроенные средства bash и внешние утилиты.
 
 ---
 
-## Функции — углублённо
+## Функции - углублённо
 
 ### Объявление и вызов
 
 ```bash
-# Два синтаксиса — оба валидны
+# Два синтаксиса - оба валидны
 greet() {
     echo "Hello, $1!"
 }
@@ -41,7 +44,7 @@ show_args() {
 show_args "foo" "bar" "baz"
 ```
 
-### local — область видимости
+### local - область видимости
 
 ```bash
 x="global"
@@ -161,7 +164,7 @@ square() { echo $(( $1 * $1 )); }
 apply double 5              # 10
 apply square 5              # 25
 
-# Функция высшего порядка — map
+# Функция высшего порядка - map
 map() {
     local func="$1"
     shift
@@ -248,7 +251,7 @@ level1
 
 ---
 
-## Массивы — углублённо
+## Массивы - углублённо
 
 ### Индексированные массивы
 
@@ -346,7 +349,7 @@ echo "${upper[@]}"          # APPLE BANANA CHERRY DATE
 ### Ассоциативные массивы
 
 ```bash
-# Объявление — declare -A обязательно
+# Объявление - declare -A обязательно
 declare -A config
 config[host]="localhost"
 config[port]="5432"
@@ -458,7 +461,7 @@ readarray -t processes < <(ps aux | awk 'NR>1 {print $11}')
 readarray -t -d ',' fields <<< "alice,30,admin,"
 echo "${fields[@]}"
 
-# mapfile — синоним readarray
+# mapfile - синоним readarray
 mapfile -t hosts < /etc/hosts
 
 # С индексом начала
@@ -593,7 +596,7 @@ parse_url "https://example.com:8080/api/v1"
 
 ---
 
-## grep — поиск с regex
+## grep - поиск с regex
 
 ```bash
 # Базовый поиск
@@ -634,7 +637,7 @@ grep -oE "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b" file.txt  # email
 
 ---
 
-## sed — замена и трансформация
+## sed - замена и трансформация
 
 ```bash
 # Базовая замена
@@ -687,7 +690,7 @@ sed -i 's/^#Port/Port/' /etc/ssh/sshd_config
 
 ---
 
-## awk — обработка текста
+## awk - обработка текста
 
 ```bash
 # Базовый синтаксис: awk 'pattern { action }' file
@@ -1010,8 +1013,8 @@ awk '{sum+=$1} END{print sum}' file    # агрегация
 
 ## Ссылки
 
-- [Bash Arrays](https://www.gnu.org/software/bash/manual/bash.html#Arrays) — официальная документация
-- [Regex101](https://regex101.com/) — тестирование регулярных выражений
-- [grep manual](https://www.gnu.org/software/grep/manual/grep.html) — все флаги grep
-- [sed manual](https://www.gnu.org/software/sed/manual/sed.html) — документация sed
-- [awk manual](https://www.gnu.org/software/gawk/manual/gawk.html) — руководство по awk
+- [Bash Arrays](https://www.gnu.org/software/bash/manual/bash.html#Arrays) - официальная документация
+- [Regex101](https://regex101.com/) - тестирование регулярных выражений
+- [grep manual](https://www.gnu.org/software/grep/manual/grep.html) - все флаги grep
+- [sed manual](https://www.gnu.org/software/sed/manual/sed.html) - документация sed
+- [awk manual](https://www.gnu.org/software/gawk/manual/gawk.html) - руководство по awk
