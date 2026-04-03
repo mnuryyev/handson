@@ -1,15 +1,18 @@
-# Bash Scripting — Functions, Arrays, Regex
+---
+title: "Bash Scripting - Functions, Arrays, Regex"
+date: "2026-04-03"
+---
 
-A deep-dive continuation of Bash scripting. Covers advanced functions, all array types, and working with regular expressions using both built-in Bash facilities and external tools.
+Covers advanced functions, all array types, and working with regular expressions using both built-in Bash facilities and external tools.
 
 ---
 
-## Functions — In Depth
+## Functions - In Depth
 
 ### Declaration and calling
 
 ```bash
-# Two syntaxes — both valid
+# Two syntaxes - both valid
 greet() {
     echo "Hello, $1!"
 }
@@ -40,7 +43,7 @@ show_args() {
 show_args "foo" "bar" "baz"
 ```
 
-### local — scoping
+### local - scoping
 
 ```bash
 x="global"
@@ -246,7 +249,7 @@ level1
 
 ---
 
-## Arrays — In Depth
+## Arrays - In Depth
 
 ### Indexed arrays
 
@@ -590,7 +593,7 @@ parse_url "https://example.com:8080/api/v1"
 
 ---
 
-## grep — Pattern Search
+## grep - Pattern Search
 
 ```bash
 # Basic search
@@ -631,7 +634,7 @@ grep -oE "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b" file.txt  # email
 
 ---
 
-## sed — Stream Editing
+## sed - Stream Editing
 
 ```bash
 # Basic substitution
@@ -683,7 +686,7 @@ sed 's/[[:space:]]*$//' file.txt    # trailing
 
 ---
 
-## awk — Text Processing
+## awk - Text Processing
 
 ```bash
 # Basic syntax: awk 'pattern { action }' file
@@ -1000,8 +1003,8 @@ awk '{sum+=$1} END{print sum}' file    # aggregate
 
 ## References
 
-- [Bash Arrays](https://www.gnu.org/software/bash/manual/bash.html#Arrays) — official docs
-- [Regex101](https://regex101.com/) — test regular expressions
-- [grep manual](https://www.gnu.org/software/grep/manual/grep.html) — all grep flags
-- [sed manual](https://www.gnu.org/software/sed/manual/sed.html) — sed documentation
-- [awk manual](https://www.gnu.org/software/gawk/manual/gawk.html) — gawk reference
+- [Bash Arrays](https://www.gnu.org/software/bash/manual/bash.html#Arrays) - official docs
+- [Regex101](https://regex101.com/) - test regular expressions
+- [grep manual](https://www.gnu.org/software/grep/manual/grep.html) - all grep flags
+- [sed manual](https://www.gnu.org/software/sed/manual/sed.html) - sed documentation
+- [awk manual](https://www.gnu.org/software/gawk/manual/gawk.html) - gawk reference
