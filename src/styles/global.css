@@ -4,7 +4,7 @@
   --card-bg: #1e1e1e;
   --text-primary: #ffffff;
   --text-secondary: #aaaaaa;
-  --accent: #3ea6ff;       /* Тот самый синий */
+  --accent: #3ea6ff;        /* Тот самый синий */
   --accent-rgb: 62, 166, 255;
 }
 
@@ -66,7 +66,6 @@ a {
   color: #fff;
 }
 
-/* Применяем синий цвет к span в логотипе */
 .nav-logo span {
   color: var(--accent);
 }
@@ -87,7 +86,7 @@ a {
 }
 
 .nav-links a:hover {
-  color: var(--accent); /* Теперь и ссылки при наведении синие */
+  color: var(--accent);
 }
 
 /* Кнопка GitHub */
@@ -98,6 +97,7 @@ a {
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
+  text-decoration: none !important;
 }
 
 .btn-projects:hover {
@@ -117,12 +117,11 @@ a {
 
 .markdown-content {
   line-height: 1.7;
-  color: #d1d5db; /* Мягкий светло-серый для текста */
+  color: #d1d5db;
   word-wrap: break-word;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* ЗАГОЛОВКИ: Очень жирные с синим акцентом */
 .markdown-content h1, 
 .markdown-content h2, 
 .markdown-content h3 {
@@ -136,34 +135,34 @@ a {
 .markdown-content h1, 
 .markdown-content h2 {
   padding-bottom: 0.4em;
-  border-bottom: 2px solid #1a2638; /* Глубокий темно-синий разделитель */
+  border-bottom: 2px solid #1a2638;
 }
 
-/* ЦИТАТЫ (>) в стиле Soft Blue */
+/* ЦИТАТЫ (>) */
 .markdown-content blockquote {
   margin: 12px 0;
   padding: 2px 12px;
   color: #94a3b8;
-  border-left: 4px solid #3498db; /* Яркий синий акцент */
-  background: rgba(52, 152, 219, 0.08); /* Очень мягкий синий фон */
+  border-left: 4px solid #3498db;
+  background: rgba(52, 152, 219, 0.08);
   font-style: italic;
   border-radius: 0 12px 12px 0;
 }
 
-/* ТАБЛИЦЫ: Строгие, в темно-синих тонах */
+/* ТАБЛИЦЫ */
 .markdown-content table {
   width: 100%;
   border-collapse: collapse;
   margin: 30px 0;
-  border: 1px solid #1e293b; /* Граница "Slate Blue" */
+  border: 1px solid #1e293b;
   background: #0a0a0a;
   overflow: hidden;
   border-radius: 8px;
 }
 
 .markdown-content table th {
-  background: #111827; /* Полночно-синий подтон */
-  color: #3498db;      /* Синий заголовок */
+  background: #111827;
+  color: #3498db;
   padding: 14px;
   border-bottom: 2px solid #1e293b;
   text-align: left;
@@ -179,30 +178,21 @@ a {
   color: #cbd5e1;
 }
 
-.markdown-content table tr:hover {
-  background: #0f172a; /* Темно-синяя подсветка строки */
-}
-
-/* КОД: Внутри текста `code` */
-/* КОД: Внутри текста `code` — Скорректированный размер */
+/* КОД */
 .markdown-content :not(pre) > code {
   background: #111827;
   color: #60a5fa; 
-  /* Уменьшаем до 0.85em или 13px, чтобы не казался огромным */
   font-size: 0.85em; 
-  padding: 0.15em 0.4em; /* Более аккуратные отступы */
+  padding: 0.15em 0.4em;
   margin: 0 2px;
   border-radius: 4px;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-family: 'JetBrains Mono', monospace;
   border: 1px solid #1e293b;
-  /* Выравнивание, чтобы код не "прыгал" выше основного текста */
   vertical-align: middle; 
-  word-break: break-word;
 }
 
-/* Если у тебя есть блоки с кодом (многострочные), тоже поправим их */
 .markdown-content pre {
-  font-size: 0.85em; /* Тот же размер для консистентности */
+  font-size: 0.85em;
   line-height: 1.5;
   padding: 16px;
   border-radius: 8px;
@@ -211,23 +201,19 @@ a {
   overflow-x: auto;
 }
 
-/* СПИСКИ: С синими маркерами */
+/* СПИСКИ */
 .markdown-content ul, 
 .markdown-content ol {
   padding-left: 1.5em;
   margin-bottom: 20px;
 }
 
-.markdown-content li {
-  margin-bottom: 8px;
-}
-
 .markdown-content li::marker {
-  color: #3498db; /* Синие точки/цифры */
+  color: #3498db;
   font-weight: 900;
 }
 
-/* ССЫЛКИ: Чистый синий */
+/* ССЫЛКИ В ТЕКСТЕ (С ПОДЧЕРКИВАНИЕМ) */
 .markdown-content a {
   color: #3498db;
   text-decoration: none;
@@ -237,84 +223,49 @@ a {
 
 .markdown-content a:hover {
   color: #60a5fa;
-  text-decoration: underline;
+  text-decoration: underline; /* Обычные ссылки подчеркиваются */
 }
 
 /* ИЗОБРАЖЕНИЯ */
 .markdown-content img {
+  max-width: 100%;
+  height: auto;
   border-radius: 12px;
   border: 1px solid #1e293b;
   margin: 30px auto;
   display: block;
+  object-fit: contain;
 }
 
-/* В global.css или в стили markdown */
-.markdown-content img, 
-.markdown-body img {
-  max-width: 100%; /* Чтобы не вылезала за края */
-  height: auto;    /* Чтобы сохраняла пропорции и не сплющивалась */
-  display: block;
-  object-fit: contain; /* Гарантирует, что картинка видна целиком */
-}
-
-/* 1. Блокируем горизонтальный скролл всей страницы */
+/* --- ГЛОБАЛЬНЫЙ СКРОЛЛ --- */
 html, body {
   overflow-x: hidden;
   position: relative;
   width: 100%;
 }
 
-/* 2. Контейнер статьи: на мобилках убираем лишние отступы, чтобы текст был шире */
+/* --- АДАПТИВНОСТЬ --- */
 @media (max-width: 768px) {
   .main-content {
-    padding-top: 20px;
-    padding-bottom: 40px;
-    /* Уменьшаем боковые отступы контейнера, чтобы больше текста влезало */
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 20px 12px 40px 12px;
   }
 
-  /* Чтобы таблицы и код не "ломали" ширину сайта */
-  .markdown-content, 
-  .markdown-body {
-    width: 100%;
-    overflow-x: hidden; /* Важно! */
-  }
-
-  /* Таблицы: разрешаем скролл ТОЛЬКО внутри таблицы */
-  .markdown-content table,
-  .markdown-body table {
+  .markdown-content table {
     display: block !important;
     width: 100% !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
-    border-radius: 4px;
-    /* Убираем лишние внешние границы, если они мешают */
-  }
-
-  /* Код: тоже запираем внутри блока */
-  .markdown-content pre,
-  .markdown-body pre {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    white-space: pre; /* Не даем коду переноситься, лучше пусть скроллится внутри */
-    word-wrap: normal;
-  }
-  
-  /* Картинки: строго в рамках экрана */
-  .markdown-content img,
-  .markdown-body img {
-    max-width: 100% !important;
-    height: auto !important;
   }
 }
+
+/* --- ТЕГИ --- */
 .tag-item {
   display: inline-block;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #3ea6ff; /* Твой синий */
+  color: #3ea6ff;
   background: rgba(62, 166, 255, 0.1);
   padding: 4px 10px;
   border-radius: 6px;
@@ -322,11 +273,39 @@ html, body {
   margin-top: 8px;
   border: 1px solid rgba(62, 166, 255, 0.2);
   transition: 0.2s ease;
+  text-decoration: none !important; /* Убираем подчеркивание */
 }
 
 .tag-item:hover {
   background: #3ea6ff;
   color: #000;
-  text-decoration: none !important;
   transform: translateY(-2px);
+  text-decoration: none !important;
+}
+
+/* =========================================== */
+/* ФИКСЫ ДЛЯ КАРТОЧЕК И ПРОЕКТОВ (АНТИ-LINE)   */
+/* =========================================== */
+
+/* Жестко отключаем подчеркивание для всех элементов карточек */
+.card-link, 
+.card-link:hover, 
+.card-link *,
+.mini-card,
+.mini-card * {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* Исправляем конфликт, если карточка лежит внутри .markdown-content */
+.markdown-content a.card-link:hover,
+.markdown-content a.card-link:hover h4,
+.markdown-content a.card-link:hover p {
+  text-decoration: none !important;
+  color: inherit; /* Чтобы не менялся цвет на светло-голубой из статьи */
+}
+
+/* Дополнительная защита для заголовков в карточках */
+h4, .mini-card h4 {
+  text-decoration: none !important;
 }
