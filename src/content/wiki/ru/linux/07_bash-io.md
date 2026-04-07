@@ -1,5 +1,5 @@
 ---
-title: "Bash Scripting — обработка файлов, stdin/stdout/stderr"
+title: "Bash Scripting - обработка файлов, stdin/stdout/stderr"
 date: "2026-04-06"
 ---
 
