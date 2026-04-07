@@ -113,8 +113,7 @@ a {
   margin-top: 20px;
 }
 
-/* --- СТИЛИ ДЛЯ СТАТЕЙ (Wiki-Blue Style) --- */
-
+/* --- СТИЛИ ДЛЯ СТАТЕЙ --- */
 .markdown-content {
   line-height: 1.7;
   color: #d1d5db;
@@ -213,7 +212,7 @@ a {
   font-weight: 900;
 }
 
-/* ССЫЛКИ В ТЕКСТЕ (С ПОДЧЕРКИВАНИЕМ) */
+/* ССЫЛКИ В ТЕКСТЕ */
 .markdown-content a {
   color: #3498db;
   text-decoration: none;
@@ -223,48 +222,34 @@ a {
 
 .markdown-content a:hover {
   color: #60a5fa;
-  text-decoration: underline; /* Обычные ссылки подчеркиваются */
+  text-decoration: underline;
 }
 
-/* ИЗОБРАЖЕНИЯ */
-.markdown-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-  margin: 30px auto;
-  display: block;
-  object-fit: contain;
-}
-
-/* --- ГЛОБАЛЬНЫЙ СКРОЛЛ --- */
+/* ГЛОБАЛЬНЫЙ СКРОЛЛ */
 html, body {
   overflow-x: hidden;
   position: relative;
   width: 100%;
 }
 
-/* --- АДАПТИВНОСТЬ --- */
+/* АДАПТИВНОСТЬ */
 @media (max-width: 768px) {
   .main-content {
     padding: 20px 12px 40px 12px;
   }
-
   .markdown-content table {
     display: block !important;
     width: 100% !important;
     overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
   }
 }
 
-/* --- ТЕГИ --- */
+/* ТЕГИ */
 .tag-item {
   display: inline-block;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   color: #3ea6ff;
   background: rgba(62, 166, 255, 0.1);
   padding: 4px 10px;
@@ -273,59 +258,45 @@ html, body {
   margin-top: 8px;
   border: 1px solid rgba(62, 166, 255, 0.2);
   transition: 0.2s ease;
-  text-decoration: none !important; /* Убираем подчеркивание */
-}
-
-.tag-item:hover {
-  background: #3ea6ff;
-  color: #000;
-  transform: translateY(-2px);
   text-decoration: none !important;
 }
 
 /* =========================================== */
-/* ФИКСЫ ДЛЯ КАРТОЧЕК И ПРОЕКТОВ (АНТИ-LINE)   */
+/* ФИКСЫ ДЛЯ КАРТОЧЕК И ПРОЕКТОВ (ПОДЧЕРКИВАНИЕ И СДВИГ) */
 /* =========================================== */
 
-/* Жестко отключаем подчеркивание для всех элементов карточек */
-.card-link, 
-.card-link:hover, 
-.card-link *,
-.mini-card,
-.mini-card * {
+/* 1. Общий сброс линий для всех типов карточек */
+.card-link, .mini-card, .folder-card, .lab-card,
+.card-link:hover, .mini-card:hover, .folder-card:hover, .lab-card:hover {
+  text-decoration: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* 2. Отключаем линии у всех вложенных элементов при наведении */
+.card-link *, .mini-card *, .folder-card *, .lab-card * {
   text-decoration: none !important;
   border-bottom: none !important;
 }
 
-/* Исправляем конфликт, если карточка лежит внутри .markdown-content */
-.markdown-content a.card-link:hover,
-.markdown-content a.card-link:hover h4,
-.markdown-content a.card-link:hover p {
-  text-decoration: none !important;
-  color: inherit; /* Чтобы не менялся цвет на светло-голубой из статьи */
-}
-
-/* Дополнительная защита для заголовков в карточках */
-h4, .mini-card h4 {
-  text-decoration: none !important;
-}
-
-/* Фикс конкретно для карточек проектов (папок) */
-.folder-card,
-.folder-card:hover,
-.folder-card *,
-a.folder-card,
-a.folder-card:hover {
-    text-decoration: none !important;
-    border-bottom: none !important;
-}
-
-/* Дополнительно убеждаемся, что заголовок внутри проекта не подчеркнут */
+/* 3. RESET & ALIGNMENT FOR PROJECTS (чтобы не ехал текст) */
 .folder-card .folder-body h3 {
-    text-decoration: none !important;
+  margin: 0 !important;      /* Обнуляем отступы, которые сдвигают текст вниз */
+  padding: 0 !important;
+  line-height: 1.2 !important;
+  text-decoration: none !important;
 }
 
-/* Если вдруг подчеркивание идет от markdown-content */
-.markdown-content a.folder-card:hover {
-    text-decoration: none !important;
+.folder-card .folder-body p {
+  margin: 8px 0 0 !important; /* Контролируемый отступ сверху для описания */
+}
+
+.folder-header {
+  align-items: center !important; /* Выравниваем иконку и бейдж по центру */
+}
+
+/* 4. Защита от глобальных стилей .markdown-content */
+.markdown-content a.folder-card:hover, 
+.markdown-content a.lab-card:hover {
+  text-decoration: none !important;
 }
