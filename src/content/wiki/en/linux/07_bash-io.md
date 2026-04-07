@@ -1,6 +1,9 @@
-# Bash Scripting — File Handling, stdin/stdout/stderr
+---
+title: "Bash Scripting - File Handling, stdin/stdout/stderr"
+date: "2026-04-06"
+---
 
-I/O streams and file handling are the backbone of any serious script. Understanding how data flows between commands, files, and processes unlocks the full power of the Unix philosophy.
+I/O streams and file handling are the backbone of any serious script.
 
 ---
 
@@ -36,10 +39,10 @@ ls -la /proc/$$/fd
 ## Output Redirection
 
 ```bash
-# > — overwrite file
+# > - overwrite file
 echo "hello" > file.txt
 
-# >> — append to file
+# >> - append to file
 echo "world" >> file.txt
 
 # Write multiple lines
@@ -71,7 +74,7 @@ command | tee -a output.log   # tee with append
 ### Order of redirections matters
 
 ```bash
-# WRONG — stderr does NOT go to the file
+# WRONG - stderr does NOT go to the file
 command 2>&1 > file.txt
 # Explanation: first 2>&1 (stderr → current stdout = terminal),
 #              then > file.txt (stdout → file, but stderr is already on terminal)
@@ -87,7 +90,7 @@ command > file.txt 2>&1
 ## Input Redirection
 
 ```bash
-# < — read from file instead of stdin
+# < - read from file instead of stdin
 command < input.txt
 sort < unsorted.txt
 wc -l < /etc/passwd
@@ -97,7 +100,7 @@ grep "root" <<< "this string contains root"
 base64 <<< "hello world"
 read var <<< "some value"
 
-# Heredoc — multi-line input
+# Heredoc - multi-line input
 cat << 'EOF'
 This line: $HOME will NOT be expanded
 EOF
@@ -127,7 +130,7 @@ EOF
 ## Pipes
 
 ```bash
-# | — stdout of one command → stdin of the next
+# | - stdout of one command → stdin of the next
 cat file.txt | grep "error"
 ps aux | grep nginx | grep -v grep
 
@@ -153,7 +156,7 @@ done < <(find . -name "*.log")         # read find output in while
 ### Pipe exit codes
 
 ```bash
-# Default — exit code of the last command
+# Default - exit code of the last command
 false | true
 echo $?    # 0 (true is last)
 
@@ -176,7 +179,7 @@ echo "${PIPESTATUS[1]}"    # grep exit code
 ### Line by line
 
 ```bash
-# The correct way — while + read
+# The correct way - while + read
 while IFS= read -r line; do
     echo "$line"
 done < file.txt
@@ -207,7 +210,7 @@ done < file.txt
 } < data.csv
 ```
 
-> ⚠️ Never use `for line in $(cat file)` — it breaks on spaces and special characters.
+> Never use `for line in $(cat file)` - it breaks on spaces and special characters.
 
 ```bash
 # BAD — splits on words, not lines
@@ -243,7 +246,7 @@ readarray -t users < <(awk -F: '$3 >= 1000 {print $1}' /etc/passwd)
 ### Reading binary data
 
 ```bash
-# xxd — hex dump
+# xxd - hex dump
 xxd file.bin | head
 xxd -p file.bin              # hex only, no addresses
 xxd -r hex.txt > file.bin    # reverse conversion
@@ -376,7 +379,7 @@ command 3>&1 1>&2 2>&3 3>&-
 
 ---
 
-## find — File Search
+## find - File Search
 
 ```bash
 # Basic search
@@ -422,7 +425,7 @@ find . -not -path "*/\.*"   # exclude hidden files
 find . -type f \( -name "*.jpg" -o -name "*.png" \)
 find . -type f -name "*.log" -size +1M -mtime +30
 
-# xargs — pass list to a command
+# xargs - pass list to a command
 find . -name "*.txt" | xargs grep "error"
 find . -name "*.txt" -print0 | xargs -0 grep "error"  # safe for filenames with spaces
 find . -name "*.log" | xargs -P 4 -I {} gzip {}       # parallel
@@ -447,7 +450,7 @@ mkdir -p /deep/nested/path        # create entire chain
 rm file.txt
 rm -r directory/                  # recursive
 rm -f file.txt                    # no prompt
-rm -rf directory/                 # ⚠️ dangerous — no prompt
+rm -rf directory/                 # dangerous - no prompt
 
 # Safe removal
 rm -i *.txt                       # confirm each file
@@ -457,7 +460,7 @@ ls *.txt; rm *.txt                 # look before you delete
 ### Copying and moving
 
 ```bash
-# cp — copy
+# cp - copy
 cp src.txt dst.txt
 cp -r srcdir/ dstdir/
 cp -a srcdir/ dstdir/             # archive mode (preserves permissions and times)
@@ -465,23 +468,23 @@ cp -u src dst                     # only if src is newer
 cp -v src dst                     # verbose
 cp --backup=numbered file.txt dst/  # with numbered backups
 
-# mv — move / rename
+# mv - move / rename
 mv old.txt new.txt
 mv file.txt /other/dir/
 mv -i src dst                     # prompt before overwriting
 mv -u src dst                     # only if src is newer
 
-# rsync — synchronize
+# rsync - synchronize
 rsync -av src/ dst/               # archive mode + verbose
 rsync -avz src/ user@host:dst/    # with compression over SSH
 rsync --delete src/ dst/          # delete extras in dst
-rsync -n src/ dst/                # dry run — preview what will happen
+rsync -n src/ dst/                # dry run - preview what will happen
 ```
 
 ### Links
 
 ```bash
-# Hard link — same inode
+# Hard link - same inode
 ln original.txt hardlink.txt
 ls -li original.txt hardlink.txt  # same inode number
 
@@ -531,7 +534,7 @@ file -i file.txt                   # MIME type: text/plain; charset=utf-8
 ## Temporary Files
 
 ```bash
-# mktemp — create temporary files safely
+# mktemp - create temporary files safely
 tmpfile=$(mktemp)
 tmpdir=$(mktemp -d)
 tmpfile=$(mktemp /tmp/myapp.XXXXXX)     # custom prefix
@@ -883,7 +886,7 @@ trap "rm -f $tmpfile" EXIT
 
 ## References
 
-- [Bash Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections) — official docs
-- [find manual](https://man7.org/linux/man-pages/man1/find.1.html) — `man find`
-- [tee manual](https://man7.org/linux/man-pages/man1/tee.1.html) — `man tee`
-- [flock manual](https://man7.org/linux/man-pages/man1/flock.1.html) — `man flock`
+- [Bash Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections) - official docs
+- [find manual](https://man7.org/linux/man-pages/man1/find.1.html) - `man find`
+- [tee manual](https://man7.org/linux/man-pages/man1/tee.1.html) - `man tee`
+- [flock manual](https://man7.org/linux/man-pages/man1/flock.1.html) - `man flock`
