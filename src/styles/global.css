@@ -310,24 +310,22 @@ h4, .mini-card h4 {
   text-decoration: none !important;
 }
 
-/* Фикс для проектов: убираем подчеркивание в любом контексте */
-.article-body a.card-link,
-.article-body a.card-link:hover,
-.prose a.card-link,
-.prose a.card-link:hover,
-.markdown-content a.card-link,
-.markdown-content a.card-link:hover {
+/* Фикс конкретно для карточек проектов (папок) */
+.folder-card,
+.folder-card:hover,
+.folder-card *,
+a.folder-card,
+a.folder-card:hover {
     text-decoration: none !important;
-    text-decoration-line: none !important;
     border-bottom: none !important;
-    border-bottom-width: 0 !important;
-    box-shadow: none !important;
 }
 
-/* Убираем подчеркивание у заголовков внутри этих ссылок */
-a.card-link:hover h4, 
-a.card-link:hover p,
-a.card-link:hover span {
+/* Дополнительно убеждаемся, что заголовок внутри проекта не подчеркнут */
+.folder-card .folder-body h3 {
     text-decoration: none !important;
-    border-bottom: none !important;
+}
+
+/* Если вдруг подчеркивание идет от markdown-content */
+.markdown-content a.folder-card:hover {
+    text-decoration: none !important;
 }
