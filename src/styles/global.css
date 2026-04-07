@@ -309,3 +309,25 @@ html, body {
 h4, .mini-card h4 {
   text-decoration: none !important;
 }
+
+/* Фикс для проектов: убираем подчеркивание в любом контексте */
+.article-body a.card-link,
+.article-body a.card-link:hover,
+.prose a.card-link,
+.prose a.card-link:hover,
+.markdown-content a.card-link,
+.markdown-content a.card-link:hover {
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    border-bottom: none !important;
+    border-bottom-width: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Убираем подчеркивание у заголовков внутри этих ссылок */
+a.card-link:hover h4, 
+a.card-link:hover p,
+a.card-link:hover span {
+    text-decoration: none !important;
+    border-bottom: none !important;
+}
