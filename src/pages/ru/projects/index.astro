@@ -94,12 +94,23 @@ const allProjects = projectFolders.map(folder => {
     width: 100%;
   }
 
+  /* --- ИСПРАВЛЕНИЕ ТУТ --- */
   .card-link {
-    text-decoration: none;
+    text-decoration: none !important; /* Убираем подчеркивание в обычном состоянии */
     color: inherit;
     display: flex;
     height: 100%;
   }
+
+  .card-link:hover {
+    text-decoration: none !important; /* Убираем подчеркивание при наведении */
+  }
+
+  /* Чтобы заголовки внутри тоже не подчеркивались */
+  .card-link:hover h4 {
+    text-decoration: none !important;
+  }
+  /* ----------------------- */
 
   .mini-card {
     background: #1a1a1a;
@@ -129,6 +140,8 @@ const allProjects = projectFolders.map(folder => {
     color: var(--accent);
     font-size: 1.05rem;
     font-weight: 600;
+    /* Гарантируем отсутствие линии */
+    text-decoration: none; 
   }
 
   .mini-card p {
