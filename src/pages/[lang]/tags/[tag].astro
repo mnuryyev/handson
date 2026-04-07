@@ -100,4 +100,47 @@ const titleText = lang === 'en' ? `Tag: ${tag}` : `Тег: ${tag}`;
   .date { font-size: 0.75rem; color: #444; }
   .result-card h3 { color: #fff; margin: 0 0 10px 0; font-size: 1.4rem; }
   .result-card p { color: #888; font-size: 0.95rem; line-height: 1.5; }
+
+  @media (max-width: 768px) {
+    .container { 
+      margin: 30px auto; 
+      padding: 0 16px; 
+    }
+
+    .tag-header { 
+      margin-bottom: 30px; 
+      text-align: center; /* Центрируем заголовок на мобилках */
+    }
+
+    .tag-title { 
+      font-size: 2.2rem; /* Немного меньше для узких экранов */
+    }
+
+    .results-grid { 
+      grid-template-columns: 1fr; /* Строго одна колонка */
+      gap: 16px; 
+    }
+
+    .result-card { 
+      padding: 20px; /* Уменьшаем внутренние отступы карточки */
+    }
+
+    .result-card h3 {
+      font-size: 1.2rem; /* Уменьшаем размер заголовка статьи */
+    }
+
+    .meta-top {
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tag-title {
+      font-size: 1.8rem;
+    }
+    
+    .category {
+      font-size: 0.6rem; /* Совсем крошечный бейдж для очень узких экранов */
+    }
+  }
 </style>
