@@ -1,9 +1,10 @@
 ---
-import MainLayout from '../../../../layouts/MainLayout.astro'; // 4 уровня вверх!
+import MainLayout from '../../../../layouts/MainLayout.astro';
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { marked } from 'marked';
+
 const base = import.meta.env.BASE_URL;
 const cleanBase = base.endsWith('/') ? base : `${base}/`;
 
@@ -58,7 +59,7 @@ const htmlContent = marked.parse(content);
 
       <hr class="divider" />
 
-      <div class="article-body" set:html={htmlContent} />
+      <div class="article-body markdown-content" set:html={htmlContent} />
     </article>
   </div>
 </MainLayout>
@@ -88,6 +89,13 @@ const htmlContent = marked.parse(content);
     word-wrap: break-word;
     text-align: justify;
     text-justify: inter-word;
+  }
+
+  /* --- ФИКС ПОДЧЕРКИВАНИЯ ДЛЯ ССЫЛОК-КАРТОЧЕК --- */
+  .article-body :global(a.card-link),
+  .article-body :global(a.card-link:hover) {
+    text-decoration: none !important;
+    border-bottom: none !important;
   }
 
   .article-body :global(h2), .article-body :global(h3) { 
