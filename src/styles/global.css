@@ -1,26 +1,22 @@
-/* --- ПЕРЕМЕННЫЕ (Цвета) --- */
+/* --- ПЕРЕМЕННЫЕ --- */
 :root {
   --bg-color: #0f0f0f;
   --card-bg: #1e1e1e;
   --text-primary: #ffffff;
   --text-secondary: #aaaaaa;
-  --accent: #3ea6ff;        /* Тот самый синий */
+  --accent: #3ea6ff;
   --accent-rgb: 62, 166, 255;
 }
 
 /* --- БАЗОВЫЕ СТИЛИ --- */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
-  font-family: 'Roboto', system-ui, -apple-system, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  font-family: 'Roboto', system-ui, Arial, sans-serif;
+  margin: 0; padding: 0;
   line-height: 1.5;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -33,79 +29,32 @@ body {
   width: 100%;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: 0.3s;
-}
+a { color: inherit; text-decoration: none; transition: 0.3s; }
 
 /* --- НАВИГАЦИЯ --- */
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  position: sticky; top: 0; z-index: 1000;
   background-color: rgba(15, 15, 15, 0.8);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid #222;
   min-height: 64px;
-  display: flex;
-  align-items: center;
+  display: flex; align-items: center;
 }
 
-.nav-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 80px;
-}
+.nav-wrapper { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+.nav-logo a { font-size: 1.5rem; font-weight: 800; color: #fff; }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; list-style: none; gap: 32px; align-items: center; }
+.nav-links a { color: #888; font-size: 0.95rem; font-weight: 500; }
+.nav-links a:hover { color: var(--accent); }
 
-.nav-logo a {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -1px;
-  color: #fff;
-}
-
-.nav-logo span {
-  color: var(--accent);
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 32px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.nav-links a {
-  color: #888;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.nav-links a:hover {
-  color: var(--accent);
-}
-
-/* Кнопка GitHub */
 .btn-projects {
-  background: #fff;
-  color: #000 !important;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none !important;
+  background: #fff; color: #000 !important;
+  padding: 8px 18px; border-radius: 8px;
+  font-weight: 600; text-decoration: none !important;
 }
 
-.btn-projects:hover {
-  background: var(--accent);
-  color: #fff !important;
-}
-
-/* Сетка карточек */
+/* --- СЕТКА --- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -113,190 +62,74 @@ a {
   margin-top: 20px;
 }
 
-/* --- СТИЛИ ДЛЯ СТАТЕЙ --- */
-.markdown-content {
-  line-height: 1.7;
-  color: #d1d5db;
-  word-wrap: break-word;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+/* --- СТИЛИ ДЛЯ СТАТЕЙ (Markdown) --- */
+.markdown-content { line-height: 1.7; color: #d1d5db; }
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+  font-weight: 800; color: #ffffff; margin-top: 32px; margin-bottom: 16px;
+}
+.markdown-content h1, .markdown-content h2 {
+  padding-bottom: 0.4em; border-bottom: 2px solid #1a2638;
 }
 
-.markdown-content h1, 
-.markdown-content h2, 
-.markdown-content h3 {
-  font-weight: 800; 
-  color: #ffffff;
-  margin-top: 32px;
-  margin-bottom: 16px;
-  letter-spacing: -0.01em;
+.markdown-content a { color: #3498db; text-decoration: none; }
+.markdown-content a:hover { text-decoration: underline; }
+
+/* Сбрасываем подчеркивание для КАРТОЧЕК внутри маркдауна */
+.markdown-content a.lab-card:hover,
+.markdown-content a.folder-card:hover {
+  text-decoration: none !important;
 }
 
-.markdown-content h1, 
-.markdown-content h2 {
-  padding-bottom: 0.4em;
-  border-bottom: 2px solid #1a2638;
-}
-
-/* ЦИТАТЫ (>) */
-.markdown-content blockquote {
-  margin: 12px 0;
-  padding: 2px 12px;
-  color: #94a3b8;
-  border-left: 4px solid #3498db;
-  background: rgba(52, 152, 219, 0.08);
-  font-style: italic;
-  border-radius: 0 12px 12px 0;
-}
-
-/* ТАБЛИЦЫ */
-.markdown-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 30px 0;
-  border: 1px solid #1e293b;
-  background: #0a0a0a;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.markdown-content table th {
-  background: #111827;
-  color: #3498db;
-  padding: 14px;
-  border-bottom: 2px solid #1e293b;
-  text-align: left;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
-}
-
-.markdown-content table td {
-  padding: 12px 14px;
-  border-bottom: 1px solid #111827;
-  color: #cbd5e1;
-}
-
-/* КОД */
-.markdown-content :not(pre) > code {
-  background: #111827;
-  color: #60a5fa; 
-  font-size: 0.85em; 
-  padding: 0.15em 0.4em;
-  margin: 0 2px;
-  border-radius: 4px;
-  font-family: 'JetBrains Mono', monospace;
-  border: 1px solid #1e293b;
-  vertical-align: middle; 
-}
-
-.markdown-content pre {
-  font-size: 0.85em;
-  line-height: 1.5;
-  padding: 16px;
-  border-radius: 8px;
-  background: #050505;
-  border: 1px solid #1e293b;
-  overflow-x: auto;
-}
-
-/* СПИСКИ */
-.markdown-content ul, 
-.markdown-content ol {
-  padding-left: 1.5em;
-  margin-bottom: 20px;
-}
-
-.markdown-content li::marker {
-  color: #3498db;
-  font-weight: 900;
-}
-
-/* ССЫЛКИ В ТЕКСТЕ */
-.markdown-content a {
-  color: #3498db;
-  text-decoration: none;
-  transition: 0.2s;
-  font-weight: 500;
-}
-
-.markdown-content a:hover {
-  color: #60a5fa;
-  text-decoration: underline;
-}
-
-/* ГЛОБАЛЬНЫЙ СКРОЛЛ */
-html, body {
-  overflow-x: hidden;
-  position: relative;
-  width: 100%;
-}
-
-/* АДАПТИВНОСТЬ */
-@media (max-width: 768px) {
-  .main-content {
-    padding: 20px 12px 40px 12px;
-  }
-  .markdown-content table {
-    display: block !important;
-    width: 100% !important;
-    overflow-x: auto !important;
-  }
-}
-
-/* ТЕГИ */
+/* --- ТЕГИ --- */
 .tag-item {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #3ea6ff;
-  background: rgba(62, 166, 255, 0.1);
-  padding: 4px 10px;
-  border-radius: 6px;
-  margin-right: 8px;
-  margin-top: 8px;
-  border: 1px solid rgba(62, 166, 255, 0.2);
-  transition: 0.2s ease;
+  display: inline-block; padding: 4px 10px; border-radius: 6px;
+  background: rgba(62, 166, 255, 0.1); color: #3ea6ff;
+  font-size: 0.7rem; font-weight: 700; border: 1px solid rgba(62, 166, 255, 0.2);
   text-decoration: none !important;
 }
 
-/* =========================================== */
-/* ФИКСЫ ДЛЯ КАРТОЧЕК И ПРОЕКТОВ (ПОДЧЕРКИВАНИЕ И СДВИГ) */
-/* =========================================== */
+/* =========================================================== */
+/* ФИКСЫ ДЛЯ КАРТОЧЕК (УБИРАЕМ ЛИНИИ ТЕКСТА, ОСТАВЛЯЕМ РАМКИ)  */
+/* =========================================================== */
 
-/* 1. Общий сброс линий для всех типов карточек */
-.card-link, .mini-card, .folder-card, .lab-card,
-.card-link:hover, .mini-card:hover, .folder-card:hover, .lab-card:hover {
-  text-decoration: none !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-/* 2. Отключаем линии у всех вложенных элементов при наведении */
-.card-link *, .mini-card *, .folder-card *, .lab-card * {
-  text-decoration: none !important;
-  border-bottom: none !important;
-}
-
-/* 3. RESET & ALIGNMENT FOR PROJECTS (чтобы не ехал текст) */
-.folder-card .folder-body h3 {
-  margin: 0 !important;      /* Обнуляем отступы, которые сдвигают текст вниз */
-  padding: 0 !important;
-  line-height: 1.2 !important;
+/* 1. Убираем подчеркивание ТЕКСТА у всех типов карточек */
+.lab-card, .folder-card, .card-link {
   text-decoration: none !important;
 }
 
-.folder-card .folder-body p {
-  margin: 8px 0 0 !important; /* Контролируемый отступ сверху для описания */
+/* 2. Бьем по всем вложенным элементам, чтобы текст не подчеркивался */
+.lab-card *, .folder-card *, .card-link * {
+  text-decoration: none !important;
+  /* ВНИМАНИЕ: Здесь НЕ ПИШЕМ border-bottom: none, чтобы не сломать рамку карточки */
 }
 
-.folder-header {
-  align-items: center !important; /* Выравниваем иконку и бейдж по центру */
+/* 3. Фикс заголовков (чтобы не прыгали) */
+.lab-card h3, .folder-card h3, .folder-body h3 {
+  margin: 0 !important;
+  text-decoration: none !important;
+  border-bottom: none !important; /* Убираем линию только у текста заголовка */
 }
 
-/* 4. Защита от глобальных стилей .markdown-content */
-.markdown-content a.folder-card:hover, 
-.markdown-content a.lab-card:hover {
+/* 4. ГАРАНТИРУЕМ, ЧТО РАМКА КАРТОЧКИ ОСТАНЕТСЯ ПРИ ХОВЕРЕ */
+/* Если при наведении рамка пропадала снизу, этот блок ее вернет */
+.lab-card:hover, .folder-card:hover {
+  border: 1px solid var(--accent) !important; /* Рисуем рамку целиком */
+  text-decoration: none !important;
+}
+
+/* 5. Убираем "фантомные" линии у ссылок в проектах */
+.folder-card {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #333 !important; /* Возвращаем нижнюю грань по умолчанию */
+}
+
+.folder-card:hover {
+  border-bottom: 1px solid var(--accent) !important; /* Синяя грань при наведении */
+}
+
+/* Исправляем отступ описания в проектах */
+.folder-body p {
+  margin-top: 8px !important;
   text-decoration: none !important;
 }
