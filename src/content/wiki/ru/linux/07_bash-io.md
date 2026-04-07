@@ -1,6 +1,9 @@
-# Bash Scripting — обработка файлов, stdin/stdout/stderr
+---
+title: "Bash Scripting — обработка файлов, stdin/stdout/stderr"
+date: "2026-04-06"
+---
 
-Потоки ввода-вывода и работа с файлами — основа любого серьёзного скрипта. Понимание того, как данные текут между командами, файлами и процессами, открывает полную мощь Unix-философии.
+Потоки ввода-вывода и работа с файлами - основа любого серьёзного скрипта.
 
 ---
 
@@ -26,9 +29,9 @@
 
 # Проверить открытые дескрипторы текущего shell
 ls -la /proc/$$/fd
-# lrwx------ 0 -> /dev/pts/0   (stdin  — терминал)
-# lrwx------ 1 -> /dev/pts/0   (stdout — терминал)
-# lrwx------ 2 -> /dev/pts/0   (stderr — терминал)
+# lrwx------ 0 -> /dev/pts/0   (stdin  - терминал)
+# lrwx------ 1 -> /dev/pts/0   (stdout - терминал)
+# lrwx------ 2 -> /dev/pts/0   (stderr - терминал)
 ```
 
 ---
@@ -36,10 +39,10 @@ ls -la /proc/$$/fd
 ## Перенаправление вывода
 
 ```bash
-# > — перезаписать файл
+# > - перезаписать файл
 echo "hello" > file.txt
 
-# >> — дозапись в конец файла
+# >> - дозапись в конец файла
 echo "world" >> file.txt
 
 # Перезаписать несколькими строками
@@ -71,7 +74,7 @@ command | tee -a output.log   # tee с дозаписью
 ### Порядок перенаправлений важен
 
 ```bash
-# НЕПРАВИЛЬНО — stderr не попадает в файл
+# НЕПРАВИЛЬНО - stderr не попадает в файл
 command 2>&1 > file.txt
 # Объяснение: сначала 2>&1 (stderr → текущий stdout = терминал),
 #             потом > file.txt (stdout → файл, но stderr уже на терминале)
@@ -87,7 +90,7 @@ command > file.txt 2>&1
 ## Перенаправление ввода
 
 ```bash
-# < — читать из файла вместо stdin
+# < - читать из файла вместо stdin
 command < input.txt
 sort < unsorted.txt
 wc -l < /etc/passwd
@@ -97,7 +100,7 @@ grep "root" <<< "/etc/passwd содержит root"
 base64 <<< "hello world"
 read var <<< "значение"
 
-# Heredoc — многострочный ввод
+# Heredoc - многострочный ввод
 cat << 'EOF'
 Эта строка: $HOME не будет раскрыта
 EOF
@@ -127,7 +130,7 @@ EOF
 ## Пайпы (каналы)
 
 ```bash
-# | — stdout одной команды → stdin следующей
+# | - stdout одной команды → stdin следующей
 cat file.txt | grep "error"
 ps aux | grep nginx | grep -v grep
 
@@ -153,11 +156,11 @@ done < <(find . -name "*.log")         # читать вывод find в while
 ### Код возврата пайпа
 
 ```bash
-# По умолчанию — код возврата последней команды
+# По умолчанию - код возврата последней команды
 false | true
 echo $?    # 0 (true — последняя)
 
-# pipefail — ошибка если любая команда в пайпе упала
+# pipefail - ошибка если любая команда в пайпе упала
 set -o pipefail
 false | true
 echo $?    # 1
@@ -176,7 +179,7 @@ echo "${PIPESTATUS[1]}"    # код возврата grep
 ### Построчное чтение
 
 ```bash
-# Правильный способ — while + read
+# Правильный способ - while + read
 while IFS= read -r line; do
     echo "$line"
 done < file.txt
@@ -207,10 +210,10 @@ done < file.txt
 } < data.csv
 ```
 
-> ⚠️ Не используй `for line in $(cat file)` — ломается на пробелах и спецсимволах.
+> Не использовать `for line in $(cat file)` - ломается на пробелах и спецсимволах.
 
 ```bash
-# ПЛОХО — разбивает по словам, не строкам
+# ПЛОХО - разбивает по словам, не строкам
 for line in $(cat file.txt); do
     echo "$line"   # слова, а не строки!
 done
@@ -224,7 +227,7 @@ done < file.txt
 ### Чтение в массив
 
 ```bash
-# Каждая строка — элемент массива
+# Каждая строка - элемент массива
 readarray -t lines < file.txt
 mapfile -t lines < file.txt    # синоним
 
@@ -243,12 +246,12 @@ readarray -t users < <(awk -F: '$3 >= 1000 {print $1}' /etc/passwd)
 ### Чтение бинарных данных
 
 ```bash
-# xxd — hex dump
+# xxd - hex dump
 xxd file.bin | head
 xxd -p file.bin              # только hex, без адресов
 xxd -r hex.txt > file.bin    # обратная конвертация
 
-# od — octal dump
+# od - octal dump
 od -c file.bin               # символьный вывод
 od -x file.bin               # hex
 od -A x -t x1z file.bin      # как xxd
@@ -376,7 +379,7 @@ command 3>&1 1>&2 2>&3 3>&-
 
 ---
 
-## find — поиск файлов
+## find - поиск файлов
 
 ```bash
 # Базовый поиск
@@ -447,7 +450,7 @@ mkdir -p /deep/nested/path        # создать всю цепочку
 rm file.txt
 rm -r directory/                  # рекурсивно
 rm -f file.txt                    # без подтверждения
-rm -rf directory/                 # ⚠️ опасно — без подтверждения
+rm -rf directory/                 # опасно - без подтверждения
 
 # Безопасное удаление
 rm -i *.txt                       # интерактивное подтверждение
@@ -481,7 +484,7 @@ rsync -n src/ dst/                # dry run — что будет сделано
 ### Ссылки
 
 ```bash
-# Жёсткая ссылка — тот же inode
+# Жёсткая ссылка - тот же inode
 ln original.txt hardlink.txt
 ls -li original.txt hardlink.txt  # одинаковый inode
 
@@ -531,7 +534,7 @@ file -i file.txt                   # MIME тип: text/plain; charset=utf-8
 ## Временные файлы
 
 ```bash
-# mktemp — безопасное создание временных файлов
+# mktemp - безопасное создание временных файлов
 tmpfile=$(mktemp)
 tmpdir=$(mktemp -d)
 tmpfile=$(mktemp /tmp/myapp.XXXXXX)     # кастомный префикс
@@ -572,7 +575,7 @@ update_config() {
 ## Блокировки файлов (flock)
 
 ```bash
-# flock — файловые блокировки для синхронизации процессов
+# flock - файловые блокировки для синхронизации процессов
 
 LOCKFILE="/var/lock/myscript.lock"
 
@@ -910,7 +913,7 @@ trap "rm -f $tmpfile" EXIT
 
 ## Ссылки
 
-- [Bash Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections) — официальная документация
-- [find manual](https://man7.org/linux/man-pages/man1/find.1.html) — `man find`
-- [tee manual](https://man7.org/linux/man-pages/man1/tee.1.html) — `man tee`
-- [flock manual](https://man7.org/linux/man-pages/man1/flock.1.html) — `man flock`
+- [Bash Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections) - официальная документация
+- [find manual](https://man7.org/linux/man-pages/man1/find.1.html) - `man find`
+- [tee manual](https://man7.org/linux/man-pages/man1/tee.1.html) - `man tee`
+- [flock manual](https://man7.org/linux/man-pages/man1/flock.1.html) - `man flock`
