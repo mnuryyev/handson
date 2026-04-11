@@ -1,5 +1,5 @@
 ---
-title: "Active Directory — домены, деревья, леса"
+title: "Active Directory - домены, деревья, леса"
 date: "2026-04-11"
 ---
 
