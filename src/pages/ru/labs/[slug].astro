@@ -69,7 +69,12 @@ const htmlContent = marked.parse(content);
     color: #fff; 
     line-height: 1.2;
   }
-  
+
+  .article-body :global(code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+  }
+
   /* УДАЛИЛИ старые стили для .article-body, h2, pre, img, 
      потому что они теперь подтягиваются из .markdown-content в global.css */
 
