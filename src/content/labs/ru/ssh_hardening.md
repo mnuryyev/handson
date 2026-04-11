@@ -383,7 +383,7 @@ ACK     → подтверждение
 # Что реально слушает SSH
 sudo ss -tlnp | grep 2222
 
-# Активная конфигурация — что применилось
+# Активная конфигурация - что применилось
 sudo sshd -T | grep -E "port|permitroot|passwordauth|allowusers|maxauthtries"
 
 # Статус fail2ban
