@@ -62,6 +62,10 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   margin-top: 20px;
 }
 
+/* =========================================================== */
+/* ЕДИНЫЙ MARKDOWN СТИЛЬ (WIKI BLUE STYLE) */
+/* =========================================================== */
+
 .markdown-content { line-height: 1.7; color: #d1d5db; word-wrap: break-word; }
 
 .markdown-content h1, 
@@ -70,10 +74,10 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   font-weight: 800; color: #ffffff; margin-top: 1.5em; margin-bottom: 0.5em;
 }
 
-.markdown-content h1 {padding-bottom: 0.3em; border-bottom: 2px solid #1a2638; font-size: 0.5rem;} 
-.markdown-content h2 {
-  padding-bottom: 0.3em; border-bottom: 2px solid #1a2638; font-size: 2.5rem;
-}
+/* Поправил размеры заголовков, чтобы не были по 0.5rem */
+.markdown-content h1 { font-size: 2.2rem; padding-bottom: 0.3em; border-bottom: 2px solid #1a2638; } 
+.markdown-content h2 { font-size: 1.8rem; padding-bottom: 0.3em; border-bottom: 2px solid #1a2638; }
+.markdown-content h3 { font-size: 1.4rem; }
 
 /* ЦИТАТЫ */
 .markdown-content blockquote {
@@ -103,7 +107,6 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   color: #cbd5e1; white-space: nowrap;
 }
 
-/* Разрешаем перенос для длинных описаний в таблицах */
 .markdown-content td:nth-child(3) {
   white-space: normal; min-width: 250px; max-width: 400px;
 }
@@ -132,21 +135,52 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
 .markdown-content a { color: #3498db; text-decoration: none; font-weight: 500; }
 .markdown-content a:hover { color: #60a5fa; text-decoration: underline; }
 
-/* ВИДЕО / IFRAME */
-.markdown-content iframe {
-  width: 100% !important; aspect-ratio: 16/9;
-  border-radius: 12px; margin: 24px 0; border: 1px solid #1e293b;
-}
-
 /* КАРТИНКИ */
 .markdown-content img {
   max-width: 100%; height: auto; border-radius: 12px;
   border: 1px solid #333; margin: 2.5em 0; display: block;
 }
 
-/* Отключаем подчеркивание в карточках (даже если они внутри markdown) */
+/* =========================================================== */
+/* ФИКСЫ ДЛЯ КАРТОЧЕК */
+/* =========================================================== */
+
+.lab-card, .folder-card, .card-link { text-decoration: none !important; }
+.lab-card *, .folder-card *, .card-link * { text-decoration: none !important; }
+
+.lab-card h3, .folder-card h3, .folder-body h3 {
+  margin: 0 !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.lab-card:hover, .folder-card:hover {
+  border: 1px solid var(--accent) !important;
+  text-decoration: none !important;
+}
+
+.folder-card {
+  display: flex; flex-direction: column;
+  border-bottom: 1px solid #333 !important;
+}
+
+.folder-card:hover { border-bottom: 1px solid var(--accent) !important; }
+.folder-body p { margin-top: 8px !important; text-decoration: none !important; }
+
+/* Отключаем подчеркивание ссылок-карточек, если они внутри .markdown-content */
 .markdown-content a.lab-card:hover,
 .markdown-content a.folder-card:hover {
+  text-decoration: none !important;
+}
+
+/* --- АНИМАЦИЯ "Все →" --- */
+.section-header a {
+  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.section-header a:hover {
+  color: #60a5fa !important;
+  transform: scale(1.1) translateX(5px);
   text-decoration: none !important;
 }
 
@@ -156,69 +190,4 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   background: rgba(62, 166, 255, 0.1); color: #3ea6ff;
   font-size: 0.7rem; font-weight: 700; border: 1px solid rgba(62, 166, 255, 0.2);
   text-decoration: none !important;
-}
-
-/* =========================================================== */
-/* ФИКСЫ ДЛЯ КАРТОЧЕК (УБИРАЕМ ЛИНИИ ТЕКСТА, ОСТАВЛЯЕМ РАМКИ)  */
-/* =========================================================== */
-
-/* 1. Убираем подчеркивание ТЕКСТА у всех типов карточек */
-.lab-card, .folder-card, .card-link {
-  text-decoration: none !important;
-}
-
-/* 2. Бьем по всем вложенным элементам, чтобы текст не подчеркивался */
-.lab-card *, .folder-card *, .card-link * {
-  text-decoration: none !important;
-  /* ВНИМАНИЕ: Здесь НЕ ПИШЕМ border-bottom: none, чтобы не сломать рамку карточки */
-}
-
-/* 3. Фикс заголовков (чтобы не прыгали) */
-.lab-card h3, .folder-card h3, .folder-body h3 {
-  margin: 0 !important;
-  text-decoration: none !important;
-  border-bottom: none !important; /* Убираем линию только у текста заголовка */
-}
-
-/* 4. ГАРАНТИРУЕМ, ЧТО РАМКА КАРТОЧКИ ОСТАНЕТСЯ ПРИ ХОВЕРЕ */
-/* Если при наведении рамка пропадала снизу, этот блок ее вернет */
-.lab-card:hover, .folder-card:hover {
-  border: 1px solid var(--accent) !important; /* Рисуем рамку целиком */
-  text-decoration: none !important;
-}
-
-/* 5. Убираем "фантомные" линии у ссылок в проектах */
-.folder-card {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid #333 !important; /* Возвращаем нижнюю грань по умолчанию */
-}
-
-.folder-card:hover {
-  border-bottom: 1px solid var(--accent) !important; /* Синяя грань при наведении */
-}
-
-/* Исправляем отступ описания в проектах */
-.folder-body p {
-  margin-top: 8px !important;
-  text-decoration: none !important;
-}
-
-/* --- АНИМАЦИЯ ССЫЛОК "Все →" --- */
-.section-header a {
-  display: inline-block;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.section-header a:hover {
-  color: #60a5fa !important; /* Чуть более светлый синий при наведении */
-  transform: scale(1.1) translateX(5px); /* Увеличиваем и двигаем вправо */
-  text-shadow: 0 0 15px rgba(62, 166, 255, 0.4); /* Легкое свечение текста */
-  text-decoration: none !important; /* На всякий случай блокируем линию и тут */
-}
-
-/* Эффект для самой стрелочки, если она отдельным символом */
-.section-header a:active {
-  transform: scale(0.95); /* Эффект нажатия */
 }
