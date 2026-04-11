@@ -3,7 +3,7 @@ title: "TCP/IP Stack - Packets, Frames, Segments"
 date: "2026-04-11"
 ---
 
-TCP/IP is the fundamental protocol stack of the internet. Unlike OSI (7 layers), TCP/IP uses 4 layers. Understanding how data is encapsulated and transmitted at each level is critical for network diagnostics and development.
+TCP/IP is the fundamental protocol stack of the internet. Unlike OSI (7 layers), TCP/IP uses 4 layers.
 
 ---
 
