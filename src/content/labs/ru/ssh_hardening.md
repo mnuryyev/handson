@@ -343,7 +343,7 @@ sudo fail2ban-client status sshd
 ssh -p 2222 ubuntu@10.10.70.130
 ```
 
-![23_connecting](images/lab03_ssh/23_connecting.png)
+![23_connecting](/handson/images/ssh_hardening_sec/23_connecting.png)
 
 Подключение снова разрешено.
 
