@@ -13,7 +13,7 @@ In this lab we will configure SSH: generate an Ed25519 key, disable password aut
 
 | Parameter | Value |
 | --- | --- |
-| Server | Ubuntu Server, openssh-server |
+| Server | Ubuntu, openssh-server |
 | Client | Parrot OS |
 | Server IP | 10.10.70.130 |
 | Client IP | 10.10.70.129 |
