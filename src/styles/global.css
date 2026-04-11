@@ -71,7 +71,7 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   color: #d1d5db; 
   word-wrap: break-word;
   /* Устанавливаем базовый размер шрифта (примерно 15px) */
-  font-size: 1.95rem; 
+  font-size: 1.2rem; 
 }
 
 /* Заголовки: уменьшены для аккуратности */
