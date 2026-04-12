@@ -104,8 +104,14 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   ::-webkit-scrollbar-thumb:hover { background: #3498db; }
   * { scrollbar-width: thin; scrollbar-color: #1e293b #0d0d0d; }
 
-  /* --- WIKI BLUE MARKDOWN STYLES --- */
+  /* --- WIKI BLUE MARKDOWN STYLES (LOCAL TO WIKI) --- */
   
+  .markdown-body {
+    font-size: 15px; /* Базовый размер для текста статьи */
+    line-height: 1.7;
+    color: #cbd5e1;
+  }
+
   .markdown-body h1, 
   .markdown-body h2, 
   .markdown-body h3 {
@@ -115,32 +121,29 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
     margin-bottom: 0.5em;
   }
 
-  .markdown-body h1, 
-  .markdown-body h2 {
-    border-bottom: 2px solid #1a2638;
-    padding-bottom: 0.3em;
-  }
+  /* Заголовки чуть компактнее */
+  .markdown-body h1 { font-size: 1.8rem; border-bottom: 2px solid #1a2638; padding-bottom: 0.3em; }
+  .markdown-body h2 { font-size: 1.4rem; border-bottom: 2px solid #1a2638; padding-bottom: 0.3em; }
+  .markdown-body h3 { font-size: 1.2rem; }
 
   .markdown-body blockquote {
-    margin: 12px 0;
-    padding: 2px 12px;
+    margin: 16px 0;
+    padding: 8px 16px;
     color: #94a3b8;
     border-left: 4px solid #3498db;
     background: rgba(52, 152, 219, 0.08);
     font-style: italic;
-    border-radius: 0 12px 12px 0;
-    
+    border-radius: 0 8px 8px 0;
   }
 
-  /* --- ТАБЛИЦЫ: ФИНАЛЬНЫЙ ФИКС ШИРИНЫ --- */
+  /* --- ТАБЛИЦЫ: НОРМАЛЬНЫЙ РАЗМЕР --- */
   .markdown-body table {
     display: block;            
-    width: fit-content;        /* ТАБЛИЦА СЖИМАЕТСЯ ПО КОНТЕНТУ */
-    max-width: 100%;           /* Но не вылезает за экран */
+    width: fit-content;        
+    max-width: 100%;           
     overflow-x: auto;          
-    -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
-    margin: 30px 0;            
+    margin: 24px 0;            
     border: 1px solid #1e293b; 
     background: #0a0a0a;
     border-radius: 8px;
@@ -149,56 +152,64 @@ const dateLabel = lang === 'en' ? 'Updated' : 'Обновлено';
   .markdown-body th { 
     background: #111827;       
     color: #3498db;            
-    padding: 14px 20px;        /* Чуть больше отступов для красоты */
+    padding: 12px 16px;        
     border-bottom: 2px solid #1e293b; 
     text-align: left;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    white-space: nowrap;       
+    font-size: 13px; /* Сделали читабельным */
+    letter-spacing: 0.5px;
   }
   
   .markdown-body td { 
-    padding: 12px 20px; 
+    padding: 10px 16px; 
     border-bottom: 1px solid #111827; 
     color: #cbd5e1;
-    font-size: 0.75rem;
-    white-space: nowrap;       /* По умолчанию не рвем строки */
+    font-size: 14px; /* Было 0.75rem (12px), стало 14px */
+    white-space: nowrap;
   }
 
-  /* Разрешаем перенос текста только для колонки с описанием */
   .markdown-body td:nth-child(3) {
     white-space: normal;      
-    min-width: 250px;          /* Ограничиваем минимальную ширину для текста */
-    max-width: 400px;          /* Чтобы описание не было слишком длинным в одну строку */
+    min-width: 250px;         
+    max-width: 450px;         
   }
 
-  .markdown-body tr:hover {
-    background: #0f172a;       
-  }
+  .markdown-body tr:hover { background: #0f172a; }
 
-  /* --- ОСТАЛЬНЫЕ ЭЛЕМЕНТЫ --- */
-
-  .markdown-body a { color: #3498db; text-decoration: none; font-weight: 500; }
-  .markdown-body a:hover { color: #60a5fa; text-decoration: underline; }
-
+  /* --- КОД: ИСПРАВЛЕННЫЙ РАЗМЕР --- */
   .markdown-body :not(pre) > code {
     background: #111827;
     color: #60a5fa; 
     padding: 0.2em 0.4em;
     border-radius: 6px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6em; 
+    font-size: 13px; /* Было 0.6em (очень мелко), теперь норм */
     border: 1px solid #1e293b;
     vertical-align: middle;
   }
 
-  .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-bottom: 16px; }
-  .markdown-body li { margin-bottom: 6px; }
-  .markdown-body li::marker { color: #3498db; font-weight: bold; }
+  .markdown-body pre {
+    background: #0b0b0b;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #222;
+    margin: 1.5em 0;
+    overflow-x: auto;
+  }
 
-  .markdown-body iframe { width: 100% !important; aspect-ratio: 16/9; border-radius: 12px; margin: 24px 0; border: 1px solid #1e293b; }
+  .markdown-body pre code {
+    font-size: 13px;
+    background: transparent;
+    padding: 0;
+    border: none;
+  }
+
+  .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-bottom: 16px; }
+  .markdown-body li { margin-bottom: 8px; }
+
+  .markdown-body a { color: #3498db; text-decoration: none; }
+  .markdown-body a:hover { text-decoration: underline; }
 </style>
 <style>
   .wiki-container {
