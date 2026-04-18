@@ -84,9 +84,13 @@ const t = nav[lang];
 
     <Footer lang={lang} />
 
-    <script is:inline>
+<script is:inline>
       const menuToggle = document.getElementById('menu-toggle');
       const navMenu = document.getElementById('nav-menu');
+      const navbar = document.querySelector('.navbar');
+      let lastScrollY = window.scrollY;
+
+      // 1. Твоя логика клика (кнопка справа)
       if (menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => {
           menuToggle.classList.toggle('is-active');
@@ -94,6 +98,25 @@ const t = nav[lang];
           document.body.classList.toggle('menu-open');
         });
       }
+
+      // 2. Умное появление при скролле вверх
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        // Если скроллим вниз и проехали больше 100px — прячем
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          navbar.classList.add('navbar--hidden');
+          // Если меню было открыто, лучше его закрыть при начале скролла
+          navMenu.classList.remove('is-open');
+          menuToggle.classList.remove('is-active');
+        } 
+        // Если скроллим вверх — показываем
+        else {
+          navbar.classList.remove('navbar--hidden');
+        }
+        
+        lastScrollY = currentScrollY;
+      });
     </script>
   </body>
 </html>
