@@ -1,7 +1,7 @@
 ---
 title: "Анализ сетевого трафика TCP/IP в Wireshark"
 description: "В данной работе захватим и разберём трафик: HTTP-запрос в открытом виде, DNS-резолвинг, ICMP-пинг, TCP three-way handshake, SSH-сессию и HTTPS"
-image: "/images/tpc_ip_net/main.jpg"
+image: "/images/tcp_ip_net/main.jpg"
 date: "2026-04-18"
 ---
 
