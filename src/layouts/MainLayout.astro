@@ -133,55 +133,88 @@ const t = nav[lang];
     padding-bottom: 60px;
   }
 
-  /* КНОПКА БУРГЕР */
+  /* ВОЗВРАЩАЕМ СИНИЙ СТИЛЬ GITHUB */
+  .btn-projects {
+    background: var(--accent) !important; /* Твой синий #3ea6ff */
+    color: #fff !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .btn-projects:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 4px 15px rgba(62, 166, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* КНОПКА МЕНЮ (ЦЕНТРИРОВАНИЕ И ВИД) */
   .menu-toggle {
     display: none;
     flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 18px;
+    justify-content: center; /* Центрируем полоски внутри кнопки */
+    align-items: center;
+    width: 40px;
+    height: 40px; /* Фиксированный квадрат для легкого нажатия */
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 2001; /* Выше чем меню */
+    z-index: 2100;
+    position: relative; /* Для точного позиционирования полосок */
   }
 
   .menu-toggle .bar {
-    width: 100%;
+    width: 24px;
     height: 2px;
     background-color: #fff;
-    border-radius: 4px;
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+    position: absolute;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Анимация в крестик */
-  .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-  .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
-  .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  /* Позиции полосок в спокойном состоянии */
+  .menu-toggle .bar:nth-child(1) { transform: translateY(-8px); }
+  .menu-toggle .bar:nth-child(2) { opacity: 1; }
+  .menu-toggle .bar:nth-child(3) { transform: translateY(8px); }
 
-  /* МОБИЛЬНОЕ МЕНЮ (БОКОВАЯ ПАНЕЛЬ) */
+  /* ТРАНСФОРМАЦИЯ В "X" ПРИ ОТКРЫТИИ */
+  .menu-toggle.is-active .bar:nth-child(1) { 
+    transform: translateY(0) rotate(45deg); 
+  }
+  .menu-toggle.is-active .bar:nth-child(2) { 
+    opacity: 0; 
+    transform: translateX(10px); 
+  }
+  .menu-toggle.is-active .bar:nth-child(3) { 
+    transform: translateY(0) rotate(-45deg); 
+  }
+
+  /* МОБИЛЬНОЕ МЕНЮ */
   @media (max-width: 992px) {
     .menu-toggle { display: flex; }
 
     .nav-links {
       position: fixed;
       top: 0;
-      right: -100%; /* Спрятано */
-      width: 280px !important; /* ВОЗВРАЩАЕМ СТАРУЮ УДОБНУЮ ШИРИНУ */
+      right: -100%;
+      width: 280px !important;
       height: 100vh !important;
-      background: rgba(15, 15, 15, 0.98) !important;
-      backdrop-filter: blur(10px);
+      background: #0f0f0f !important;
+      border-left: 1px solid #222;
       flex-direction: column;
       justify-content: flex-start !important;
       align-items: flex-start !important;
-      padding: 80px 30px !important; /* Отступ сверху, чтобы кнопка не перекрывала */
-      gap: 15px !important;
+      padding: 100px 30px !important; /* Отступ побольше, чтобы X был виден */
+      gap: 10px !important;
       transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
       z-index: 2000 !important;
-      border-left: 1px solid #222;
       margin: 0 !important;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+      box-shadow: -15px 0 30px rgba(0,0,0,0.7);
     }
 
     .nav-links.is-open { 
@@ -193,38 +226,17 @@ const t = nav[lang];
       list-style: none;
     }
 
-    .nav-links a { 
+    .nav-links a:not(.btn-projects) { 
       font-size: 1.1rem !important; 
-      font-weight: 500; 
-      color: #eee !important; 
+      color: #ccc !important; 
       display: block; 
-      padding: 12px 0;
+      padding: 15px 0;
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    /* Переключатель языка внутри меню */
     .nav-actions { 
-      border: none !important;
-      padding: 20px 0 !important; 
-      width: 100%; 
-      display: flex;
-      justify-content: flex-start;
+      border: none !important; 
+      padding: 20px 0 !important;
     }
-
-    /* Github кнопка в меню */
-    .btn-projects {
-      display: inline-block;
-      margin-top: 10px;
-      text-align: center;
-      width: auto;
-    }
-  }
-
-  /* Фикс для Markdown таблиц на мобилках */
-  @media (max-width: 768px) {
-    .markdown-content table {
-      font-size: 13px;
-    }
-    .markdown-content h1 { font-size: 1.7rem; }
   }
 </style>
