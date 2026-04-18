@@ -11,6 +11,12 @@
 /* --- БАЗОВЫЕ СТИЛИ --- */
 * { box-sizing: border-box; }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* Фикс горизонтального скролла */
+  position: relative;
+}
+
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
@@ -20,8 +26,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden; 
-  width: 100%;
 }
 
 .container {
@@ -41,9 +45,20 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   border-bottom: 1px solid #222;
   min-height: 64px;
   display: flex; align-items: center;
+  width: 100%;
 }
 
-.nav-wrapper { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+.nav-wrapper { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  height: 80px; 
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .nav-logo a { font-size: 1.5rem; font-weight: 800; color: #fff; }
 .nav-logo span { color: var(--accent); }
 .nav-links { display: flex; list-style: none; gap: 32px; align-items: center; }
@@ -70,13 +85,12 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
 
 .markdown-content { 
   line-height: 1.7; 
-  color: #d1d5db; 
+  color: #e2e8f0; /* Чуть мягче белый */
   word-wrap: break-word;
-  /* Устанавливаем базовый размер шрифта (примерно 15px) */
-  font-size: 1.1rem; 
+  font-size: 1.1rem; /* Увеличенный основной шрифт */
 }
 
-/* Заголовки: уменьшены для аккуратности */
+/* Заголовки */
 .markdown-content h1, 
 .markdown-content h2, 
 .markdown-content h3 {
@@ -88,7 +102,7 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
 }
 
 .markdown-content h1 { 
-  font-size: 1.8rem; /* Оптимальный размер для Title */
+  font-size: 1.8rem; 
   padding-bottom: 0.3em; 
   border-bottom: 2px solid #1a2638; 
 } 
@@ -99,14 +113,12 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   border-bottom: 2px solid #1a2638; 
 }
 
-.markdown-content h3 { 
-  font-size: 1.2rem; 
-}
+.markdown-content h3 { font-size: 1.2rem; }
 
-/* ЦИТАТЫ (Blockquotes) */
+/* ЦИТАТЫ */
 .markdown-content blockquote {
-  margin: 12px 0; 
-  padding: 2px 16px;
+  margin: 16px 0; 
+  padding: 8px 16px;
   color: #94a3b8; 
   border-left: 4px solid #3498db;
   background: rgba(52, 152, 219, 0.08);
@@ -114,12 +126,12 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   border-radius: 0 12px 12px 0;
 }
 
-/* ТАБЛИЦЫ (Wiki-Style) */
+/* ТАБЛИЦЫ: ФИКС МОБИЛОК */
 .markdown-content table {
   display: block; 
-  width: fit-content; 
-  max-width: 100%;
-  overflow-x: auto; 
+  width: 100% !important; /* Чтобы не распирало экран */
+  overflow-x: auto; /* Скролл внутри таблицы */
+  -webkit-overflow-scrolling: touch;
   border-collapse: collapse;
   margin: 30px 0; 
   border: 1px solid #1e293b;
@@ -148,30 +160,26 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   white-space: nowrap;
 }
 
-/* Перенос текста для колонки с описанием */
 .markdown-content td:nth-child(3) {
   white-space: normal; 
   min-width: 250px; 
   max-width: 450px;
 }
 
-.markdown-content tr:hover { 
-  background: #0f172a; 
-}
+.markdown-content tr:hover { background: #0f172a; }
 
-/* КОД (Inline) */
+/* КОД */
 .markdown-content :not(pre) > code {
   background: #111827; 
   color: #60a5fa;
   padding: 0.2em 0.4em; 
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace; 
-  font-size: 0.9em; /* Чуть меньше основного текста */
+  font-size: 0.9em; 
   border: 1px solid #1e293b; 
   vertical-align: middle;
 }
 
-/* БЛОКИ КОДА (Pre) */
 .markdown-content pre {
   background: #0b0b0b; 
   padding: 24px; 
@@ -179,6 +187,7 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   overflow-x: auto; 
   border: 1px solid #222; 
   margin: 2em 0;
+  max-width: 100%; /* Фикс вылета кода */
 }
 
 .markdown-content pre code {
@@ -191,32 +200,9 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
 }
 
 /* СПИСКИ */
-.markdown-content ul, 
-.markdown-content ol { 
-  padding-left: 2em; 
-  margin-bottom: 16px; 
-}
-
-.markdown-content li { 
-  margin-bottom: 8px; 
-}
-
-.markdown-content li::marker { 
-  color: #3498db; 
-  font-weight: bold; 
-}
-
-/* ССЫЛКИ В ТЕКСТЕ */
-.markdown-content a { 
-  color: #3498db; 
-  text-decoration: none; 
-  font-weight: 500; 
-}
-
-.markdown-content a:hover { 
-  color: #60a5fa; 
-  text-decoration: underline; 
-}
+.markdown-content ul, .markdown-content ol { padding-left: 2em; margin-bottom: 16px; }
+.markdown-content li { margin-bottom: 8px; }
+.markdown-content li::marker { color: #3498db; font-weight: bold; }
 
 /* КАРТИНКИ */
 .markdown-content img {
@@ -228,53 +214,39 @@ a { color: inherit; text-decoration: none; transition: 0.3s; }
   display: block;
 }
 
-/* =========================================================== */
-/* ФИКСЫ ДЛЯ КАРТОЧЕК */
-/* =========================================================== */
-
+/* --- КАРТОЧКИ --- */
 .lab-card, .folder-card, .card-link { text-decoration: none !important; }
 .lab-card *, .folder-card *, .card-link * { text-decoration: none !important; }
-
 .lab-card h3, .folder-card h3, .folder-body h3 {
   margin: 0 !important;
   text-decoration: none !important;
   border-bottom: none !important;
 }
-
-.lab-card:hover, .folder-card:hover {
-  border: 1px solid var(--accent) !important;
-  text-decoration: none !important;
-}
-
-.folder-card {
-  display: flex; flex-direction: column;
-  border-bottom: 1px solid #333 !important;
-}
-
+.lab-card:hover, .folder-card:hover { border: 1px solid var(--accent) !important; }
+.folder-card { display: flex; flex-direction: column; border-bottom: 1px solid #333 !important; }
 .folder-card:hover { border-bottom: 1px solid var(--accent) !important; }
 .folder-body p { margin-top: 8px !important; text-decoration: none !important; }
 
-/* Отключаем подчеркивание ссылок-карточек, если они внутри .markdown-content */
-.markdown-content a.lab-card:hover,
-.markdown-content a.folder-card:hover {
-  text-decoration: none !important;
+/* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛОК --- */
+@media (max-width: 768px) {
+  html, body { overflow-x: hidden; width: 100%; }
+  .container { padding: 0 15px; }
+  .nav-links { display: none; } /* Скрываем ссылки если нет мобильного меню */
+  
+  .markdown-content { font-size: 1rem; }
+  .markdown-content pre { 
+    margin: 1.5em -15px; 
+    border-radius: 0; 
+    padding: 16px; 
+    max-width: calc(100% + 30px);
+  }
 }
 
-/* --- АНИМАЦИЯ "Все →" --- */
-.section-header a {
-  display: inline-block;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.section-header a:hover {
-  color: #60a5fa !important;
-  transform: scale(1.1) translateX(5px);
-  text-decoration: none !important;
-}
-
-/* --- ТЕГИ --- */
+/* --- ТЕГИ И АНИМАЦИИ --- */
 .tag-item {
   display: inline-block; padding: 4px 10px; border-radius: 6px;
   background: rgba(62, 166, 255, 0.1); color: #3ea6ff;
   font-size: 0.7rem; font-weight: 700; border: 1px solid rgba(62, 166, 255, 0.2);
-  text-decoration: none !important;
 }
+.section-header a { display: inline-block; transition: 0.3s; }
+.section-header a:hover { color: #60a5fa !important; transform: translateX(5px); }
