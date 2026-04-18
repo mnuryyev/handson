@@ -122,21 +122,18 @@ const t = nav[lang];
 </html>
 
 <style is:global>
-  /* Стили оставляем как есть, они правильные */
   body.menu-open { overflow: hidden; }
 
+  /* Теги */
   .tag-item {
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;
-    text-transform: lowercase;
-    letter-spacing: 0.5px;
     color: #3ea6ff; 
     background: rgba(62, 166, 255, 0.07);
     padding: 4px 12px;
     border-radius: 6px;
     border: 1px solid rgba(62, 166, 255, 0.2);
-    text-decoration: none !important;
     transition: all 0.2s ease;
   }
 
@@ -144,78 +141,92 @@ const t = nav[lang];
     background: #3ea6ff;
     color: #000 !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(62, 166, 255, 0.3);
   }
 
+  /* Основной контент (учитываем высоту шапки) */
   .main-content {
     flex: 1;
     width: 100%;
+    margin-top: 64px; /* Чтобы не пряталось под навбаром */
     padding-top: 40px;
     padding-bottom: 60px;
   }
 
+  /* Селектор языка */
   .nav-actions {
     padding: 0 15px;
     border-left: 1px solid #222;
     border-right: 1px solid #222;
   }
 
+  /* КНОПКА МЕНЮ (БУРГЕР) */
   .menu-toggle {
     display: none;
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
-    height: 21px;
+    width: 26px;
+    height: 18px;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
-    z-index: 1100;
+    z-index: 2000; /* Самый высокий слой */
   }
 
   .menu-toggle .bar {
     width: 100%;
-    height: 3px;
+    height: 2px;
     background-color: #fff;
-    border-radius: 10px;
-    transition: all 0.3s ease-in-out;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
-  .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-  .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+  /* Анимация в крестик */
+  .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
+  /* МОБИЛЬНОЕ МЕНЮ НА ВЕСЬ ЭКРАН */
   @media (max-width: 992px) {
     .menu-toggle { display: flex; }
+
     .nav-links {
       position: fixed;
       top: 0;
       right: -100%;
-      width: 100%;
-      height: 100vh;
-      background: #0b0b0b;
+      width: 100% !important; /* На весь экран */
+      height: 100vh !important;
+      background: #0f0f0f !important;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 8px;
-      transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 1050;
+      gap: 20px !important;
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      z-index: 1500 !important;
       padding: 40px 20px;
+      margin: 0 !important;
     }
-    .nav-links.is-open { right: 0; }
-    .nav-links li { width: 100%; text-align: center; display: flex; justify-content: center; }
-    .nav-links a { font-size: 1.3rem; padding: 10px 0; display: block; width: 100%; }
-    .nav-actions { border: none; border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a; padding: 16px 0; width: 100%; display: flex; justify-content: center; }
+
+    .nav-links.is-open { 
+      right: 0 !important; 
+    }
+
+    .nav-links li { width: 100%; text-align: center; }
+    .nav-links a { font-size: 1.6rem; font-weight: 700; color: #fff; display: block; padding: 15px 0; }
+    
+    .nav-actions { 
+      border: none; 
+      border-top: 1px solid #222; 
+      border-bottom: 1px solid #222; 
+      padding: 20px 0; 
+      width: 100%; 
+      display: flex; 
+      justify-content: center; 
+    }
   }
 
   @media (max-width: 768px) {
-    .main-content { padding-top: 24px; padding-bottom: 40px; }
-    .markdown-content table, .markdown-body table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .markdown-content h1 { font-size: 1.6rem; }
-    .markdown-content h2 { font-size: 1.3rem; }
-    .markdown-content h3 { font-size: 1.1rem; }
-    .markdown-content pre { font-size: 0.78em; }
+    .main-content { padding-top: 24px; }
+    .markdown-content h1 { font-size: 1.8rem; }
   }
-
-  @media (max-width: 480px) { .container { padding: 0 14px; } }
 </style>
