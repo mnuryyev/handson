@@ -242,9 +242,11 @@ body.menu-open {
 .markdown-content h3 { font-size: 1.4rem; }
 
 /* ТАБЛИЦЫ */
+/* ТАБЛИЦЫ */
 .markdown-content table {
-  display: block; 
-  width: 100% !important; 
+  display: table; /* Вернули стандартное поведение таблицы */
+  width: auto; /* Таблица занимает столько места, сколько нужно контенту */
+  max-width: 100%; /* Но не вылезает за пределы экрана */
   overflow-x: auto; 
   -webkit-overflow-scrolling: touch;
   border-collapse: collapse;
@@ -252,6 +254,14 @@ body.menu-open {
   border: 1px solid #1e293b;
   background: #0a0a0a; 
   border-radius: 8px;
+}
+
+/* Оборачиваем таблицу для корректного скролла на мобилках, 
+   если вдруг она шире экрана */
+@media (max-width: 768px) {
+  .markdown-content table {
+    display: block; /* На мобилках разрешаем блочный вид для скролла */
+  }
 }
 
 .markdown-content th {
