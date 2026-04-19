@@ -30,39 +30,46 @@ const allProjects = projectFolders.map(folder => {
 ---
 
 <MainLayout title="My Projects">
-  <section>
-    <header class="page-header">
-      <h1>📁 Projects</h1>
-      <p>Projects & Guides.</p>
-    </header>
-    
-    {allProjects.map(project => (
-      <div class="project-group">
-        <div class="project-title">
-          <h2>📁 {project.folder}</h2>
-        </div>
-        
-        <div class="cards-preview-grid">
-          {project.cards.map(card => (
-            /* ИСПРАВЛЕН URL: Добавлен ${base} */
-            <a href={`${base}${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
-              <div class="mini-card">
-                <div class="card-icon">📝</div>
-                <div class="card-body">
-                  <h4>{card.title || "Untitled"}</h4>
-                  <p>{card.description || "No description provided"}</p>
+  <div class="container project-index-wrapper">
+    <section>
+      <header class="page-header">
+        <h1>📁 Projects</h1>
+        <p>Projects & Guides.</p>
+      </header>
+      
+      {allProjects.map(project => (
+        <div class="project-group">
+          <div class="project-title">
+            <h2>📁 {project.folder}</h2>
+          </div>
+          
+          <div class="cards-preview-grid">
+            {project.cards.map(card => (
+              /* ИСПРАВЛЕН URL: Добавлен ${base} */
+              <a href={`${base}${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
+                <div class="mini-card">
+                  <div class="card-icon">📝</div>
+                  <div class="card-body">
+                    <h4>{card.title || "Untitled"}</h4>
+                    <p>{card.description || "No description provided"}</p>
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    ))}
-  </section>
+      ))}
+    </section>
+  </div>
 </MainLayout>
 
 <style>
-  /* Styles remain the same for visual consistency */
+  /* Отступ сверху для всей страницы */
+  .project-index-wrapper {
+    margin-top: 40px;
+    margin-bottom: 60px;
+  }
+
   .page-header {
     margin-bottom: 40px;
     border-left: 4px solid var(--accent);
