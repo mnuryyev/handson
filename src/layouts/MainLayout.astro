@@ -5,7 +5,6 @@ import LangSwitcher from '../components/LangSwitcher.astro';
 
 const base = import.meta.env.BASE_URL;
 
-// Канонический URL
 const { pathname } = Astro.url;
 const normalizedPathname = pathname.endsWith('/') ? pathname : `${pathname}/`;
 const canonicalURL = new URL(normalizedPathname, Astro.site);
@@ -67,9 +66,9 @@ const t = nav[lang];
         <li class="nav-actions">
           <LangSwitcher />
         </li>
-        <li>
+        <li class="github-li">
           <a href="https://github.com/mnuryyev" class="btn-github" target="_blank" rel="noopener noreferrer">
-            GitHub
+            <span>GitHub</span>
           </a>
         </li>
       </ul>
@@ -90,24 +89,22 @@ const t = nav[lang];
     const navbar = document.querySelector('.navbar');
     let lastScrollY = window.scrollY;
 
-    // Открытие/закрытие меню
     menuToggle.addEventListener('click', () => {
       menuToggle.classList.toggle('active');
       navMenu.classList.toggle('open');
       document.body.classList.toggle('menu-open');
     });
 
-    // Скрытие navbar при скролле вниз
     window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      const current = window.scrollY;
+      if (current > lastScrollY && current > 80) {
         navbar.classList.add('navbar--hidden');
         navMenu.classList.remove('open');
         menuToggle.classList.remove('active');
       } else {
         navbar.classList.remove('navbar--hidden');
       }
-      lastScrollY = currentScrollY;
+      lastScrollY = current;
     });
   </script>
 </body>
