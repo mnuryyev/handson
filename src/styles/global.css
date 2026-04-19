@@ -117,32 +117,48 @@ a {
 }
 
 /* ===================== БУРГЕР + X ===================== */
+/* ===================== БУРГЕР + X ===================== */
 .menu-toggle {
   display: none;
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   background: transparent;
   border: none;
   cursor: pointer;
   z-index: 9999;
-  margin-right: 8px;
+  padding: 0;
+  position: relative;
 }
 
 .menu-toggle .bar {
+  position: absolute;
+  left: 12px;
   width: 26px;
   height: 2.5px;
   background: #fff;
   border-radius: 2px;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.menu-toggle .bar:nth-child(1) { transform: translateY(-7px); }
-.menu-toggle .bar:nth-child(3) { transform: translateY(7px); }
+.menu-toggle .bar:nth-child(1) { top: 14px; }
+.menu-toggle .bar:nth-child(2) { top: 22px; }
+.menu-toggle .bar:nth-child(3) { top: 30px; }
 
-.menu-toggle.active .bar:nth-child(1) { transform: translateY(0) rotate(45deg); }
-.menu-toggle.active .bar:nth-child(2) { opacity: 0; }
-.menu-toggle.active .bar:nth-child(3) { transform: translateY(0) rotate(-45deg); }
+/* Анимация в X */
+.menu-toggle.active .bar:nth-child(1) {
+  top: 22px;
+  transform: rotate(45deg);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  top: 22px;
+  transform: rotate(-45deg);
+}
 
 /* ===================== МОБИЛЬНОЕ МЕНЮ ===================== */
 @media (max-width: 992px) {
@@ -150,11 +166,9 @@ a {
     display: flex;
   }
 
-  /* Исправление видимости крестика */
+  /* Надёжное позиционирование крестика */
   .menu-toggle.active {
-    margin-right: 24px !important;
-    transform: translateX(-15px) !important;
-    z-index: 9999 !important;
+    margin-right: 20px;
   }
 
   .nav-links {
@@ -168,7 +182,7 @@ a {
     flex-direction: column;
     padding: 100px 30px 40px;
     gap: 8px;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: right 0.45s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2000;
     box-shadow: -15px 0 30px rgba(0,0,0,0.7);
   }
