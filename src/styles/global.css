@@ -126,6 +126,7 @@ a {
   border: none;
   cursor: pointer;
   z-index: 2100;
+  margin-right: -4px;
 }
 
 .menu-toggle .bar {
