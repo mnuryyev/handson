@@ -391,7 +391,7 @@ Transaction ID - ключевое поле. DNS работает по UDP без
 sudo systemctl status dnsmasq
 ```
 
-![26_dnsmasq_active](images/lab06_dns/26_dnsmasq_active.png)
+![26_dnsmasq_active](/handson/images/dns_net/26_dnsmasq_active.png)
 
 Статус `active (running)`, PID 1432, память 2.7 МБ - dnsmasq один из самых лёгких DNS-серверов.
 
