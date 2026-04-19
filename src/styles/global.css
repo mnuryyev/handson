@@ -48,6 +48,7 @@ a {
 }
 
 /* ===================== NAVBAR ===================== */
+/* ===================== NAVBAR ===================== */
 .navbar {
   position: fixed;
   top: 0;
@@ -79,16 +80,15 @@ a {
   font-size: 1.65rem;
   font-weight: 800;
   color: #fff;
-  text-decoration: none;
 }
 
 .nav-logo span { color: var(--accent); }
 
-/* Десктоп */
+/* Десктоп меню */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 34px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -96,6 +96,7 @@ a {
 
 .nav-links a {
   color: #aaa;
+  font-size: 1.02rem;           /* +1px как просил */
   font-weight: 500;
   transition: all 0.3s ease;
 }
@@ -104,63 +105,26 @@ a {
   color: var(--accent);
 }
 
-/* GitHub кнопка — новая стильная */
+/* ==================== КНОПКА GITHUB ==================== */
 .btn-github {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #222;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 9999px;
+  background: var(--accent);
+  color: #fff !important;
+  padding: 11px 24px;
+  border-radius: 10px;           /* чуть прямоугольная */
   font-weight: 600;
-  border: 1px solid #444;
+  font-size: 1rem;
   transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(62, 166, 255, 0.25);
 }
 
 .btn-github:hover {
-  background: #3ea6ff;
-  color: #000;
-  border-color: #3ea6ff;
+  background: #5ab8ff;
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(62, 166, 255, 0.4);
 }
 
-/* Бургер */
-.menu-toggle {
-  display: none;
-  width: 48px;
-  height: 48px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 2000;
-  position: relative;
-}
-
-.menu-toggle .bar {
-  position: absolute;
-  width: 28px;
-  height: 2.5px;
-  background: #fff;
-  border-radius: 2px;
-  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-.menu-toggle .bar:nth-child(1) { top: 14px; }
-.menu-toggle .bar:nth-child(2) { top: 22px; }
-.menu-toggle .bar:nth-child(3) { top: 30px; }
-
-.menu-toggle.active .bar:nth-child(1) {
-  top: 22px;
-  transform: rotate(45deg);
-}
-.menu-toggle.active .bar:nth-child(2) { opacity: 0; }
-.menu-toggle.active .bar:nth-child(3) {
-  top: 22px;
-  transform: rotate(-45deg);
-}
-
-/* ===================== МОБИЛЬНОЕ МЕНЮ ===================== */
+/* ==================== МОБИЛЬНОЕ МЕНЮ ==================== */
 @media (max-width: 992px) {
   .menu-toggle { display: flex; }
 
@@ -173,43 +137,39 @@ a {
     height: 100vh;
     background: #0a0a0a;
     flex-direction: column;
-    padding: 90px 30px 40px;
-    gap: 8px;
+    padding: 85px 25px 40px;     /* уменьшил отступы */
+    gap: 4px;
     transition: right 0.45s cubic-bezier(0.32, 0.72, 0, 1);
     box-shadow: -25px 0 50px rgba(0, 0, 0, 0.8);
     z-index: 999;
-    overflow-y: auto;
   }
 
   .nav-links.open {
     right: 0;
   }
 
-  .nav-links li {
-    width: 100%;
-  }
-
   .nav-links a {
-    font-size: 1.4rem;
-    padding: 16px 0;
+    font-size: 1.38rem;
+    padding: 15px 8px;
     color: #ddd;
-    display: block;
   }
 
   .github-li {
-    margin-top: 30px;
+    margin-top: auto;           /* прижимает кнопку вниз */
+    padding-top: 20px;
   }
 
   .btn-github {
     width: 100%;
     justify-content: center;
-    padding: 16px 24px;
-    font-size: 1.1rem;
-    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 1.15rem;
+    border-radius: 10px;
+    text-align: center;
   }
 }
 
-/* Остальные стили (main-content, markdown и т.д.) оставь как были */
+/* Общие */
 .main-content {
   margin-top: var(--nav-height);
   padding-top: 40px;
