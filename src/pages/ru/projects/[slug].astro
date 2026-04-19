@@ -41,30 +41,30 @@ const cards = files.map(file => {
 ---
 
 <MainLayout title={`Проект: ${slug}`}>
-  <header class="project-header">
-    <div class="header-content">
-      <span class="folder-badge">📁 Проект</span>
-      <h1>{slug.replace(/-/g, ' ')}</h1>
-      <p>Выберите этап для изучения</p>
-    </div>
-  </header>
+  <div class="container"> <header class="project-header">
+      <div class="header-content">
+        <span class="folder-badge">📁 Проект</span>
+        <h1>{slug.replace(/-/g, ' ')}</h1>
+        <p>Выберите этап для изучения</p>
+      </div>
+    </header>
 
-  <div class="articles-grid">
-    {cards.map(card => (
-      /* ИСПРАВЛЕН URL: Добавлен ${base} */
-      <a href={`${base}${lang}/projects/${slug}/${card.id}`} class="step-card">
-        <div class="card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        </div>
-        <div class="card-info">
-          <h2>{card.data.title}</h2>
-          <p>{card.data.description || "Нажмите, чтобы прочитать подробнее..."}</p>
-        </div>
-        <div class="card-arrow">→</div>
-      </a>
-    ))}
-  </div>
-</MainLayout>
+    <div class="articles-grid">
+      {cards.map(card => (
+        <a href={`${base}${lang}/projects/${slug}/${card.id}`} class="step-card">
+          <div class="card-icon">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          </div>
+          <div class="card-info">
+            <h2>{card.data.title}</h2>
+            <p>{card.data.description || "Нажмите, чтобы прочитать подробнее..."}</p>
+          </div>
+          <div class="card-arrow">→</div>
+        </a>
+      ))}
+    </div>
+
+  </div> </MainLayout>
 
 <style>
   /* Стили остаются без изменений, они отлично работают */
