@@ -116,6 +116,7 @@ a {
 
 /* Бургер + X */
 /* ===================== БУРГЕР + X ===================== */
+/* ===================== БУРГЕР + X ===================== */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -126,9 +127,9 @@ a {
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 2100;
-  margin-right: 4px;           /* базовый отступ */
-  transition: margin-right 0.3s, transform 0.3s;
+  z-index: 9999;           /* Очень высокий */
+  margin-right: 8px;
+  transition: all 0.4s ease;
 }
 
 .menu-toggle .bar {
@@ -153,10 +154,10 @@ a {
     display: flex; 
   }
 
-  /* Главное исправление — сдвигаем крестик когда активно */
+  /* Сильное смещение крестика влево, когда меню открыто */
   .menu-toggle.active {
-    margin-right: 20px !important;   /* ← увеличил, чтобы было хорошо видно */
-    transform: translateX(-12px);
+    margin-right: 32px !important;
+    transform: translateX(-22px) !important;
   }
 
   .nav-links {
