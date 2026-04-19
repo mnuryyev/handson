@@ -103,7 +103,7 @@ a {
 
 /* Кнопка GitHub */
 .btn-github {
-  background: var(--accent);
+  background: #3ea6ff;
   color: #fff !important;
   padding: 10px 24px;
   border-radius: 10px;
