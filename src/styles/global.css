@@ -58,7 +58,6 @@ a {
   backdrop-filter: blur(16px);
   border-bottom: 1px solid #222;
   z-index: 1000;
-  /* Убрали анимацию скрытия */
 }
 
 .nav-wrapper {
@@ -79,7 +78,7 @@ a {
 
 .nav-logo span { color: var(--accent); }
 
-/* Десктоп */
+/* Десктоп меню */
 .nav-links {
   display: flex;
   align-items: center;
@@ -113,20 +112,20 @@ a {
 .btn-github:hover {
   background: #5ab8ff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(62, 166, 255, 0.4);
 }
 
-/* Бургер */
+/* Бургер + X */
 .menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   background: transparent;
   border: none;
   cursor: pointer;
+  z-index: 2100;
 }
 
 .menu-toggle .bar {
@@ -134,7 +133,8 @@ a {
   height: 2.5px;
   background: #fff;
   border-radius: 2px;
-  transition: all 0.4s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .menu-toggle .bar:nth-child(1) { transform: translateY(-7px); }
@@ -157,7 +157,6 @@ a {
     background: #0f0f0f;
     border-left: 1px solid #222;
     flex-direction: column;
-    justify-content: flex-start;
     padding: 100px 30px 40px;
     gap: 8px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -181,11 +180,11 @@ a {
   }
 
   .btn-github {
-    width: 100%;           /* На всю ширину на телефоне */
+    width: 100%;           /* Полная ширина */
+    padding: 18px 20px;    /* Сделали выше и шире */
+    font-size: 1.15rem;
     text-align: center;
-    padding: 16px 20px;
-    font-size: 1.1rem;
-    border-radius: 10px;
+    border-radius: 12px;
   }
 }
 
