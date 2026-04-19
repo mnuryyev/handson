@@ -149,6 +149,13 @@ a {
 @media (max-width: 992px) {
   .menu-toggle { display: flex; }
 
+/* Когда меню открыто — сдвигаем крестик левее */
+  .nav-links.is-open ~ .menu-toggle,
+  .menu-toggle.active {
+    margin-right: 12px;        /* ← главное изменение */
+    transform: translateX(-8px); /* дополнительное смещение влево */
+  }
+
   .nav-links {
     position: fixed;
     top: 0;
