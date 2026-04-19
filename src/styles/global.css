@@ -115,6 +115,7 @@ a {
 }
 
 /* Бургер + X */
+/* ===================== БУРГЕР + X ===================== */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -126,7 +127,8 @@ a {
   border: none;
   cursor: pointer;
   z-index: 2100;
-  margin-right: -4px;
+  margin-right: 4px;           /* базовый отступ */
+  transition: margin-right 0.3s, transform 0.3s;
 }
 
 .menu-toggle .bar {
@@ -147,13 +149,14 @@ a {
 
 /* ===================== МОБИЛЬНОЕ МЕНЮ ===================== */
 @media (max-width: 992px) {
-  .menu-toggle { display: flex; }
+  .menu-toggle { 
+    display: flex; 
+  }
 
-/* Когда меню открыто — сдвигаем крестик левее */
-  .nav-links.is-open ~ .menu-toggle,
+  /* Главное исправление — сдвигаем крестик когда активно */
   .menu-toggle.active {
-    margin-right: 12px;        /* ← главное изменение */
-    transform: translateX(-8px); /* дополнительное смещение влево */
+    margin-right: 20px !important;   /* ← увеличил, чтобы было хорошо видно */
+    transform: translateX(-12px);
   }
 
   .nav-links {
@@ -188,8 +191,8 @@ a {
   }
 
   .btn-github {
-    width: 100%;           /* Полная ширина */
-    padding: 18px 20px;    /* Сделали выше и шире */
+    width: 100%;
+    padding: 18px 20px;
     font-size: 1.15rem;
     text-align: center;
     border-radius: 12px;
