@@ -5,13 +5,12 @@ import LangSwitcher from '../components/LangSwitcher.astro';
 
 const base = import.meta.env.BASE_URL;
 
-// 1. ПРАВИЛЬНАЯ ЛОГИКА ДЛЯ GOOGLE:
-// Гарантируем, что канонический URL всегда заканчивается на слэш
+// Канонический URL
 const { pathname } = Astro.url;
 const normalizedPathname = pathname.endsWith('/') ? pathname : `${pathname}/`;
 const canonicalURL = new URL(normalizedPathname, Astro.site);
 
-const { title, tags = [] } = Astro.props; 
+const { title } = Astro.props;
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
 const nav = {
@@ -32,211 +31,84 @@ const nav = {
     wiki: 'Wiki',
   }
 };
-
 const t = nav[lang];
 ---
 
 <!DOCTYPE html>
 <html lang={lang}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    
-    <link rel="canonical" href={canonicalURL.href} />
-    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="container nav-wrapper">
-        <div class="nav-logo">
-          <a href={`${base}${lang}/`}>HANDS<span>.ON</span></a>
-        </div>
-
-        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </button>
-
-        <ul class="nav-links" id="nav-menu">
-          <li><a href={`${base}${lang}/articles/1/`}>{t.articles}</a></li>
-          <li><a href={`${base}${lang}/labs/1/`}>{t.labs}</a></li>
-          <li><a href={`${base}${lang}/writeups/`}>{t.writeups}</a></li>
-          <li><a href={`${base}${lang}/tools/1/`}>{t.tools}</a></li>
-          <li><a href={`${base}${lang}/projects/`}>{t.projects}</a></li>
-          <li><a href={`${base}${lang}/wiki/`}>{t.wiki}</a></li>
-          <li class="nav-actions">
-            <LangSwitcher />
-          </li>
-          <li>
-            <a href="https://github.com/mnuryyev" class="btn-projects" target="_blank" rel="noopener noreferrer">Github</a>
-          </li>
-        </ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="canonical" href={canonicalURL.href} />
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-wrapper">
+      <div class="nav-logo">
+        <a href={`${base}${lang}/`}>HANDS<span>.ON</span></a>
       </div>
-    </nav>
 
-    <main class="container main-content">
-      <div class="markdown-content">
-        <slot />
-      </div>
-    </main>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
 
-    <Footer lang={lang} />
-
-<script is:inline>
-      const menuToggle = document.getElementById('menu-toggle');
-      const navMenu = document.getElementById('nav-menu');
-      const navbar = document.querySelector('.navbar');
-      let lastScrollY = window.scrollY;
-
-      // 1. Твоя логика клика (кнопка справа)
-      if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
-          menuToggle.classList.toggle('is-active');
-          navMenu.classList.toggle('is-open');
-          document.body.classList.toggle('menu-open');
-        });
-      }
-
-      // 2. Умное появление при скролле вверх
-      window.addEventListener('scroll', () => {
-        const currentScrollY = window.scrollY;
-
-        // Если скроллим вниз и проехали больше 100px — прячем
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-          navbar.classList.add('navbar--hidden');
-          // Если меню было открыто, лучше его закрыть при начале скролла
-          navMenu.classList.remove('is-open');
-          menuToggle.classList.remove('is-active');
-        } 
-        // Если скроллим вверх — показываем
-        else {
-          navbar.classList.remove('navbar--hidden');
-        }
+      <ul class="nav-links" id="nav-menu">
+        <li><a href={`${base}${lang}/articles/1/`}>{t.articles}</a></li>
+        <li><a href={`${base}${lang}/labs/1/`}>{t.labs}</a></li>
+        <li><a href={`${base}${lang}/writeups/`}>{t.writeups}</a></li>
+        <li><a href={`${base}${lang}/tools/1/`}>{t.tools}</a></li>
+        <li><a href={`${base}${lang}/projects/`}>{t.projects}</a></li>
+        <li><a href={`${base}${lang}/wiki/`}>{t.wiki}</a></li>
         
-        lastScrollY = currentScrollY;
-      });
-    </script>
-  </body>
+        <li class="nav-actions">
+          <LangSwitcher />
+        </li>
+        <li>
+          <a href="https://github.com/mnuryyev" class="btn-github" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="markdown-content">
+      <slot />
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    const navbar = document.querySelector('.navbar');
+    let lastScrollY = window.scrollY;
+
+    // Открытие/закрытие меню
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      navMenu.classList.toggle('open');
+      document.body.classList.toggle('menu-open');
+    });
+
+    // Скрытие navbar при скролле вниз
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        navbar.classList.add('navbar--hidden');
+        navMenu.classList.remove('open');
+        menuToggle.classList.remove('active');
+      } else {
+        navbar.classList.remove('navbar--hidden');
+      }
+      lastScrollY = currentScrollY;
+    });
+  </script>
+</body>
 </html>
-
-<style is:global>
-  body.menu-open { overflow: hidden; }
-
-  /* Основной контент */
-  .main-content {
-    flex: 1;
-    width: 100%;
-    margin-top: 64px;
-    padding-top: 40px;
-    padding-bottom: 60px;
-  }
-
-  /* ВОЗВРАЩАЕМ СИНИЙ СТИЛЬ GITHUB */
-  .btn-projects {
-    background: var(--accent) !important; /* Твой синий #3ea6ff */
-    color: #fff !important;
-    padding: 10px 20px !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    transition: all 0.3s ease !important;
-    border: none !important;
-    display: inline-block;
-    text-align: center;
-  }
-
-  .btn-projects:hover {
-    filter: brightness(1.2);
-    box-shadow: 0 4px 15px rgba(62, 166, 255, 0.4);
-    transform: translateY(-2px);
-  }
-
-  /* КНОПКА МЕНЮ (ЦЕНТРИРОВАНИЕ И ВИД) */
-  .menu-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: center; /* Центрируем полоски внутри кнопки */
-    align-items: center;
-    width: 40px;
-    height: 40px; /* Фиксированный квадрат для легкого нажатия */
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 2100;
-    position: relative; /* Для точного позиционирования полосок */
-  }
-
-  .menu-toggle .bar {
-    width: 24px;
-    height: 2px;
-    background-color: #fff;
-    border-radius: 2px;
-    position: absolute;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Позиции полосок в спокойном состоянии */
-  .menu-toggle .bar:nth-child(1) { transform: translateY(-8px); }
-  .menu-toggle .bar:nth-child(2) { opacity: 1; }
-  .menu-toggle .bar:nth-child(3) { transform: translateY(8px); }
-
-  /* ТРАНСФОРМАЦИЯ В "X" ПРИ ОТКРЫТИИ */
-  .menu-toggle.is-active .bar:nth-child(1) { 
-    transform: translateY(0) rotate(45deg); 
-  }
-  .menu-toggle.is-active .bar:nth-child(2) { 
-    opacity: 0; 
-    transform: translateX(10px); 
-  }
-  .menu-toggle.is-active .bar:nth-child(3) { 
-    transform: translateY(0) rotate(-45deg); 
-  }
-
-  /* МОБИЛЬНОЕ МЕНЮ */
-  @media (max-width: 992px) {
-    .menu-toggle { display: flex; }
-
-    .nav-links {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 280px !important;
-      height: 100vh !important;
-      background: #0f0f0f !important;
-      border-left: 1px solid #222;
-      flex-direction: column;
-      justify-content: flex-start !important;
-      align-items: flex-start !important;
-      padding: 100px 30px !important; /* Отступ побольше, чтобы X был виден */
-      gap: 10px !important;
-      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      z-index: 2000 !important;
-      margin: 0 !important;
-      box-shadow: -15px 0 30px rgba(0,0,0,0.7);
-    }
-
-    .nav-links.is-open { 
-      right: 0 !important; 
-    }
-
-    .nav-links li { 
-      width: 100%; 
-      list-style: none;
-    }
-
-    .nav-links a:not(.btn-projects) { 
-      font-size: 1.1rem !important; 
-      color: #ccc !important; 
-      display: block; 
-      padding: 15px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .nav-actions { 
-      border: none !important; 
-      padding: 20px 0 !important;
-    }
-  }
-</style>
