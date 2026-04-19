@@ -9,8 +9,6 @@ const base = import.meta.env.BASE_URL;
 const lang = "ru"; 
 const projectsDir = path.resolve(`./src/content/projects/${lang}`);
 
-// ... (весь твой код поиска папок остается таким же) ...
-
 const projectFolders = fs.existsSync(projectsDir) 
   ? fs.readdirSync(projectsDir).filter(f => 
       fs.statSync(path.join(projectsDir, f)).isDirectory()
@@ -31,39 +29,45 @@ const allProjects = projectFolders.map(folder => {
 ---
 
 <MainLayout title="Мои Проекты">
-  <section>
-    <header class="page-header">
-      <h1>📁 Проекты</h1>
-      <p>Проекты и кейсы.</p>
-    </header>
-    
-    {allProjects.map(project => (
-      <div class="project-group">
-        <div class="project-title">
-          <h2>📁 {project.folder}</h2>
-        </div>
-        
-        <div class="cards-preview-grid">
-          {project.cards.map(card => (
-            /* ИСПРАВЛЕН URL: Добавлен ${base} */
-            <a href={`${base}${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
-              <div class="mini-card">
-                <div class="card-icon">📝</div>
-                <div class="card-body">
-                  <h4>{card.title || "Без названия"}</h4>
-                  <p>{card.description || "Нет описания"}</p>
+  <div class="container project-page-wrapper">
+    <section>
+      <header class="page-header">
+        <h1>📁 Проекты</h1>
+        <p>Проекты и кейсы.</p>
+      </header>
+      
+      {allProjects.map(project => (
+        <div class="project-group">
+          <div class="project-title">
+            <h2>📁 {project.folder}</h2>
+          </div>
+          
+          <div class="cards-preview-grid">
+            {project.cards.map(card => (
+              <a href={`${base}${lang}/projects/${project.folder}/${card.fileName}`} class="card-link">
+                <div class="mini-card">
+                  <div class="card-icon">📝</div>
+                  <div class="card-body">
+                    <h4>{card.title || "Без названия"}</h4>
+                    <p>{card.description || "Нет описания"}</p>
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    ))}
-  </section>
+      ))}
+    </section>
+  </div>
 </MainLayout>
 
 <style>
-  /* Стили оставляем без изменений, они у тебя отличные */
+  /* Добавляем небольшой отступ сверху для всей страницы */
+  .project-page-wrapper {
+    margin-top: 40px;
+    margin-bottom: 60px;
+  }
+
   .page-header {
     margin-bottom: 40px;
     border-left: 4px solid var(--accent);
@@ -94,23 +98,20 @@ const allProjects = projectFolders.map(folder => {
     width: 100%;
   }
 
-  /* --- ИСПРАВЛЕНИЕ ТУТ --- */
   .card-link {
-    text-decoration: none !important; /* Убираем подчеркивание в обычном состоянии */
+    text-decoration: none !important;
     color: inherit;
     display: flex;
     height: 100%;
   }
 
   .card-link:hover {
-    text-decoration: none !important; /* Убираем подчеркивание при наведении */
+    text-decoration: none !important;
   }
 
-  /* Чтобы заголовки внутри тоже не подчеркивались */
   .card-link:hover h4 {
     text-decoration: none !important;
   }
-  /* ----------------------- */
 
   .mini-card {
     background: #1a1a1a;
@@ -140,7 +141,6 @@ const allProjects = projectFolders.map(folder => {
     color: var(--accent);
     font-size: 1.05rem;
     font-weight: 600;
-    /* Гарантируем отсутствие линии */
     text-decoration: none; 
   }
 
