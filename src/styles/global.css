@@ -48,18 +48,16 @@ a {
 }
 
 /* ===================== NAVBAR ===================== */
-/* ===================== NAVBAR ===================== */
 .navbar {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100%;
   height: var(--nav-height);
-  background: rgba(15, 15, 15, 0.97);
+  background: rgba(15, 15, 15, 0.96);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid #222;
   z-index: 1000;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s ease;
 }
 
 .navbar--hidden {
@@ -84,11 +82,11 @@ a {
 
 .nav-logo span { color: var(--accent); }
 
-/* Десктоп меню */
+/* Десктоп */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 34px;
+  gap: 32px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -96,35 +94,60 @@ a {
 
 .nav-links a {
   color: #aaa;
-  font-size: 1.02rem;           /* +1px как просил */
+  font-size: 1.02rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: color 0.3s;
 }
 
 .nav-links a:hover {
   color: var(--accent);
 }
 
-/* ==================== КНОПКА GITHUB ==================== */
+/* Кнопка GitHub — синяя, как ты любишь */
 .btn-github {
   background: var(--accent);
   color: #fff !important;
-  padding: 11px 24px;
-  border-radius: 10px;           /* чуть прямоугольная */
+  padding: 10px 24px;
+  border-radius: 10px;
   font-weight: 600;
-  font-size: 1rem;
   transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 4px 15px rgba(62, 166, 255, 0.25);
 }
 
 .btn-github:hover {
   background: #5ab8ff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(62, 166, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(62, 166, 255, 0.4);
 }
 
-/* ==================== МОБИЛЬНОЕ МЕНЮ ==================== */
+/* Бургер — скрываем на ПК */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.menu-toggle .bar {
+  width: 26px;
+  height: 2.5px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.4s ease;
+}
+
+.menu-toggle .bar:nth-child(1) { transform: translateY(-7px); }
+.menu-toggle .bar:nth-child(3) { transform: translateY(7px); }
+
+.menu-toggle.active .bar:nth-child(1) { transform: translateY(0) rotate(45deg); }
+.menu-toggle.active .bar:nth-child(2) { opacity: 0; }
+.menu-toggle.active .bar:nth-child(3) { transform: translateY(0) rotate(-45deg); }
+
+/* ===================== МОБИЛЬНОЕ МЕНЮ (возвращаем старый красивый стиль) ===================== */
 @media (max-width: 992px) {
   .menu-toggle { display: flex; }
 
@@ -132,53 +155,51 @@ a {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 100%;
-    max-width: 360px;
+    width: 280px;
     height: 100vh;
-    background: #0a0a0a;
+    background: #0f0f0f;
+    border-left: 1px solid #222;
     flex-direction: column;
-    padding: 85px 25px 40px;     /* уменьшил отступы */
-    gap: 4px;
-    transition: right 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-    box-shadow: -25px 0 50px rgba(0, 0, 0, 0.8);
-    z-index: 999;
+    justify-content: flex-start;
+    padding: 100px 30px 40px;
+    gap: 8px;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2000;
+    box-shadow: -15px 0 30px rgba(0,0,0,0.7);
   }
 
-  .nav-links.open {
+  .nav-links.is-open {
     right: 0;
   }
 
   .nav-links a {
-    font-size: 1.38rem;
-    padding: 15px 8px;
-    color: #ddd;
+    font-size: 1.25rem;
+    color: #ccc;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
 
   .github-li {
-    margin-top: auto;           /* прижимает кнопку вниз */
-    padding-top: 20px;
+    margin-top: 40px;
   }
 
   .btn-github {
     width: 100%;
-    justify-content: center;
-    padding: 16px 20px;
-    font-size: 1.15rem;
-    border-radius: 10px;
     text-align: center;
+    padding: 16px 20px;
+    font-size: 1.1rem;
+    border-radius: 10px;
   }
 }
 
-/* Общие */
+/* Общее */
 .main-content {
   margin-top: var(--nav-height);
   padding-top: 40px;
   padding-bottom: 60px;
 }
 
-body.menu-open {
-  overflow: hidden;
-}
+body.menu-open { overflow: hidden; }
 
 /* ===================== КОНТЕНТ ===================== */
 .main-content {
