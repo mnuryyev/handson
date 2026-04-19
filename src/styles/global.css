@@ -68,68 +68,22 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;           /* важно */
 }
 
-.nav-logo a {
-  font-size: 1.65rem;
-  font-weight: 800;
-  color: #fff;
-}
-
-.nav-logo span { color: var(--accent); }
-
-/* Десктоп меню */
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-links a {
-  color: #aaa;
-  font-size: 1.02rem;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: var(--accent);
-}
-
-/* Кнопка GitHub */
-.btn-github {
-  background: var(--accent);
-  color: #fff !important;
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-github:hover {
-  background: #5ab8ff;
-  transform: translateY(-2px);
-}
-
-/* Бургер + X */
-/* ===================== БУРГЕР + X ===================== */
 /* ===================== БУРГЕР + X ===================== */
 .menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 9999;           /* Очень высокий */
+  z-index: 9999;                /* самый высокий */
   margin-right: 8px;
-  transition: all 0.4s ease;
 }
 
 .menu-toggle .bar {
@@ -154,10 +108,10 @@ a {
     display: flex; 
   }
 
-  /* Сильное смещение крестика влево, когда меню открыто */
+  /* Когда меню открыто — гарантируем, что крестик сверху */
   .menu-toggle.active {
-    margin-right: 32px !important;
-    transform: translateX(-22px) !important;
+    z-index: 9999 !important;
+    margin-right: 16px;
   }
 
   .nav-links {
@@ -172,7 +126,7 @@ a {
     padding: 100px 30px 40px;
     gap: 8px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 2000;
+    z-index: 2000;                    /* ниже чем у кнопки */
     box-shadow: -15px 0 30px rgba(0,0,0,0.7);
   }
 
