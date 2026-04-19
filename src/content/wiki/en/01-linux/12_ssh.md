@@ -1,6 +1,6 @@
 ---
 title: "SSH - Keys, Config, Tunnels, Port Forwarding"
-date: "2026-04-13"
+date: "2026-04-16"
 ---
 
 SSH (Secure Shell) is a cryptographic protocol for secure remote access to servers. It provides encryption, authentication, and traffic tunneling. Default port: **22**.
