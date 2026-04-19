@@ -47,43 +47,20 @@ a {
   transition: 0.3s; 
 }
 
-/* ===================== NAVBAR ===================== */
-.navbar {
-  position: fixed;
-  top: 0; 
-  left: 0;
-  width: 100%;
-  height: var(--nav-height);
-  background: rgba(15, 15, 15, 0.96);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid #222;
-  z-index: 1000;
-}
-
-.nav-wrapper {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 20px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;           /* важно */
-}
-
 /* ===================== БУРГЕР + X ===================== */
 .menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 9999;                /* самый высокий */
+  z-index: 9999;           /* Очень высокий */
   margin-right: 8px;
+  transition: all 0.4s ease;
 }
 
 .menu-toggle .bar {
@@ -108,10 +85,10 @@ a {
     display: flex; 
   }
 
-  /* Когда меню открыто — гарантируем, что крестик сверху */
+  /* Сильное смещение крестика влево, когда меню открыто */
   .menu-toggle.active {
-    z-index: 9999 !important;
-    margin-right: 16px;
+    margin-right: 32px !important;
+    transform: translateX(-22px) !important;
   }
 
   .nav-links {
@@ -126,7 +103,7 @@ a {
     padding: 100px 30px 40px;
     gap: 8px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 2000;                    /* ниже чем у кнопки */
+    z-index: 2000;
     box-shadow: -15px 0 30px rgba(0,0,0,0.7);
   }
 
@@ -153,15 +130,6 @@ a {
     border-radius: 12px;
   }
 }
-
-/* Общее */
-.main-content {
-  margin-top: var(--nav-height);
-  padding-top: 40px;
-  padding-bottom: 60px;
-}
-
-body.menu-open { overflow: hidden; }
 
 /* ===================== КОНТЕНТ ===================== */
 .main-content {
