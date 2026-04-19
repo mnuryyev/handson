@@ -42,32 +42,40 @@ const cards = files.map(file => {
 ---
 
 <MainLayout title={`Project: ${slug}`}>
-  <header class="project-header">
-    <div class="header-content">
-      <span class="folder-badge">📁 Project</span>
-      <h1>{slug.replace(/-/g, ' ')}</h1>
-      <p>Select a stage to explore</p>
-    </div>
-  </header>
+  <div class="container project-slug-wrapper">
+    
+    <header class="project-header">
+      <div class="header-content">
+        <span class="folder-badge">📁 Project</span>
+        <h1>{slug.replace(/-/g, ' ')}</h1>
+        <p>Select a stage to explore</p>
+      </div>
+    </header>
 
-  <div class="articles-grid">
-    {cards.map(card => (
-      /* ИСПРАВЛЕН URL: Добавлен ${base} */
-      <a href={`${base}${lang}/projects/${slug}/${card.id}`} class="step-card">
-        <div class="card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        </div>
-        <div class="card-info">
-          <h2>{card.data.title}</h2>
-          <p>{card.data.description || "Click to read more details..."}</p>
-        </div>
-        <div class="card-arrow">→</div>
-      </a>
-    ))}
+    <div class="articles-grid">
+      {cards.map(card => (
+        <a href={`${base}${lang}/projects/${slug}/${card.id}`} class="step-card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          </div>
+          <div class="card-info">
+            <h2>{card.data.title}</h2>
+            <p>{card.data.description || "Click to read more details..."}</p>
+          </div>
+          <div class="card-arrow">→</div>
+        </a>
+      ))}
+    </div>
+
   </div>
 </MainLayout>
 
 <style>
+  /* Дополнительный отступ для обертки */
+  .project-slug-wrapper {
+    margin-top: 20px;
+  }
+
   /* Шапка проекта */
   .project-header {
     margin: 40px 0;
