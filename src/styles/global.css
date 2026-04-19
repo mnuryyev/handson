@@ -54,7 +54,7 @@ a {
   left: 0;
   width: 100%;
   height: var(--nav-height);
-  background: rgba(15, 15, 15, 0.96);
+  background: rgba(15, 15, 15, 0.97);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid #222;
   z-index: 1000;
@@ -79,13 +79,12 @@ a {
   font-size: 1.65rem;
   font-weight: 800;
   color: #fff;
+  text-decoration: none;
 }
 
-.nav-logo span {
-  color: var(--accent);
-}
+.nav-logo span { color: var(--accent); }
 
-/* Десктопное меню */
+/* Десктоп */
 .nav-links {
   display: flex;
   align-items: center;
@@ -98,61 +97,70 @@ a {
 .nav-links a {
   color: #aaa;
   font-weight: 500;
-  padding: 8px 0;
   transition: all 0.3s ease;
 }
 
 .nav-links a:hover {
   color: var(--accent);
-  transform: translateY(-1px);
 }
 
-/* Кнопка GitHub */
+/* GitHub кнопка — новая стильная */
 .btn-github {
-  background: var(--accent);
-  color: #fff !important;
-  padding: 10px 24px;
-  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #222;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 9999px;
   font-weight: 600;
+  border: 1px solid #444;
   transition: all 0.3s ease;
 }
 
 .btn-github:hover {
-  background: #5ab8ff;
+  background: #3ea6ff;
+  color: #000;
+  border-color: #3ea6ff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(62, 166, 255, 0.35);
 }
 
-/* Бургер-меню */
+/* Бургер */
 .menu-toggle {
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 1100;
+  z-index: 2000;
+  position: relative;
 }
 
 .menu-toggle .bar {
-  width: 26px;
+  position: absolute;
+  width: 28px;
   height: 2.5px;
   background: #fff;
   border-radius: 2px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-.menu-toggle .bar:nth-child(1) { transform: translateY(-7px); }
-.menu-toggle .bar:nth-child(3) { transform: translateY(7px); }
+.menu-toggle .bar:nth-child(1) { top: 14px; }
+.menu-toggle .bar:nth-child(2) { top: 22px; }
+.menu-toggle .bar:nth-child(3) { top: 30px; }
 
-.menu-toggle.active .bar:nth-child(1) { transform: translateY(0) rotate(45deg); }
-.menu-toggle.active .bar:nth-child(2) { opacity: 0; transform: scale(0.6); }
-.menu-toggle.active .bar:nth-child(3) { transform: translateY(0) rotate(-45deg); }
+.menu-toggle.active .bar:nth-child(1) {
+  top: 22px;
+  transform: rotate(45deg);
+}
+.menu-toggle.active .bar:nth-child(2) { opacity: 0; }
+.menu-toggle.active .bar:nth-child(3) {
+  top: 22px;
+  transform: rotate(-45deg);
+}
 
-/* Мобильное меню */
+/* ===================== МОБИЛЬНОЕ МЕНЮ ===================== */
 @media (max-width: 992px) {
   .menu-toggle { display: flex; }
 
@@ -160,33 +168,56 @@ a {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 320px;
+    width: 100%;
+    max-width: 360px;
     height: 100vh;
     background: #0a0a0a;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 110px 30px 40px;
-    gap: 6px;
+    padding: 90px 30px 40px;
+    gap: 8px;
     transition: right 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-    box-shadow: -20px 0 40px rgba(0, 0, 0, 0.7);
+    box-shadow: -25px 0 50px rgba(0, 0, 0, 0.8);
     z-index: 999;
+    overflow-y: auto;
   }
 
   .nav-links.open {
     right: 0;
   }
 
-  .nav-links li { width: 100%; }
-  
-  .nav-links a {
-    font-size: 1.35rem;
-    padding: 14px 0;
-    display: block;
+  .nav-links li {
     width: 100%;
-    color: #ddd;
   }
 
-  .nav-actions { margin: 20px 0; }
+  .nav-links a {
+    font-size: 1.4rem;
+    padding: 16px 0;
+    color: #ddd;
+    display: block;
+  }
+
+  .github-li {
+    margin-top: 30px;
+  }
+
+  .btn-github {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 24px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+  }
+}
+
+/* Остальные стили (main-content, markdown и т.д.) оставь как были */
+.main-content {
+  margin-top: var(--nav-height);
+  padding-top: 40px;
+  padding-bottom: 60px;
+}
+
+body.menu-open {
+  overflow: hidden;
 }
 
 /* ===================== КОНТЕНТ ===================== */
