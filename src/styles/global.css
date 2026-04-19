@@ -50,18 +50,15 @@ a {
 /* ===================== NAVBAR ===================== */
 .navbar {
   position: fixed;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100%;
   height: var(--nav-height);
   background: rgba(15, 15, 15, 0.96);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid #222;
   z-index: 1000;
-  transition: transform 0.4s ease;
-}
-
-.navbar--hidden {
-  transform: translateY(-100%);
+  /* Убрали анимацию скрытия */
 }
 
 .nav-wrapper {
@@ -103,7 +100,7 @@ a {
   color: var(--accent);
 }
 
-/* Кнопка GitHub — синяя, как ты любишь */
+/* Кнопка GitHub */
 .btn-github {
   background: var(--accent);
   color: #fff !important;
@@ -119,7 +116,7 @@ a {
   box-shadow: 0 6px 20px rgba(62, 166, 255, 0.4);
 }
 
-/* Бургер — скрываем на ПК */
+/* Бургер */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -147,7 +144,7 @@ a {
 .menu-toggle.active .bar:nth-child(2) { opacity: 0; }
 .menu-toggle.active .bar:nth-child(3) { transform: translateY(0) rotate(-45deg); }
 
-/* ===================== МОБИЛЬНОЕ МЕНЮ (возвращаем старый красивый стиль) ===================== */
+/* ===================== МОБИЛЬНОЕ МЕНЮ ===================== */
 @media (max-width: 992px) {
   .menu-toggle { display: flex; }
 
@@ -184,7 +181,7 @@ a {
   }
 
   .btn-github {
-    width: 100%;
+    width: 100%;           /* На всю ширину на телефоне */
     text-align: center;
     padding: 16px 20px;
     font-size: 1.1rem;
