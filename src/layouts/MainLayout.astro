@@ -13,22 +13,8 @@ const { title } = Astro.props;
 const lang = pathname.includes('/en/') ? 'en' : 'ru';
 
 const nav = {
-  ru: {
-    articles: 'Сети',
-    labs: 'Безопасность',
-    projects: 'Проекты',
-    writeups: 'Writeups',
-    tools: 'Tools',
-    wiki: 'Wiki',
-  },
-  en: {
-    articles: 'Networks',
-    labs: 'Security',
-    projects: 'Projects',
-    writeups: 'Writeups',
-    tools: 'Tools',
-    wiki: 'Wiki',
-  }
+  ru: { articles: 'Сети', labs: 'Безопасность', projects: 'Проекты', writeups: 'Writeups', tools: 'Tools', wiki: 'Wiki' },
+  en: { articles: 'Networks', labs: 'Security', projects: 'Projects', writeups: 'Writeups', tools: 'Tools', wiki: 'Wiki' }
 };
 const t = nav[lang];
 ---
@@ -91,7 +77,7 @@ const t = nav[lang];
 
     menuToggle.addEventListener('click', () => {
       menuToggle.classList.toggle('active');
-      navMenu.classList.toggle('open');
+      navMenu.classList.toggle('is-open');
       document.body.classList.toggle('menu-open');
     });
 
@@ -99,7 +85,7 @@ const t = nav[lang];
       const current = window.scrollY;
       if (current > lastScrollY && current > 80) {
         navbar.classList.add('navbar--hidden');
-        navMenu.classList.remove('open');
+        navMenu.classList.remove('is-open');
         menuToggle.classList.remove('active');
       } else {
         navbar.classList.remove('navbar--hidden');
