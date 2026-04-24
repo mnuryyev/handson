@@ -1,5 +1,5 @@
 ---
-title: "iptables - Build Your Own Firewall from Scratch"
+title: "iptables. Basic firewall configuration"
 description: "In this lab we will build a firewall from scratch: from resetting rules to SYN-flood protection, port scan blocking, and logging everything suspicious"
 image: "/images/iptables_sec/main.jpg"
 date: "2026-04-12"
