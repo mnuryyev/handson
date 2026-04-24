@@ -1,5 +1,5 @@
 ---
-title: "iptables - построй свой firewall с нуля"
+title: "iptables. Базовая настройка firewall"
 description: "В данной работе построим firewall с нуля: от сброса правил до защиты от SYN-flood, блокировки сканирования портов и логирования всего подозрительного"
 image: "/images/iptables_sec/main.jpg"
 date: "2026-04-12"
