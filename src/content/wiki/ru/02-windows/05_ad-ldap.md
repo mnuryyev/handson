@@ -1,6 +1,6 @@
 ---
 title: "Active Directory - LDAP: структура и запросы"
-date: "2026-04-21"
+date: "2026-04-25"
 ---
 
 LDAP (Lightweight Directory Access Protocol) - протокол доступа к каталогу, через который приложения взаимодействуют с Active Directory. Весь AD по сути — это LDAP-совместимый каталог с расширениями Microsoft.
