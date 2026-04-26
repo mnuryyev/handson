@@ -3,7 +3,7 @@ title: "Ethernet - MAC Addresses, ARP, CAM Table"
 date: "2026-04-26"
 ---
 
-Ethernet is the most widely used data link layer technology (OSI L2). It works with physical addresses (MAC), defines the frame format and rules for transmitting data within a single network segment. ARP bridges L2 and L3 - it maps an IP address to a MAC address. The CAM table is how a switch "remembers" who is where.
+Ethernet is the most widely used data link layer technology (OSI L2). It works with physical addresses (MAC), defines the frame format and rules for transmitting data within a single network segment. ARP bridges L2 and L3 - it maps an IP address to a MAC address. The CAM table is how a switch remembers who is where.
 
 ---
 
