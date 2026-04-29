@@ -3,7 +3,7 @@ title: "DNS - recursive vs iterative resolving"
 date: "2026-04-29"
 ---
 
-When you type google.com in a browser, a chain of DNS queries happens. There are two fundamentally different ways those queries are handled - recursive and iterative. Understanding the difference helps you diagnose problems, configure resolvers, and know where things can break.
+When we type google.com in a browser, a chain of DNS queries happens. There are two fundamentally different ways those queries are handled - recursive and iterative. Understanding the difference helps you diagnose problems, configure resolvers, and know where things can break.
 
 ---
 
