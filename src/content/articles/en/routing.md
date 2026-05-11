@@ -1,7 +1,7 @@
 ---
 title: "Routing in Local Networks: From Static Routing to OSPF"
 description: "In this lab, we will build a three-router topology in GNS3, configure IP addresses on all interfaces, go through static routing from scratch"
-image: "/images/routing_net/main.png"
+image: "/images/routing_net/main.jpg"
 date: "2026-05-11"
 ---
 
