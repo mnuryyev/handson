@@ -279,7 +279,7 @@ To fix this, we use MikroTik as DHCP Relay and configure routing.
 
 #### 1. Configuring Routing on MikroTik
 
-![29_route_mikroik](/handson/images/dhcp_net/29_route_mikrotik.png)
+![29_route_mikroik](/handson/images/dhcp_net/29_route_mikroik.png)
 
 On interface ether2, which faces the new subnet 172.16.10.0/24, we assign IP address 172.16.10.1/24. Now the router knows that packets destined for this subnet go through ether2 and can correctly route traffic between networks. Routing is also needed for the return path: when the DHCP server responds, the packet should get back to 172.16.10.0/24.
 
