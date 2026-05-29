@@ -39,10 +39,9 @@ const lang = "ru";
       <p>Инструменты, скрипты и утилиты для тестирования и защиты систем</p>
     </header>
 
-    <div class="cards-list">
+    <div class="cards-grid">
       {page.data.map(lab => (
         <LabCard
-          horizontal={true}
           title={lab.title}
           desc={lab.description}
           date={lab.date}
@@ -74,7 +73,7 @@ const lang = "ru";
   .header-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 10px; }
   .page-header h1 { font-size: 1.9rem; font-weight: 800; margin: 0 0 10px; color: #fff; letter-spacing: -0.5px; }
   .page-header p { color: var(--text-2); margin: 0; font-size: 0.95rem; }
-  .cards-list { display: flex; flex-direction: column; gap: 12px; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
   .pagination { margin-top: 56px; display: flex; justify-content: center; align-items: center; gap: 16px; }
   .p-btn { padding: 8px 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--text-2); font-size: 0.875rem; font-weight: 500; transition: all 0.2s; }
   .p-btn:hover:not(.disabled) { border-color: rgba(62,166,255,0.35); color: var(--accent); background: rgba(62,166,255,0.05); }
@@ -83,7 +82,7 @@ const lang = "ru";
   @media (max-width: 768px) {
     .list-container { padding: 28px 16px 60px; }
     .page-header h1 { font-size: 1.45rem; }
-    .cards-list { gap: 10px; }
+    .cards-grid { grid-template-columns: 1fr; gap: 14px; }
     .pagination { margin-top: 36px; gap: 10px; }
   }
 </style>

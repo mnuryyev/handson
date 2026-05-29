@@ -1,5 +1,5 @@
 ---
-const { title, desc, url, image, date, horizontal = false } = Astro.props;
+const { title, desc, url, image, date } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
 const finalUrl = `${base}${cleanUrl}`;
@@ -7,7 +7,7 @@ const cleanImage = image && image.startsWith('/') ? image.slice(1) : image;
 const finalImage = image ? `${base}${cleanImage}` : null;
 const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-01-01";
 ---
-<a href={finalUrl} class={`lab-card${horizontal ? ' lab-card--h' : ''}`}>
+<a href={finalUrl} class="lab-card">
   <div class="thumbnail">
     {finalImage ? (
       <img src={finalImage} alt={title} class="card-img" loading="lazy" />
@@ -30,7 +30,6 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
 </a>
 
 <style>
-  /* ── БАЗОВЫЙ (вертикальный) вариант ─────────────────────── */
   .lab-card {
     color: inherit;
     display: flex;
@@ -46,7 +45,7 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
 
   .lab-card:hover {
     border-color: rgba(62, 166, 255, 0.35);
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     box-shadow:
       0 12px 40px rgba(0, 0, 0, 0.5),
       0 0 0 1px rgba(62, 166, 255, 0.12),
@@ -74,19 +73,24 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .lab-card:hover .card-img { transform: scale(1.06); }
+  .lab-card:hover .card-img {
+    transform: scale(1.06);
+  }
 
   .card-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(9,9,15,0.6) 0%, transparent 60%);
+    background: linear-gradient(to top, rgba(9, 9, 15, 0.6) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
   }
 
-  .lab-card:hover .card-overlay { opacity: 1; }
+  .lab-card:hover .card-overlay {
+    opacity: 1;
+  }
 
+  /* Плейсхолдер без картинки */
   .no-img {
     position: absolute;
     inset: 0;
@@ -101,8 +105,8 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(62,166,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(62,166,255,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(62, 166, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(62, 166, 255, 0.04) 1px, transparent 1px);
     background-size: 28px 28px;
   }
 
@@ -111,10 +115,11 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     font-size: 0.65rem;
     letter-spacing: 3px;
     font-weight: 700;
-    color: rgba(62,166,255,0.25);
+    color: rgba(62, 166, 255, 0.25);
     text-transform: uppercase;
   }
 
+  /* Мета-блок */
   .meta {
     padding: 16px 18px 18px;
     display: flex;
@@ -123,7 +128,7 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
   }
 
   .title {
-    margin: 0 0 8px;
+    margin: 0 0 8px 0;
     font-size: 1.05rem;
     color: #fff;
     font-weight: 600;
@@ -132,7 +137,7 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
   }
 
   .description {
-    margin: 0 0 auto;
+    margin: 0 0 auto 0;
     font-size: 0.875rem;
     color: var(--text-2, #7c8ca0);
     line-height: 1.55;
@@ -149,7 +154,7 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     justify-content: space-between;
     align-items: center;
     padding-top: 12px;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .date {
@@ -168,50 +173,8 @@ const formattedDate = date ? new Date(date).toISOString().split('T')[0] : "2026-
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .lab-card:hover .read-more { opacity: 1; transform: translateX(0); }
-
-  /* ── ГОРИЗОНТАЛЬНЫЙ вариант (листинг, только десктоп) ───── */
-  @media (min-width: 769px) {
-    .lab-card--h {
-      flex-direction: row;
-      height: 156px;
-    }
-
-    .lab-card--h:hover {
-      transform: translateY(-2px);
-    }
-
-    .lab-card--h .thumbnail {
-      width: 248px;
-      min-width: 248px;
-      flex-shrink: 0;
-      padding-top: 0;
-      height: 156px;
-    }
-
-    .lab-card--h .meta {
-      padding: 18px 24px 16px;
-      justify-content: space-between;
-      flex-grow: 1;
-      min-width: 0;
-    }
-
-    .lab-card--h .title {
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .lab-card--h .description {
-      -webkit-line-clamp: 2;
-      padding-bottom: 0;
-      flex-grow: 0;
-    }
-
-    .lab-card--h .read-more {
-      font-size: 0.82rem;
-    }
+  .lab-card:hover .read-more {
+    opacity: 1;
+    transform: translateX(0);
   }
 </style>
