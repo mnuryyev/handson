@@ -29,25 +29,28 @@ const htmlContent = marked.parse(content);
 <MainLayout title={data.title}>
   <div class="article-container">
     <nav class="breadcrumb">
-      <a href={`${cleanBase}${lang}/articles/1`}>Сети и администрирование</a> 
-      <span class="sep">/</span> 
+      <a href={`${cleanBase}${lang}/articles/1`}>Сети</a>
+      <span class="sep">/</span>
       <span class="current">{data.title}</span>
     </nav>
 
     <article class="prose">
       <header class="article-header">
         <h1>{data.title}</h1>
+        {data.date && (
+          <time class="article-date">{new Date(data.date).toISOString().split('T')[0]}</time>
+        )}
       </header>
-      
-      <div class="article-body" set:html={htmlContent} />
+
+      <div class="article-body markdown-content" set:html={htmlContent} />
 
       {data.tags && data.tags.length > 0 && (
         <div class="post-footer-tags">
-          <span class="tags-label">{lang === 'en' ? 'Tags:' : 'Теги:'}</span>
+          <span class="tags-label">Теги</span>
           <div class="tags-list">
             {data.tags.map((tag) => (
-            <a href={`${cleanBase}${lang}/tags/${tag.toLowerCase()}`} class="tag-item">
-              #{tag.toLowerCase()}
+              <a href={`${cleanBase}${lang}/tags/${tag.toLowerCase()}`} class="tag-item">
+                #{tag.toLowerCase()}
               </a>
             ))}
           </div>
@@ -58,69 +61,88 @@ const htmlContent = marked.parse(content);
 </MainLayout>
 
 <style>
-  .article-container { max-width: 1300px; margin: 40px auto; padding: 0 40px; }
-  .breadcrumb { margin-bottom: 25px; font-size: 0.9rem; color: #666; }
-  .breadcrumb a { color: var(--accent, #3ea6ff); text-decoration: none; }
-  .breadcrumb .sep { margin: 0 10px; opacity: 0.3; }
-  
-  .article-header h1 { 
-    font-size: 2.8rem; 
-    margin-bottom: 30px; 
-    color: #fff; 
+  .article-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 32px;
+    font-size: 0.85rem;
+  }
+
+  .breadcrumb a {
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .breadcrumb a:hover { opacity: 1; }
+
+  .breadcrumb .sep {
+    color: var(--text-3);
+    font-size: 0.75rem;
+  }
+
+  .breadcrumb .current {
+    color: var(--text-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 320px;
+  }
+
+  .article-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    color: #fff;
     line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin: 0 0 12px;
   }
-  
-  .article-body { line-height: 1.8; font-size: 1.1rem; color: #e0e0e0; }
-  
-  /* Стили для заголовков внутри статьи */
-  .article-body :global(h2) { font-size: 1.8rem; margin: 1.5em 0 0.8em; color: #fff; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; }
-  .article-body :global(h3) { font-size: 1.4rem; margin: 1.2em 0 0.6em; color: #3ea6ff; }
-  
-  /* Стили для тегов в футере статьи */
+
+  .article-date {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: var(--text-3);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
   .post-footer-tags {
-    margin-top: 60px;
-    padding-top: 30px;
-    border-top: 1px solid #1a1a1a;
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
   }
-  
+
   .tags-label {
     display: block;
-    font-size: 0.8rem;
-    color: #555;
+    font-size: 0.68rem;
+    color: var(--text-3);
     text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: 15px;
-    letter-spacing: 1px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
   }
 
   .tags-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  /* Сами плашки тегов подхватят стили .tag-item из MainLayout */
-
-  .article-body :global(p) { margin-bottom: 1.2em; }
-  .article-body :global(img) { width: 100%; border-radius: 12px; margin: 2rem 0; border: 1px solid #333; }
-  
-  .article-body :global(pre) { 
-    background: #0b0b0b; 
-    padding: 20px; 
-    border-radius: 12px; 
-    border: 1px solid #222; 
-    overflow-x: auto; 
-    margin: 1.5em 0;
-  }
-  
-  .article-body :global(code) {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9em;
+    gap: 8px;
   }
 
   @media (max-width: 768px) {
-    .article-container { margin: 20px auto; padding: 0 20px; }
-    .article-header h1 { font-size: 2rem; }
-    .post-footer-tags { margin-top: 40px; }
+    .article-container { padding: 28px 16px 60px; }
+    .breadcrumb .current { max-width: 180px; }
   }
 </style>

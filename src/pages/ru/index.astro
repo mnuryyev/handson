@@ -81,141 +81,360 @@ function pluralize(count, one, two, five) {
 ---
 
 <MainLayout title="Главная | HANDS.ON">
+
+  <!-- HERO -->
   <section class="hero">
+    <div class="hero-glow"></div>
     <div class="container">
-      <h1><span>Проекты,</span> <span>Writeups</span> и разборы по <span>сетям</span> и <span>безопасности</span></h1>
-      <p>Документация, лабораторные и разборы технологий.</p>
+      <div class="hero-inner">
+        <p class="hero-badge">Сети · Безопасность · CTF</p>
+        <h1>Разборы по <span class="gradient-text">сетям и&nbsp;безопасности</span></h1>
+        <p class="hero-desc">Лабораторные, writeups и документация по сетям, системному администрированию и кибербезопасности.</p>
+        <div class="hero-cta">
+          <a href={`${base}${lang}/articles/1`} class="cta-primary">Начать читать</a>
+          <a href={`${base}${lang}/wiki/`} class="cta-secondary">Wiki →</a>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- СЕТИ -->
   <section class="home-section container">
     <div class="section-header">
-      <h2>🌐 Разборы по сетям</h2>
-      <a href={`${base}${lang}/articles/1`}>Все →</a>
+      <h2><span class="section-icon">🌐</span> Разборы по сетям</h2>
+      <a href={`${base}${lang}/articles/1`} class="see-all">Все статьи →</a>
     </div>
-    <div class="grid">
+    <div class="cards-grid">
       {latestArticles.map(article => (
-        <LabCard 
-          title={article.data.title} 
-          desc={article.data.description} 
-          image={article.data.image} 
-          date={article.data.date} 
-          url={`${lang}/articles/${article.slug}`} 
+        <LabCard
+          title={article.data.title}
+          desc={article.data.description}
+          image={article.data.image}
+          date={article.data.date}
+          url={`${lang}/articles/${article.slug}`}
         />
       ))}
     </div>
   </section>
 
+  <!-- БЕЗОПАСНОСТЬ -->
   <section class="home-section container">
     <div class="section-header">
-      <h2>🔐 Безопасность</h2>
-      <a href={`${base}${lang}/labs/1`}>Все →</a>
+      <h2><span class="section-icon">🔐</span> Безопасность</h2>
+      <a href={`${base}${lang}/labs/1`} class="see-all">Все →</a>
     </div>
-    <div class="grid">
+    <div class="cards-grid">
       {latestLabs.map(lab => (
-        <LabCard 
-          title={lab.data.title} 
-          desc={lab.data.description} 
-          image={lab.data.image} 
-          date={lab.data.date} 
-          url={`${lang}/labs/${lab.slug}`} 
+        <LabCard
+          title={lab.data.title}
+          desc={lab.data.description}
+          image={lab.data.image}
+          date={lab.data.date}
+          url={`${lang}/labs/${lab.slug}`}
         />
       ))}
     </div>
   </section>
 
+  <!-- WRITEUPS -->
   <section class="home-section container">
     <div class="section-header">
-      <h2>🎯 Writeups</h2>
-      <a href={`${base}${lang}/writeups`}>Все →</a>
+      <h2><span class="section-icon">🎯</span> Writeups</h2>
+      <a href={`${base}${lang}/writeups`} class="see-all">Все →</a>
     </div>
-    <div class="grid">
+    <div class="cards-grid">
       {latestWriteups.map(post => (
-        <LabCard 
-          title={post.data.title} 
-          desc={post.data.description} 
-          image={post.data.image} 
-          date={post.data.date} 
-          url={`${lang}/writeups/${post.slug}`} 
+        <LabCard
+          title={post.data.title}
+          desc={post.data.description}
+          image={post.data.image}
+          date={post.data.date}
+          url={`${lang}/writeups/${post.slug}`}
         />
       ))}
     </div>
   </section>
 
+  <!-- ИНСТРУМЕНТЫ -->
   <section class="home-section container">
     <div class="section-header">
-      <h2>🛠️ Инструменты</h2>
-      <a href={`${base}${lang}/tools/1`}>Все →</a>
+      <h2><span class="section-icon">🛠️</span> Инструменты</h2>
+      <a href={`${base}${lang}/tools/1`} class="see-all">Все →</a>
     </div>
-    <div class="grid">
+    <div class="cards-grid">
       {latestTools.map(tool => (
-        <LabCard 
-          title={tool.data.title} 
-          desc={tool.data.description} 
-          image={tool.data.image} 
-          date={tool.data.date} 
-          url={`${lang}/tools/${tool.slug}`} 
+        <LabCard
+          title={tool.data.title}
+          desc={tool.data.description}
+          image={tool.data.image}
+          date={tool.data.date}
+          url={`${lang}/tools/${tool.slug}`}
         />
       ))}
     </div>
   </section>
 
+  <!-- ПРОЕКТЫ -->
   <section class="home-section container">
     <div class="section-header">
-      <h2>📁 Проекты</h2>
-      <a href={`${base}${lang}/projects`}>Все проекты →</a>
+      <h2><span class="section-icon">📁</span> Проекты</h2>
+      <a href={`${base}${lang}/projects`} class="see-all">Все проекты →</a>
     </div>
-    <div class="grid">
+    <div class="cards-grid">
       {latestProjects.map(proj => (
         <a href={`${base}${lang}/projects/${proj.folder}/${proj.firstCard}`} class="folder-card">
-          <div class="folder-header">
-             <div class="folder-icon">📁</div>
-             <span class="step-badge">
-               {proj.count} {pluralize(proj.count, 'часть', 'части', 'частей')}
-             </span>
+          <div class="folder-top">
+            <svg class="folder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+            </svg>
+            <span class="step-badge">{proj.count} {pluralize(proj.count, 'часть', 'части', 'частей')}</span>
           </div>
           <div class="folder-body">
             <h3>{proj.title}</h3>
             <p>{proj.description}</p>
           </div>
+          <span class="folder-arrow">→</span>
         </a>
       ))}
     </div>
   </section>
+
 </MainLayout>
 
 <style>
-  .hero { padding: 80px 0; text-align: center; }
-  .hero h1 { font-size: 3rem; margin-bottom: 1rem; letter-spacing: -2px; color: #fff; line-height: 1.1; }
-  .hero h1 span { color: var(--accent); }
-  .hero p { color: #888; font-size: 1.10rem; max-width: 600px; margin: 0 auto; }
-  
-  .home-section { padding: 40px 20px; }
-  .section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; border-bottom: 1px solid #222; padding-bottom: 10px; }
-  .section-header h2 { font-size: 1.5rem; margin: 0; color: #fff; }
-  .section-header a { color: var(--accent); font-weight: 500; font-size: 0.9rem; text-decoration: none; }
-  
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-  
-  .folder-card { background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 24px; text-decoration: none; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 15px; }
-  .folder-card:hover { border-color: var(--accent); transform: translateY(-5px); background: #222; }
-  .folder-header { display: flex; justify-content: space-between; align-items: center; }
-  .folder-icon { font-size: 2.5rem; }
-  .step-badge { background: rgba(var(--accent-rgb), 0.1); color: var(--accent); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; border: 1px solid var(--accent); }
-  .folder-body h3 { margin: 0; color: #fff; text-transform: capitalize; font-size: 1.25rem; }
-  .folder-body p { margin: 8px 0 0; color: #888; font-size: 0.95rem; line-height: 1.5; }
+  /* ── HERO ─────────────────────────────────────────────── */
+  .hero {
+    padding: 96px 0 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
 
-  /* --- АДАПТИВНОСТЬ --- */
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(62, 166, 255, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(62, 166, 255, 0.08);
+    border: 1px solid rgba(62, 166, 255, 0.2);
+    color: var(--accent);
+    padding: 5px 16px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: #fff;
+    margin: 0 0 20px;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin: 0 auto 32px;
+    max-width: 520px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 11px 26px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.925rem;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 20px rgba(62, 166, 255, 0.25);
+  }
+
+  .cta-primary:hover {
+    background: #5ab8ff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(62, 166, 255, 0.38);
+  }
+
+  .cta-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-2);
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.925rem;
+    border: 1px solid var(--border);
+    transition: all 0.22s ease;
+  }
+
+  .cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: var(--border-2);
+  }
+
+  /* ── СЕКЦИИ ───────────────────────────────────────────── */
+  .home-section {
+    padding: 48px 24px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-icon {
+    font-size: 1.1rem;
+  }
+
+  .see-all {
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s;
+    opacity: 0.8;
+  }
+
+  .see-all:hover {
+    opacity: 1;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── GRID ─────────────────────────────────────────────── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+  }
+
+  /* ── FOLDER CARD ──────────────────────────────────────── */
+  .folder-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.22s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .folder-card:hover {
+    border-color: rgba(62, 166, 255, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(62, 166, 255, 0.1);
+  }
+
+  .folder-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .folder-svg {
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  .step-badge {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    letter-spacing: 0.3px;
+  }
+
+  .folder-body h3 {
+    margin: 0;
+    color: #fff;
+    text-transform: capitalize;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .folder-body p {
+    margin: 6px 0 0;
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .folder-arrow {
+    position: absolute;
+    bottom: 18px;
+    right: 20px;
+    font-size: 1rem;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: all 0.22s ease;
+  }
+
+  .folder-card:hover .folder-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ── АДАПТИВНОСТЬ ─────────────────────────────────────── */
   @media (max-width: 768px) {
-    .hero { padding: 40px 0; }
-    .hero h1 { font-size: 2.2rem; letter-spacing: -1px; }
-    .hero p { font-size: 1.1rem; }
-    
-    .section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .section-header a { font-size: 1rem; padding-top: 5px; }
-    
-    .grid { grid-template-columns: 1fr; } /* Всё в одну колонку на мобилках */
-    
-    .folder-card { padding: 20px; }
+    .hero { padding: 56px 0 48px; }
+    .hero-desc { font-size: 0.975rem; }
+    .home-section { padding: 36px 16px; }
+    .section-header { flex-wrap: wrap; gap: 8px; }
+    .cards-grid { grid-template-columns: 1fr; gap: 14px; }
+    .folder-card { padding: 18px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-cta { gap: 10px; }
+    .cta-primary, .cta-secondary { width: 100%; text-align: center; }
   }
 </style>

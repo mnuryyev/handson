@@ -6,22 +6,24 @@ const currentYear = new Date().getFullYear();
 
 const translations = {
   ru: {
-    articles: "Статьи",
+    articles: "Сети",
     labs: "Безопасность",
     writeups: "Writeups",
     tools: "Tools",
     projects: "Проекты",
     wiki: 'Wiki',
     rights: "Все права защищены.",
+    desc: "Платформа по сетям и безопасности",
   },
   en: {
-    articles: "Articles",
-    labs: "Labs",
+    articles: "Networks",
+    labs: "Security",
     writeups: "Writeups",
     tools: "Tools",
     projects: "Projects",
     wiki: 'Wiki',
     rights: "All rights reserved.",
+    desc: "Networks & security platform",
   }
 };
 
@@ -29,125 +31,139 @@ const t = translations[lang];
 ---
 
 <footer class="footer">
-  <div class="container footer-content">
-    <div class="footer-left">
-      <div class="footer-logo">
-        <a href={`${base}${lang}/`}>HANDS<span>.ON</span></a>
-      </div>
-      <p class="copyright-text">&copy; {currentYear} HANDS.ON. {t.rights}</p>
+  <div class="container footer-inner">
+
+    <div class="footer-brand">
+      <a href={`${base}${lang}/`} class="footer-logo">HANDS<span>.ON</span></a>
+      <p class="footer-desc">{t.desc}</p>
+      <p class="copyright">&copy; {currentYear} HANDS.ON. {t.rights}</p>
     </div>
 
-    <div class="footer-right">
-      <div class="footer-nav">
-        <a href={`${base}${lang}/articles/1`}>{t.articles}</a>
-        <a href={`${base}${lang}/labs/1`}>{t.labs}</a>
-        <a href={`${base}${lang}/writeups/1`}>{t.writeups}</a>
-        <a href={`${base}${lang}/tools/1`}>{t.tools}</a>
-        <a href={`${base}${lang}/projects`}>{t.projects}</a>
-        <a href={`${base}${lang}/wiki`}>{t.wiki}</a>
-      </div>
-      
-      <div class="footer-social">
-        <a href="https://github.com/mnuryyev" target="_blank" class="social-btn">
-          <span>GitHub</span>
-        </a>
-      </div>
+    <nav class="footer-nav">
+      <a href={`${base}${lang}/articles/1`}>{t.articles}</a>
+      <a href={`${base}${lang}/labs/1`}>{t.labs}</a>
+      <a href={`${base}${lang}/writeups/1`}>{t.writeups}</a>
+      <a href={`${base}${lang}/tools/1`}>{t.tools}</a>
+      <a href={`${base}${lang}/projects`}>{t.projects}</a>
+      <a href={`${base}${lang}/wiki`}>{t.wiki}</a>
+    </nav>
+
+    <div class="footer-social">
+      <a href="https://github.com/mnuryyev" target="_blank" rel="noopener noreferrer" class="github-btn" aria-label="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        GitHub
+      </a>
     </div>
+
   </div>
 </footer>
 
 <style>
   .footer {
     width: 100%;
-    background: #0a0a0a;
-    border-top: 1px solid #1a1a1a;
-    padding: 40px 0;
-    margin-top: 60px;
+    background: var(--bg-2, #0d0d17);
+    border-top: 1px solid var(--border, rgba(255,255,255,0.07));
+    padding: 48px 0 36px;
+    margin-top: 80px;
   }
 
-  .footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 48px;
+    align-items: start;
   }
 
-  .footer-left {
+  /* Brand */
+  .footer-brand {
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Увеличили расстояние, чтобы текст не лип к лого */
+    gap: 8px;
   }
 
-  .footer-logo a {
-    font-size: 1.2rem;
+  .footer-logo {
+    font-size: 1.15rem;
     font-weight: 800;
-    text-decoration: none;
     color: #fff;
+    text-decoration: none;
+    letter-spacing: -0.3px;
   }
 
   .footer-logo span { color: var(--accent); }
 
-  .copyright-text {
+  .footer-desc {
     margin: 0;
-    color: #555;
+    color: var(--text-3, #3d4a5c);
+    font-size: 0.82rem;
+  }
+
+  .copyright {
+    margin: 4px 0 0;
+    color: var(--text-3, #3d4a5c);
     font-size: 0.75rem;
-    white-space: nowrap; /* Чтобы на больших экранах не переносилось */
   }
 
-  .footer-right {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-  }
-
+  /* Nav */
   .footer-nav {
     display: flex;
-    gap: 24px;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .footer-nav a {
-    color: #888;
+    color: var(--text-2, #7c8ca0);
+    font-size: 0.875rem;
+    transition: color 0.2s;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: 0.2s;
   }
 
   .footer-nav a:hover { color: #fff; }
 
-  .social-btn {
-    background: #111;
-    border: 1px solid #222;
-    padding: 6px 14px;
-    border-radius: 6px;
-    color: #fff;
+  /* Social */
+  .footer-social {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
     text-decoration: none;
-    font-size: 0.85rem;
-    transition: 0.2s;
+    transition: all 0.2s;
   }
 
-  .social-btn:hover {
-    border-color: var(--accent);
-    background: #161616;
+  .github-btn:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--border-2);
+    color: #fff;
   }
 
-  /* Адаптация для мобильных */
+  /* Мобильная адаптация */
   @media (max-width: 768px) {
-    .footer-content {
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
-      text-align: center;
+    .footer { padding: 40px 0 28px; margin-top: 60px; }
+
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 28px;
     }
-    .footer-right {
-      flex-direction: column;
-      gap: 20px;
-    }
+
     .footer-nav {
-      justify-content: center;
+      flex-direction: row;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 8px 20px;
     }
-    .copyright-text {
-      white-space: normal; /* На мобилках пусть переносится, если экран очень узкий */
-    }
+
+    .footer-social { align-items: flex-start; }
   }
 </style>

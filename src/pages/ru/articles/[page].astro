@@ -29,20 +29,21 @@ const { page } = Astro.props;
 const lang = "ru"; 
 ---
 
-<MainLayout title={`Статьи - Страница ${page.currentPage}`}>
-  <div class="container">
+<MainLayout title={`Сети — Страница ${page.currentPage}`}>
+  <div class="list-container">
     <header class="page-header">
+      <div class="header-label">Раздел</div>
       <h1>🌐 Сети и администрирование</h1>
-      <p>Разборы и практические заметки по сетям и администрированию</p>
+      <p>Разборы и практические заметки по сетям и системному администрированию</p>
     </header>
 
-    <div class="grid">
+    <div class="cards-grid">
       {page.data.map(article => (
-        <LabCard 
-          title={article.title} 
-          desc={article.description} 
-          date={article.date} 
-          url={`/${lang}/articles/${article.slug}`} 
+        <LabCard
+          title={article.title}
+          desc={article.description}
+          date={article.date}
+          url={`/${lang}/articles/${article.slug}`}
           image={article.image}
         />
       ))}
@@ -54,7 +55,7 @@ const lang = "ru";
       ) : (
         <span class="p-btn disabled">← Назад</span>
       )}
-      <div class="pages">{page.currentPage} / {page.lastPage}</div>
+      <span class="pages">{page.currentPage} / {page.lastPage}</span>
       {page.url.next ? (
         <a href={page.url.next} class="p-btn">Вперед →</a>
       ) : (
@@ -65,97 +66,89 @@ const lang = "ru";
 </MainLayout>
 
 <style>
-  .container {
+  .list-container {
     max-width: 1300px;
-    margin: 60px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 52px 24px 80px;
   }
 
   .page-header {
-    margin-bottom: 50px;
-    border-bottom: 1px solid #222;
-    padding-bottom: 30px;
+    margin-bottom: 44px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 10px;
   }
 
   .page-header h1 {
-    font-size: 2rem;
-    margin: 0 0 10px 0;
+    font-size: 1.9rem;
+    font-weight: 800;
+    margin: 0 0 10px;
     color: #fff;
+    letter-spacing: -0.5px;
   }
 
   .page-header p {
-    color: #888;
+    color: var(--text-2);
     margin: 0;
+    font-size: 0.95rem;
   }
 
-  .grid {
+  .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 40px 25px;
+    gap: 18px;
   }
 
   .pagination {
-    margin-top: 60px;
+    margin-top: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
   }
 
   .p-btn {
-    padding: 8px 16px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 6px;
+    padding: 8px 18px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     text-decoration: none;
-    color: #fff;
-    transition: 0.2s;
+    color: var(--text-2);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
   }
 
   .p-btn:hover {
-    border-color: var(--accent);
+    border-color: rgba(62, 166, 255, 0.35);
     color: var(--accent);
+    background: rgba(62, 166, 255, 0.05);
   }
 
   .p-btn.disabled {
-    opacity: 0.3;
+    opacity: 0.25;
     pointer-events: none;
   }
 
   .pages {
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-3);
+    font-size: 0.875rem;
+    font-family: monospace;
   }
 
-  /* Мобильные — только для этой страницы */
   @media (max-width: 768px) {
-    .container {
-      margin: 24px auto;
-      padding: 0 16px;
-    }
-
-    .page-header {
-      margin-bottom: 24px;
-      padding-bottom: 20px;
-    }
-
-    .page-header h1 {
-      font-size: 1.4rem;
-    }
-
-    .grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    .pagination {
-      margin-top: 36px;
-      gap: 10px;
-    }
-
-    .p-btn {
-      padding: 8px 12px;
-      font-size: 0.85rem;
-    }
+    .list-container { padding: 28px 16px 60px; }
+    .page-header { margin-bottom: 24px; padding-bottom: 20px; }
+    .page-header h1 { font-size: 1.45rem; }
+    .cards-grid { grid-template-columns: 1fr; gap: 14px; }
+    .pagination { margin-top: 36px; gap: 10px; }
   }
 </style>

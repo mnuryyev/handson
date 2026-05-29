@@ -9,9 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.16.7",
     "gray-matter": "^4.0.3",
-    "marked": "^15.0.12",
-    "@astrojs/sitemap": "^3.2.1"
+    "marked": "^15.0.12"
   }
 }

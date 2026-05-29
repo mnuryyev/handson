@@ -1,68 +1,62 @@
 ---
-// src/components/LangSwitcher.astro
 const { pathname } = Astro.url;
-const base = import.meta.env.BASE_URL; // Это наш "/handson/"
+const base = import.meta.env.BASE_URL;
 
-// Проверяем, есть ли сейчас в пути /en/
-// Важно: ищем именно внутри пути, так как в начале теперь /handson/
 const isEn = pathname.includes('/en/');
 const currentLang = isEn ? 'en' : 'ru';
 
 let targetPath;
-
 if (isEn) {
-    // Если мы на английском, меняем /en/ на /ru/
-    targetPath = pathname.replace('/en/', '/ru/');
+  targetPath = pathname.replace('/en/', '/ru/');
 } else if (pathname.includes('/ru/')) {
-    // Если на русском, меняем /ru/ на /en/
-    targetPath = pathname.replace('/ru/', '/en/');
+  targetPath = pathname.replace('/ru/', '/en/');
 } else {
-    // Если мы на главной (например, /handson/ru/ или просто /handson/)
-    targetPath = `${base}en/`;
+  targetPath = `${base}en/`;
 }
 ---
 
 <div class="lang-switch">
-  {/* Ссылка на RU версию */}
-  <a 
-    href={isEn ? targetPath : pathname} 
-    class={currentLang === 'ru' ? 'active' : ''}
-  >
-    RU
-  </a>
-  
+  <a
+    href={isEn ? targetPath : pathname}
+    class={currentLang === 'ru' ? 'lang-btn active' : 'lang-btn'}
+  >RU</a>
+
   <span class="sep">/</span>
-  
-  {/* Ссылка на EN версию */}
-  <a 
-    href={isEn ? pathname : targetPath} 
-    class={currentLang === 'en' ? 'active' : ''}
-  >
-    EN
-  </a>
+
+  <a
+    href={isEn ? pathname : targetPath}
+    class={currentLang === 'en' ? 'lang-btn active' : 'lang-btn'}
+  >EN</a>
 </div>
 
 <style>
   .lang-switch {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-weight: 500;
-    font-size: 0.85rem;
+    gap: 3px;
+    font-size: 0.78rem;
+    font-weight: 600;
   }
-  .lang-switch a {
-    text-decoration: none;
-    color: #555;
-    transition: 0.2s;
+
+  .lang-btn {
+    color: var(--text-3, #3d4a5c);
+    padding: 3px 5px;
+    border-radius: 5px;
+    transition: color 0.2s;
+    letter-spacing: 0.3px;
   }
-  .lang-switch a.active {
+
+  .lang-btn.active {
     color: #fff;
-    pointer-events: none; /* Чтобы нельзя было кликнуть на текущий язык */
+    pointer-events: none;
   }
-  .lang-switch a:hover:not(.active) {
-    color: var(--accent);
+
+  .lang-btn:hover:not(.active) {
+    color: var(--accent, #3ea6ff);
   }
+
   .sep {
-    color: #333;
+    color: var(--text-3, #3d4a5c);
+    font-weight: 400;
   }
 </style>
